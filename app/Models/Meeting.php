@@ -42,4 +42,9 @@ class Meeting extends Model
     return $this->hasMany(MinuteDecision::class, 'meeting_id')->orderBy('id', 'asc');
     }
 
+    public function risks()
+    {
+    return $this->hasMany(Risk::class, 'meeting_id')->orderBy('id', 'asc');
+    }
+
 }

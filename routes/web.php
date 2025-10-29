@@ -24,6 +24,7 @@ use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\MinuteDecisionController;
 use App\Http\Controllers\AgendaController;
+use App\Http\Controllers\RiskController;
 
 // Middleware
 use App\Http\Middleware\AdminMiddleware;
@@ -171,6 +172,12 @@ Route::middleware(['auth'])->group(function () {
         ->name('agendas.destroy');
     Route::put('/agendas/{agenda}', [AgendaController::class, 'update'])
         ->name('agendas.update');
+    
+    // RISKS
+    Route::post('/meetings/{meeting}/risks', [RiskController::class, 'store'])
+        ->name('risks.store');
+    Route::delete('/risks/{risk}', [RiskController::class, 'destroy'])
+        ->name('risks.destroy');
 
 
 

@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Agenda;
 use App\Models\MinuteDecision;
 use Illuminate\Http\Request;
+use App\Models\Risks;
 
 class MeetingController extends Controller
 {
@@ -21,14 +22,15 @@ class MeetingController extends Controller
             'project',
             'organizer',
             'agendas',
-            'minuteDecisions'
+            'minuteDecisions',
+            'risks'
         ])
         ->when($request->project_id, fn($q, $projectId) => $q->where('project_id', $projectId))
         ->orderBy('scheduled_at', 'desc')
         ->get();
 
     // optional: force refresh relasi
-    $meetings->each->load('agendas', 'minuteDecisions');
+    $meetings->each->load('agendas', 'minuteDecisions', 'risks');
 
     return view('meetings.index', compact('meetings', 'projects', 'users'));
 }

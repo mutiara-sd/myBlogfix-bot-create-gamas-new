@@ -808,50 +808,6 @@
                                 </div>
                             @endforeach
 
-                            <!-- Risks Section -->
-                            <div class="notulen-group" style="margin-bottom: 30px;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                                    <h5 style="margin: 0; color: #4b5563; font-weight: 600;">Risks</h5>
-                                    <button type="button" class="btn-add-risk" onclick="addRisk()" style="background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer;">
-                                        <i class="fas fa-plus"></i> Add Risk
-                                    </button>
-                                </div>
-                                <div id="riskItems" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                    <div class="risk-item" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
-                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-                                            <input type="checkbox" checked disabled>
-                                            <span style="font-weight: 600; color: #374151;">Risk #1: Server downtime</span>
-                                        </div>
-                                        <div style="margin-bottom: 8px;">
-                                            <span style="font-size: 12px; color: #6b7280;">Owner:</span>
-                                            <span style="background: #3b82f6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 5px;">@user</span>
-                                        </div>
-                                        <div style="font-size: 12px; color: #6b7280;">
-                                            Mitigation: Implement failover server
-                                        </div>
-                                        <button type="button" style="background: none; border: none; color: #6b7280; cursor: pointer; float: right; margin-top: 5px;">
-                                            <i class="fas fa-trash" style="font-size: 12px;"></i>
-                                        </button>
-                                    </div>
-                                    <div class="risk-item" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb;">
-                                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-                                            <input type="checkbox" checked disabled>
-                                            <span style="font-weight: 600; color: #374151;">Risk #1: High Scope Creep</span>
-                                        </div>
-                                        <div style="margin-bottom: 8px;">
-                                            <span style="font-size: 12px; color: #6b7280;">Owner:</span>
-                                            <span style="background: #3b82f6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 5px;">@budi</span>
-                                        </div>
-                                        <div style="font-size: 12px; color: #6b7280;">
-                                            Mitigation: Define clear project boundaries
-                                        </div>
-                                        <button type="button" style="background: none; border: none; color: #6b7280; cursor: pointer; float: right; margin-top: 5px;">
-                                            <i class="fas fa-trash" style="font-size: 12px;"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Action Items Section -->
                             <div class="notulen-group">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">

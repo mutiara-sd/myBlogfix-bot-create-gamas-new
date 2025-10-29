@@ -82,11 +82,11 @@
                 <i class="fas fa-check" style="color: white; font-size: 10px;"></i>
             </div>
             <span style="color: #374151; flex: 1; line-height: 1.6;">{{ $decision->decision_text }}</span>
-            @if($decision->status)
+            <!-- @if($decision->status)
                 <span style="color: #059669; font-size: 12px; background: rgba(16,185,129,0.15); padding: 4px 12px; border-radius: 20px; font-weight: 600;">
                     {{ ucfirst($decision->status) }}
                 </span>
-            @endif
+            @endif -->
             <form action="{{ route('decisions.destroy', $decision->id) }}" method="POST" style="margin: 0;">
                 @csrf
                 @method('DELETE')
@@ -104,9 +104,108 @@
     @endforelse
 </div>
 
+<!-- Risks Section -->
+<div class="notulen-group" style="margin-bottom: 30px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+        <h5 style="margin: 0; color: #4b5563; font-weight: 600;">Risks</h5>
+        <button type="button" class="btn-add-risk" 
+            onclick="toggleRiskForm({{ $meeting->id }})" 
+            style="background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 12px; cursor: pointer; transition: all 0.3s;">
+            <i class="fas fa-plus"></i> Add Risk
+        </button>
+    </div>
+
+    <!-- Form Add Risk -->
+    <div id="riskForm-{{ $meeting->id }}" style="display: none; margin-bottom: 20px; background: #fef3c7; padding: 20px; border-radius: 12px; border: 1px solid #fbbf24;">
+        <form action="{{ route('risks.store', $meeting->id) }}" method="POST">
+            @csrf
+            <div style="margin-bottom: 12px;">
+                <input type="text" name="risk_title" placeholder="Risk title (e.g., Server downtime)..." required 
+                    style="width: 100%; border: 2px solid #f59e0b; border-radius: 8px; padding: 10px 14px; font-size: 13px;">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <input type="text" name="owner" placeholder="Owner (e.g., @user)" 
+                    style="width: 100%; border: 2px solid #f59e0b; border-radius: 8px; padding: 10px 14px; font-size: 13px;">
+            </div>
+            <div style="margin-bottom: 12px;">
+                <input type="text" name="mitigation" placeholder="Mitigation plan..." 
+                    style="width: 100%; border: 2px solid #f59e0b; border-radius: 8px; padding: 10px 14px; font-size: 13px;">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button type="submit" style="background: #f59e0b; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 12px;">
+                    Save
+                </button>
+                <button type="button" onclick="toggleRiskForm({{ $meeting->id }})" 
+                    style="background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s; font-size: 12px;">
+                    Cancel
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- List Risks -->
+    @if ($meeting->risks->count() > 0)
+        <div id="riskItems" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            @foreach ($meeting->risks as $risk)
+                <div class="risk-item" style="background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; position: relative; padding-right: 40px;">
+                    <!-- Tombol Delete (Pindah ke Atas) -->
+                    <form action="{{ route('risks.destroy', $risk->id) }}" method="POST" 
+                        style="position: absolute; top: 12px; right: 12px; margin: 0;" 
+                        onsubmit="return confirm('Delete this risk?')">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" 
+                            style="background: rgba(239, 68, 68, 0.1); border: none; color: #ef4444; cursor: pointer; padding: 6px 8px; border-radius: 6px; transition: all 0.3s;"
+                            onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'" 
+                            onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.1)'">
+                            <i class="fas fa-trash" style="font-size: 12px;"></i>
+                        </button>
+                    </form>
+                    
+                    <!-- Risk Title -->
+                    <div style="margin-bottom: 10px; padding-right: 5px;">
+                        <span style="font-weight: 600; color: #374151; font-size: 14px; line-height: 1.4; display: block; word-wrap: break-word;">
+                            {{ $risk->risk_title }}
+                        </span>
+                    </div>
+                    
+                    <!-- Owner -->
+                    @if($risk->owner)
+                        <div style="margin-bottom: 8px;">
+                            <span style="font-size: 12px; color: #6b7280;">Owner:</span>
+                            <span style="background: #3b82f6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 5px;">
+                                {{ $risk->owner }}
+                            </span>
+                        </div>
+                    @endif
+                    
+                    <!-- Mitigation -->
+                    @if($risk->mitigation)
+                        <div style="font-size: 12px; color: #6b7280; line-height: 1.5; word-wrap: break-word;">
+                            <strong>Mitigation:</strong> {{ $risk->mitigation }}
+                        </div>
+                    @endif
+                </div>
+            @endforeach
+        </div>
+    @else
+        <div id="riskItems" style="text-align: center; padding: 40px 20px; background: #f9fafb; border-radius: 8px; border: 2px dashed #e5e7eb;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 36px; color: #d1d5db; margin-bottom: 10px;"></i>
+            <p style="color: #9ca3af; font-size: 14px; margin: 0;">No risks identified yet</p>
+        </div>
+    @endif
+</div>
+
 <script>
     function toggleAgendaForm(meetingId) {
         const form = document.getElementById('agendaForm-' + meetingId);
+        if (form) {
+            form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+        }
+    }
+
+    function toggleRiskForm(meetingId) {
+        const form = document.getElementById('riskForm-' + meetingId);
         if (form) {
             form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
         }
