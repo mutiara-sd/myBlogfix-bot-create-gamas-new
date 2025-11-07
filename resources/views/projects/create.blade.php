@@ -7,17 +7,6 @@
         </a>
     </div>
 
-    <!-- Header Section -->
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <!-- Card Header -->
-                <div class="card-header text-white text-center py-4" style="background: linear-gradient(135deg, #6f42c1 0%, #8a2be2 100%);">
-                    <i class="fas fa-plus-circle fa-3x mb-3"></i>
-                    <h2 class="mb-2">Create New Project</h2>
-                    <p class="mb-0 opacity-75">Turn your ideas into organized, trackable projects</p>
-                </div>
-
                 <!-- Card Body -->
                 <div class="card-body p-4">
                     <form action="{{ route('projects.store') }}" method="POST" id="projectForm">
@@ -26,8 +15,7 @@
                         <!-- Project Name -->
                         <div class="mb-4">
                             <label for="name" class="form-label fw-semibold">
-                                <i class="fas fa-project-diagram me-2" style="color: #6f42c1;"></i>
-                                Project Name <span class="text-danger">*</span>
+                                </i>Project Name 
                             </label>
                             <input 
                                 type="text" 
@@ -48,7 +36,7 @@
                         <!-- Description -->
                         <div class="mb-4">
                             <label for="description" class="form-label fw-semibold">
-                                <i class="fas fa-align-left me-2" style="color: #6f42c1;"></i>
+                                </i>
                                 Project Description
                             </label>
                             <textarea 
@@ -72,8 +60,7 @@
                         <!-- Status -->
                         <div class="mb-4">
                             <label for="status" class="form-label fw-semibold">
-                                <i class="fas fa-toggle-on me-2" style="color: #6f42c1;"></i>
-                                Initial Status <span class="text-danger">*</span>
+                                </i>Initial Status
                             </label>
                             <select class="form-select @error('status') is-invalid @enderror" id="status" name="status" required>
                                 <option value="">Choose initial status</option>
@@ -91,66 +78,16 @@
                             @enderror
                         </div>
 
-                        <!-- Project Code Preview -->
-                        <div class="mb-4">
-                            <label class="form-label fw-semibold">
-                                <i class="fas fa-code me-2" style="color: #6f42c1;"></i>
-                                Project Code (Auto-generated)
-                            </label>
-                            <div class="alert alert-info border-0" style="background-color: #f0f4ff;">
-                                <p class="text-muted mb-2 small">Your project code will be:</p>
-                                <p id="codePreview" class="fw-bold text-center mb-2" style="font-family: monospace; font-size: 1.5rem; color: #6f42c1;">
-                                    PROJ001
-                                </p>
-                                <small class="text-muted d-block text-center">Generated automatically from your project name</small>
-                            </div>
-                        </div>
-
                         <!-- Form Actions -->
                         <div class="d-flex gap-2 mt-4">
                             <button type="submit" class="btn btn-primary flex-fill" style="background: #6f42c1; border-color: #6f42c1;">
-                                <i class="fas fa-rocket me-2"></i>Create Project
+                                </i>Create Project
                             </button>
                             <a href="{{ route('projects.index') }}" class="btn btn-outline-secondary flex-fill">
-                                <i class="fas fa-times me-2"></i>Cancel
+                                </i>Cancel
                             </a>
                         </div>
                     </form>
-                </div>
-            </div>
-
-            <!-- Tips Card -->
-            <div class="card border-success mt-4" style="background-color: #f0fff4;">
-                <div class="card-body">
-                    <h6 class="text-success fw-bold mb-3">
-                        <i class="fas fa-lightbulb me-2"></i>Tips for Success
-                    </h6>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-2">
-                                    <i class="fas fa-check-circle text-success me-2"></i>
-                                    Use clear, descriptive names
-                                </li>
-                                <li class="mb-2">
-                                    <i class="fas fa-check-circle text-success me-2"></i>
-                                    Define specific goals
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-unstyled">
-                                <li class="mb-2">
-                                    <i class="fas fa-check-circle text-success me-2"></i>
-                                    Start with "Active" status
-                                </li>
-                                <li class="mb-2">
-                                    <i class="fas fa-check-circle text-success me-2"></i>
-                                    You can edit later
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
