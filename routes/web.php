@@ -138,6 +138,10 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('projects', ProjectController::class);
     Route::patch('projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');
     Route::patch('projects/{project}/activate', [ProjectController::class, 'activate'])->name('projects.activate');
+    Route::patch('projects/{project}/toggle-archive', [ProjectController::class, 'toggleArchive'])
+         ->name('projects.toggle-archive');
+    Route::get('projects/{project}/analytics', [ProjectController::class, 'analytics'])
+         ->name('projects.analytics');
 
     // API-like routes (AJAX)
     Route::prefix('api/projects')->name('api.projects.')->group(function () {

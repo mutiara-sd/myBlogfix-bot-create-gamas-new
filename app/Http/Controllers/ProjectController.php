@@ -18,6 +18,7 @@ class ProjectController extends Controller
     public function index(Request $request): View|JsonResponse
     {
         $query = Project::with('owner')
+            ->withCount('tasks') // ✅ Tambahan ini buat tasks_count
             ->where('owner_id', Auth::id())
             ->orderBy('created_at', 'desc');
 
@@ -238,5 +239,35 @@ class ProjectController extends Controller
         }
 
         return back()->with('success', 'Project activated successfully');
+    }
+
+    /**
+     * ✅ Toggle archive status - Method baru untuk blade temanmu
+     */
+    public function toggleArchive(Project $project): JsonResponse|RedirectResponse
+    {
+        // Check if user owns the project
+        if ($project->owner_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to this project');
+        }
+
+        // Toggle status
+        if ($project->status === 'active') {
+            $project->archive();
+            $message = 'Project archived successfully';
+        } else {
+            $project->activate();
+            $message = 'Project activated successfully';
+        }
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'project' => $project
+            ]);
+        }
+
+        return back()->with('success', $message);
     }
 }
