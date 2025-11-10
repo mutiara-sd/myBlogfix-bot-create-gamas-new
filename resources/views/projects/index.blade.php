@@ -20,23 +20,26 @@
     @endif
 
     <!-- Filter Tabs -->
-    <ul class="nav nav-pills mb-4" id="statusTabs" role="tablist">
+    <ul class="nav nav-pills mb-4 custom-tabs" id="statusTabs" role="tablist">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button">
                 <i class="fas fa-list me-2"></i>All Projects
             </button>
         </li>
+
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="active-tab" data-bs-toggle="pill" data-bs-target="#active" type="button">
                 <i class="fas fa-play-circle me-2"></i>Active
             </button>
         </li>
+
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="archived-tab" data-bs-toggle="pill" data-bs-target="#archived" type="button">
                 <i class="fas fa-archive me-2"></i>Archived
             </button>
         </li>
     </ul>
+
 
     <!-- Projects Grid -->
     @if($projects->count() > 0)
@@ -157,7 +160,7 @@
             </div>
             <h4 class="text-muted mb-3">No Projects Found</h4>
             <p class="text-muted mb-4">You haven't created any projects yet. Start by creating your first project!</p>
-            <a href="{{ route('projects.create') }}" class="btn btn-primary" style="background:#6f42c1; border-color:#6f42c1;">
+            <a href="{{ route('projects.create') }}" class="btn btn-primary" style="background: #6f42c1; border-color:#6f42c1;">
                 <i class="fas fa-plus me-2"></i>Create Your First Project
             </a>
         </div>
@@ -201,6 +204,39 @@
 .dropdown-toggle::after {
     display: none;
 }
+
+/* Hilangkan gaya pill bawaan Bootstrap */
+.custom-tabs .nav-link {
+    background: none !important;
+    border: none !important;
+    border-radius: 0 !important;
+    color: #555;
+    padding-bottom: 8px;
+    margin-right: 20px;
+    position: relative;
+}
+
+/* Hover text color */
+.custom-tabs .nav-link:hover {
+    color: #6f42c1;
+}
+
+/* Garis bawah aktif */
+.custom-tabs .nav-link.active {
+    color: #6f42c1 !important; /* warna teks aktif */
+}
+
+.custom-tabs .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #6f42c1; /* warna garis */
+    border-radius: 3px;
+}
+
 </style>
 
 <script>

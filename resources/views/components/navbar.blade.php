@@ -112,28 +112,42 @@
                     <a class="dropdown-item" href="#" onclick="openScheduleModal()">
                         <i class="fas fa-calendar-plus text-warning me-2"></i>Schedule Meeting
                     </a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#" onclick="openTeamModal()">
-                        <i class="fas fa-user-plus text-info me-2"></i>Invite Team Member
-                    </a>
                 </div>
             </div>
 
             <!-- PROFILE DROPDOWN -->
             <div class="dropdown d-inline-block">
                 <button type="button" class="btn header-item d-flex align-items-center" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="avatar-sm bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2">
-                        <i class="fas fa-user text-primary"></i>
-                    </div>
+                    @if(Auth::user()->profile_picture)
+                        <img src="{{ filter_var(Auth::user()->profile_picture, FILTER_VALIDATE_URL) 
+                            ? Auth::user()->profile_picture 
+                            : asset('storage/' . Auth::user()->profile_picture) }}" 
+                            alt="Profile" 
+                            class="rounded-circle me-2" 
+                            style="width: 32px; height: 32px; object-fit: cover;">
+                    @else
+                        <div class="avatar-sm bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                            <i class="fas fa-user text-primary" style="font-size: 14px;"></i>
+                        </div>
+                    @endif
                     <span class="d-none d-xl-inline-block fw-semibold">{{ Auth::user()->name ?? 'User' }}</span>
                     <i class="mdi mdi-chevron-down d-none d-xl-inline-block ms-1"></i>
                 </button>
                 <div class="dropdown-menu dropdown-menu-end shadow">
                     <div class="dropdown-header">
                         <div class="d-flex align-items-center">
-                            <div class="avatar-sm bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2">
-                                <i class="fas fa-user text-primary"></i>
-                            </div>
+                            @if(Auth::user()->profile_picture)
+                                <img src="{{ filter_var(Auth::user()->profile_picture, FILTER_VALIDATE_URL) 
+                                    ? Auth::user()->profile_picture 
+                                    : asset('storage/' . Auth::user()->profile_picture) }}" 
+                                    alt="Profile" 
+                                    class="rounded-circle me-2" 
+                                    style="width: 40px; height: 40px; object-fit: cover;">
+                            @else
+                                <div class="avatar-sm bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2" style="width: 40px; height: 40px;">
+                                    <i class="fas fa-user text-primary"></i>
+                                </div>
+                            @endif
                             <div>
                                 <h6 class="mb-0">{{ Auth::user()->name ?? 'User' }}</h6>
                                 <small class="text-muted">{{ Auth::user()->username ?? 'Username' }}</small>
