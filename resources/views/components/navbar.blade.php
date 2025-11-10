@@ -10,7 +10,7 @@
                     <span class="logo-lg">
                         <div class="d-flex align-items-center">
                             <i class="fas fa-rocket me-2" style="font-size: 20px; color: #0d6efd;"></i>
-                            <span style="font-size: 20px; font-weight: bold; color: #495057;">TaskManager</span>
+                            <span style="font-size: 20px; font-weight: bold; color: #495057;">NotulenTracker</span>
                         </div>
                     </span>
                 </a>
@@ -106,7 +106,7 @@
                     <a class="dropdown-item" href="#" onclick="openNewTaskModal()">
                         <i class="fas fa-tasks text-primary me-2"></i>New Task
                     </a>
-                    <a class="dropdown-item" href="#" onclick="openNewProjectModal()">
+                    <a class="dropdown-item" href="{{ route('projects.create') }}">
                         <i class="fas fa-project-diagram text-success me-2"></i>New Project
                     </a>
                     <a class="dropdown-item" href="#" onclick="openScheduleModal()">
@@ -169,15 +169,6 @@
         console.log('Opening new task modal...');
         // Add your modal opening logic here
     }
-    
-    function openNewProjectModal() {
-    // Reset form and show modal
-    document.getElementById('quickProjectForm').reset();
-    document.getElementById('errorAlert').classList.add('d-none');
-    
-    const modal = new bootstrap.Modal(document.getElementById('newProjectModal'));
-    modal.show();
-}
     
     function openScheduleModal() {
         console.log('Opening schedule modal...');
