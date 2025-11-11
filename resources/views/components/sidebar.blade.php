@@ -33,20 +33,6 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="/reminders" class="waves-effect">
-                        <i class="fas fa-bell" style="font-size: 16px; width: 20px;"></i>
-                        <span>Reminders</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="/reports" class="waves-effect">
-                        <i class="fas fa-chart-bar" style="font-size: 16px; width: 20px;"></i>
-                        <span>Reports</span>
-                    </a>
-                </li>
-
                 <!-- DIVIDER -->
                 <li class="menu-title" style="margin-top: 25px;">Account</li>
 

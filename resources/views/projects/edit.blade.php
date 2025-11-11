@@ -1,13 +1,8 @@
 <x-layout>
-@section('title', 'Edit Project - ' . $project->name)
-
-@section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
+<div class="container-fluid">
             <!-- Header -->
             <div class="d-flex align-items-center mb-4">
-                <a href="{{ route('projects.show', $project) }}" class="btn btn-outline-secondary me-3">
+                <a href="{{ route('projects.index', $project) }}" class="btn btn-outline-secondary me-3">
                     <i class="fas fa-arrow-left me-1"></i>Back
                 </a>
                 <div>
@@ -20,7 +15,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-edit me-2" style="color: #6f42c1;"></i>Project Information
+                        </i>Project Information
                     </h5>
                 </div>
                 
@@ -32,7 +27,7 @@
                         <!-- Project Name -->
                         <div class="mb-4">
                             <label for="name" class="form-label fw-semibold">
-                                <i class="fas fa-project-diagram me-2 text-primary"></i>Project Name *
+                                </i>Project Name 
                             </label>
                             <input type="text" 
                                    class="form-control form-control-lg @error('name') is-invalid @enderror" 
@@ -51,7 +46,7 @@
                         <!-- Project Description -->
                         <div class="mb-4">
                             <label for="description" class="form-label fw-semibold">
-                                <i class="fas fa-align-left me-2 text-info"></i>Description
+                                </i>Description
                             </label>
                             <textarea class="form-control @error('description') is-invalid @enderror" 
                                       id="description" 
@@ -68,7 +63,7 @@
                         <!-- Project Status -->
                         <div class="mb-4">
                             <label for="status" class="form-label fw-semibold">
-                                <i class="fas fa-toggle-on me-2 text-success"></i>Project Status *
+                                </i>Project Status 
                             </label>
                             <select class="form-select form-select-lg @error('status') is-invalid @enderror" 
                                     id="status" 
@@ -92,7 +87,7 @@
                         <!-- Project Code (Read-only) -->
                         <div class="mb-4">
                             <label class="form-label fw-semibold">
-                                <i class="fas fa-code me-2 text-warning"></i>Project Code
+                                </i>Project Code
                             </label>
                             <div class="bg-light p-3 rounded">
                                 <div class="d-flex align-items-center">
@@ -126,44 +121,16 @@
                         <!-- Form Actions -->
                         <div class="d-flex gap-3 pt-3 border-top">
                             <button type="submit" class="btn btn-primary btn-lg flex-fill" style="background:#6f42c1; border-color:#6f42c1;">
-                                <i class="fas fa-save me-2"></i>Update Project
+                                </i>Update Project
                             </button>
                             <a href="{{ route('projects.show', $project) }}" class="btn btn-outline-secondary btn-lg">
-                                <i class="fas fa-times me-2"></i>Cancel
+                                </i>Cancel
                             </a>
                         </div>
                     </form>
                 </div>
             </div>
 
-            <!-- Current Project Stats -->
-            <div class="mt-4">
-                <div class="card border-0" style="background: linear-gradient(135deg, #f8f9ff 0%, #e3f2fd 100%);">
-                    <div class="card-body p-4">
-                        <h6 class="fw-bold mb-3" style="color: #6f42c1;">
-                            <i class="fas fa-chart-bar me-2"></i>Current Project Statistics
-                        </h6>
-                        <div class="row text-center">
-                            <div class="col-3">
-                                <div class="fw-bold h5 mb-1">{{ $project->tasks()->count() }}</div>
-                                <small class="text-muted">Total Tasks</small>
-                            </div>
-                            <div class="col-3">
-                                <div class="fw-bold h5 mb-1">{{ $project->meetings()->count() }}</div>
-                                <small class="text-muted">Meetings</small>
-                            </div>
-                            <div class="col-3">
-                                <div class="fw-bold h5 mb-1">{{ $project->progress }}%</div>
-                                <small class="text-muted">Progress</small>
-                            </div>
-                            <div class="col-3">
-                                <div class="fw-bold h5 mb-1">{{ $project->created_at->diffInDays() }}</div>
-                                <small class="text-muted">Days Old</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 </x-layout>
 
 
