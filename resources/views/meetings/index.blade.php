@@ -966,7 +966,7 @@
         </div>
         <div class="delete-modal-body">
             <button type="button" class="btn-delete-cancel" onclick="closeDeleteModal()">Cancel</button>
-            <button type="button" class="btn-delete-confirm" onclick="confirmDelete()">Yes, Delete</button>
+            <button type="button" class="btn-delete-confirm" onclick="confirmDelete()">Delete</button>
         </div>
     </div>
 </div>

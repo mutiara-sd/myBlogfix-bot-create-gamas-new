@@ -1,7 +1,4 @@
 <x-layout>
-@section('title', $project->name)
-
-@section('content')
 <div class="container-fluid">
     <!-- Header Section -->
     <div class="row mb-4">
@@ -14,7 +11,11 @@
                     <h1 class="text-dark fw-bold mb-1">{{ $project->name }}</h1>
                     <div class="d-flex align-items-center gap-3">
                         <span class="text-muted">Code: <strong>{{ $project->code }}</strong></span>
-                        {!! $project->status_badge !!}
+                        @if($project->status === 'active')
+                            <span class="badge bg-success">Active</span>
+                        @else
+                            <span class="badge bg-secondary">Archived</span>
+                        @endif
                         <span class="text-muted">
                             <i class="fas fa-user me-1"></i>{{ $project->owner->name }}
                         </span>
@@ -76,7 +77,7 @@
                          style="width: 60px; height: 60px; background: rgba(111, 66, 193, 0.1);">
                         <i class="fas fa-tasks fa-2x" style="color: #6f42c1;"></i>
                     </div>
-                    <h3 class="fw-bold mb-1">{{ $taskStats['total'] }}</h3>
+                    <h3 class="fw-bold mb-1">{{ $project->tasks->count() }}</h3>
                     <p class="text-muted mb-0">Total Tasks</p>
                 </div>
             </div>
@@ -89,7 +90,7 @@
                          style="width: 60px; height: 60px; background: rgba(40, 167, 69, 0.1);">
                         <i class="fas fa-check-circle fa-2x text-success"></i>
                     </div>
-                    <h3 class="fw-bold mb-1">{{ $taskStats['completed'] }}</h3>
+                    <h3 class="fw-bold mb-1">{{ $project->tasks->where('status', 'completed')->count() }}</h3>
                     <p class="text-muted mb-0">Completed</p>
                 </div>
             </div>
@@ -102,7 +103,7 @@
                          style="width: 60px; height: 60px; background: rgba(255, 193, 7, 0.1);">
                         <i class="fas fa-spinner fa-2x text-warning"></i>
                     </div>
-                    <h3 class="fw-bold mb-1">{{ $taskStats['in_progress'] }}</h3>
+                    <h3 class="fw-bold mb-1">{{ $project->tasks->where('status', 'in_progress')->count() }}</h3>
                     <p class="text-muted mb-0">In Progress</p>
                 </div>
             </div>
@@ -115,7 +116,7 @@
                          style="width: 60px; height: 60px; background: rgba(220, 53, 69, 0.1);">
                         <i class="fas fa-exclamation-triangle fa-2x text-danger"></i>
                     </div>
-                    <h3 class="fw-bold mb-1">{{ $taskStats['blocked'] }}</h3>
+                    <h3 class="fw-bold mb-1">{{ $project->tasks->where('status', 'blocked')->count() }}</h3>
                     <p class="text-muted mb-0">Blocked</p>
                 </div>
             </div>
@@ -149,8 +150,13 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-chart-line me-2 text-primary"></i>Progress Overview
                         </h5>
+                        @php
+                            $totalTasks = $project->tasks->count();
+                            $completedTasks = $project->tasks->where('status', 'completed')->count();
+                            $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
+                        @endphp
                         <span class="badge badge-lg" style="background: #6f42c1; font-size: 0.9em;">
-                            {{ $project->progress }}% Complete
+                            {{ $progress }}% Complete
                         </span>
                     </div>
                 </div>
@@ -158,34 +164,39 @@
                     <!-- Progress Bar -->
                     <div class="progress mb-3" style="height: 12px;">
                         <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                             style="background: linear-gradient(45deg, #6f42c1, #9b59b6); width: {{ $project->progress }}%">
+                             style="background: linear-gradient(45deg, #6f42c1, #9b59b6); width: {{ $progress }}%">
                         </div>
                     </div>
                     
                     <!-- Task Status Breakdown -->
                     <div class="row g-3">
-                        @if($taskStats['total'] > 0)
+                        @if($totalTasks > 0)
+                            @php
+                                $inProgress = $project->tasks->where('status', 'in_progress')->count();
+                                $blocked = $project->tasks->where('status', 'blocked')->count();
+                                $todo = $totalTasks - $completedTasks - $inProgress - $blocked;
+                            @endphp
                             <div class="col-sm-3">
                                 <div class="text-center">
-                                    <div class="text-success fw-bold h5 mb-1">{{ number_format(($taskStats['completed'] / $taskStats['total']) * 100, 1) }}%</div>
+                                    <div class="text-success fw-bold h5 mb-1">{{ number_format(($completedTasks / $totalTasks) * 100, 1) }}%</div>
                                     <small class="text-muted">Completed</small>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="text-center">
-                                    <div class="text-warning fw-bold h5 mb-1">{{ number_format(($taskStats['in_progress'] / $taskStats['total']) * 100, 1) }}%</div>
+                                    <div class="text-warning fw-bold h5 mb-1">{{ number_format(($inProgress / $totalTasks) * 100, 1) }}%</div>
                                     <small class="text-muted">In Progress</small>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="text-center">
-                                    <div class="text-danger fw-bold h5 mb-1">{{ number_format(($taskStats['blocked'] / $taskStats['total']) * 100, 1) }}%</div>
+                                    <div class="text-danger fw-bold h5 mb-1">{{ number_format(($blocked / $totalTasks) * 100, 1) }}%</div>
                                     <small class="text-muted">Blocked</small>
                                 </div>
                             </div>
                             <div class="col-sm-3">
                                 <div class="text-center">
-                                    <div class="text-muted fw-bold h5 mb-1">{{ number_format((($taskStats['total'] - $taskStats['completed'] - $taskStats['in_progress'] - $taskStats['blocked']) / $taskStats['total']) * 100, 1) }}%</div>
+                                    <div class="text-muted fw-bold h5 mb-1">{{ number_format(($todo / $totalTasks) * 100, 1) }}%</div>
                                     <small class="text-muted">To Do</small>
                                 </div>
                             </div>
@@ -199,7 +210,7 @@
                 </div>
             </div>
 
-            <!-- Recent Tasks (placeholder for future feature) -->
+            <!-- Recent Tasks -->
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
@@ -210,13 +221,31 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="text-center text-muted py-4">
-                        <i class="fas fa-plus-circle fa-2x mb-3"></i>
-                        <p class="mb-3">Task management coming soon!</p>
-                        <button class="btn btn-sm btn-primary" style="background:#6f42c1; border-color:#6f42c1;" disabled>
-                            <i class="fas fa-plus me-1"></i>Add Task
-                        </button>
-                    </div>
+                    @if($project->tasks->count() > 0)
+                        <div class="list-group list-group-flush">
+                            @foreach($project->tasks->take(5) as $task)
+                                <div class="list-group-item px-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-grow-1">
+                                            <h6 class="mb-1">{{ $task->title }}</h6>
+                                            <small class="text-muted">{{ $task->created_at->diffForHumans() }}</small>
+                                        </div>
+                                        <span class="badge bg-{{ $task->status === 'completed' ? 'success' : ($task->status === 'in_progress' ? 'warning' : 'secondary') }}">
+                                            {{ ucfirst(str_replace('_', ' ', $task->status)) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-plus-circle fa-2x mb-3"></i>
+                            <p class="mb-3">No tasks yet. Create your first task!</p>
+                            <button class="btn btn-sm btn-primary" style="background:#6f42c1; border-color:#6f42c1;" disabled>
+                                <i class="fas fa-plus me-1"></i>Add Task
+                            </button>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -325,7 +354,6 @@
     </div>
 </div>
 
-@push('styles')
 <style>
 .progress-bar {
     transition: width 0.6s ease;
@@ -351,23 +379,5 @@
 .rounded-circle {
     transition: all 0.2s ease;
 }
-
-.rounded-circle:hover {
-    transform: scale(1.05);
-}
 </style>
-@endpush
-
-@push('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize tooltips if using Bootstrap 5
-    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-});
-</script>
-@endpush
-@endsection
 </x-layout>
