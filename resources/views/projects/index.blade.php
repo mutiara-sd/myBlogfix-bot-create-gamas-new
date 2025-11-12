@@ -22,21 +22,24 @@
     <!-- Filter Tabs -->
     <ul class="nav nav-pills mb-4 custom-tabs" id="statusTabs" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all" type="button">
+            <a class="nav-link {{ !request('status') ? 'active' : '' }}" 
+               href="{{ route('projects.index') }}">
                 <i class="fas fa-list me-2"></i>All Projects
-            </button>
+            </a>
         </li>
 
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="active-tab" data-bs-toggle="pill" data-bs-target="#active" type="button">
+            <a class="nav-link {{ request('status') === 'active' ? 'active' : '' }}" 
+               href="{{ route('projects.index', ['status' => 'active']) }}">
                 <i class="fas fa-play-circle me-2"></i>Active
-            </button>
+            </a>
         </li>
 
         <li class="nav-item" role="presentation">
-            <button class="nav-link" id="archived-tab" data-bs-toggle="pill" data-bs-target="#archived" type="button">
+            <a class="nav-link {{ request('status') === 'archived' ? 'active' : '' }}" 
+               href="{{ route('projects.index', ['status' => 'archived']) }}">
                 <i class="fas fa-archive me-2"></i>Archived
-            </button>
+            </a>
         </li>
     </ul>
 
@@ -45,7 +48,7 @@
     @if($projects->count() > 0)
         <div class="row">
             @foreach($projects as $project)
-                <div class="col-lg-4 col-md-6 mb-4" data-status="{{ $project->status }}">
+                <div class="col-lg-4 col-md-6 mb-4">
                     <div class="card h-100 border-0 shadow-sm project-card" style="transition: all 0.3s ease;">
                         <div class="card-body p-4">
                             <!-- Project Header -->
@@ -150,7 +153,7 @@
 
         <!-- Pagination -->
         <div class="d-flex justify-content-center mt-4">
-            {{ $projects->links() }}
+            {{ $projects->appends(['status' => request('status')])->links() }}
         </div>
     @else
         <!-- Empty State -->
@@ -159,7 +162,15 @@
                 <i class="fas fa-folder-open text-muted" style="font-size: 4rem;"></i>
             </div>
             <h4 class="text-muted mb-3">No Projects Found</h4>
-            <p class="text-muted mb-4">You haven't created any projects yet. Start by creating your first project!</p>
+            <p class="text-muted mb-4">
+                @if(request('status') === 'active')
+                    You don't have any active projects.
+                @elseif(request('status') === 'archived')
+                    You don't have any archived projects.
+                @else
+                    You haven't created any projects yet. Start by creating your first project!
+                @endif
+            </p>
             <a href="{{ route('projects.create') }}" class="btn btn-primary" style="background: #6f42c1; border-color:#6f42c1;">
                 <i class="fas fa-plus me-2"></i>Create Your First Project
             </a>
@@ -177,16 +188,45 @@
     box-shadow: 0 10px 20px rgba(111, 66, 193, 0.1) !important;
 }
 
+/* ✅ Fix untuk tab - hilangkan border & outline */
 .nav-pills .nav-link {
     color: #6c757d;
-    background: transparent;
-    border: 1px solid #e9ecef;
-    margin-right: 10px;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    margin-right: 20px;
+    padding-bottom: 8px;
+    position: relative;
+    transition: color 0.3s ease;
+    text-decoration: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.nav-pills .nav-link:hover {
+    color: #6f42c1;
+    text-decoration: none !important;
+}
+
+.nav-pills .nav-link:focus {
+    outline: none !important;
+    box-shadow: none !important;
 }
 
 .nav-pills .nav-link.active {
-    background: #6f42c1;
-    border-color: #6f42c1;
+    color: #6f42c1 !important;
+    background: transparent !important;
+}
+
+.nav-pills .nav-link.active::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #6f42c1;
+    border-radius: 3px;
 }
 
 .progress-bar {
@@ -204,63 +244,5 @@
 .dropdown-toggle::after {
     display: none;
 }
-
-/* Hilangkan gaya pill bawaan Bootstrap */
-.custom-tabs .nav-link {
-    background: none !important;
-    border: none !important;
-    border-radius: 0 !important;
-    color: #555;
-    padding-bottom: 8px;
-    margin-right: 20px;
-    position: relative;
-}
-
-/* Hover text color */
-.custom-tabs .nav-link:hover {
-    color: #6f42c1;
-}
-
-/* Garis bawah aktif */
-.custom-tabs .nav-link.active {
-    color: #6f42c1 !important; /* warna teks aktif */
-}
-
-.custom-tabs .nav-link.active::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    background-color: #6f42c1; /* warna garis */
-    border-radius: 3px;
-}
-
 </style>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const filterTabs = document.querySelectorAll('#statusTabs button[data-bs-toggle="pill"]');
-    const projectCards = document.querySelectorAll('.col-lg-4[data-status]');
-    
-    filterTabs.forEach(tab => {
-        tab.addEventListener('click', function() {
-            const filter = this.id.replace('-tab', '');
-            
-            projectCards.forEach(card => {
-                const status = card.getAttribute('data-status');
-                
-                if (filter === 'all') {
-                    card.style.display = 'block';
-                } else if (status === filter) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-});
-</script>
 </x-layout>

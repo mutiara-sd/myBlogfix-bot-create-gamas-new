@@ -123,9 +123,6 @@
                             <button type="submit" class="btn btn-primary btn-lg flex-fill" style="background:#6f42c1; border-color:#6f42c1;">
                                 </i>Update Project
                             </button>
-                            <a href="{{ route('projects.show', $project) }}" class="btn btn-outline-secondary btn-lg">
-                                </i>Cancel
-                            </a>
                         </div>
                     </form>
                 </div>

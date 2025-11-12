@@ -55,6 +55,17 @@ class Project extends Model
         return $query->where('owner_id', $userId);
     }
 
+    // ✅ Method archive dan activate yang dipanggil di controller
+    public function archive(): bool
+    {
+        return $this->update(['status' => 'archived']);
+    }
+
+    public function activate(): bool
+    {
+        return $this->update(['status' => 'active']);
+    }
+
     // Generate unique project code
     public static function generateUniqueCode(string $name): string
     {

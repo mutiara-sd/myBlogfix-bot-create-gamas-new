@@ -18,7 +18,7 @@ class ProjectController extends Controller
     public function index(Request $request): View|JsonResponse
     {
         $query = Project::with('owner')
-            ->withCount('tasks') // ✅ Tambahan ini buat tasks_count
+            ->withCount('tasks')
             ->where('owner_id', Auth::id())
             ->orderBy('created_at', 'desc');
 
@@ -143,11 +143,11 @@ class ProjectController extends Controller
             abort(403, 'Unauthorized access to this project');
         }
 
+        // ✅ FIX: Code tidak perlu divalidasi karena read-only di form
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'code' => 'required|string|max:10|unique:projects,code,' . $project->id,
-            'status' => 'in:active,archived'
+            'status' => 'required|in:active,archived' // ✅ Tambah required
         ]);
 
         if ($validator->fails()) {
@@ -160,7 +160,8 @@ class ProjectController extends Controller
             return back()->withErrors($validator)->withInput();
         }
 
-        $project->update($request->only(['name', 'code', 'description', 'status']));
+        // ✅ Update tanpa code (karena code read-only)
+        $project->update($request->only(['name', 'description', 'status']));
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -170,7 +171,8 @@ class ProjectController extends Controller
             ]);
         }
 
-        return redirect()->route('projects.show', $project)->with('success', 'Project updated successfully');
+        // ✅ Redirect ke index agar langsung keliatan perubahan
+        return redirect()->route('projects.index')->with('success', 'Project updated successfully');
     }
 
     /**
@@ -242,7 +244,7 @@ class ProjectController extends Controller
     }
 
     /**
-     * ✅ Toggle archive status - Method baru untuk blade temanmu
+     * ✅ Toggle archive status - Method untuk blade
      */
     public function toggleArchive(Project $project): JsonResponse|RedirectResponse
     {
@@ -264,7 +266,7 @@ class ProjectController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => $message,
-                'project' => $project
+                'project' => $project->fresh()
             ]);
         }
 
