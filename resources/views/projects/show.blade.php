@@ -275,10 +275,21 @@
                     <div class="mb-3">
                         <label class="text-muted small">Owner</label>
                         <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center me-2" 
-                                 style="width: 32px; height: 32px;">
-                                <small class="text-white fw-bold">{{ strtoupper(substr($project->owner->name, 0, 1)) }}</small>
-                            </div>
+                            @if($project->owner->profile_picture)
+                                <!-- Tampilkan foto profile jika ada -->
+                                <img src="{{ filter_var($project->owner->profile_picture, FILTER_VALIDATE_URL)
+                                        ? $project->owner->profile_picture
+                                        : asset('storage/' . $project->owner->profile_picture) }}" 
+                                     alt="{{ $project->owner->name }}"
+                                     class="rounded-circle me-2" 
+                                     style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #e2e8f0;">
+                            @else
+                                <!-- Tampilkan initial huruf pertama jika tidak ada foto -->
+                                <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center me-2" 
+                                     style="width: 32px; height: 32px;">
+                                    <small class="text-white fw-bold">{{ strtoupper(substr($project->owner->name, 0, 1)) }}</small>
+                                </div>
+                            @endif
                             <div>
                                 <div class="fw-semibold">{{ $project->owner->name }}</div>
                                 <small class="text-muted">{{ $project->owner->email }}</small>
