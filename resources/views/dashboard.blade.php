@@ -39,12 +39,7 @@
                         </script>
                     </p>
                 </div>
-                <div class="page-title-right">
-                    <ol class="breadcrumb m-0">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active">Dashboard</li>
-                    </ol>
-                </div>
+                
             </div>
         </div>
     </div>
