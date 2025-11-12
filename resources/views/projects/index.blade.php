@@ -82,14 +82,13 @@
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
-                                            <form action="{{ route('projects.destroy', $project) }}" method="POST" 
-                                                  class="d-inline" onsubmit="return confirm('Are you sure you want to delete this project?')">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="dropdown-item text-danger" type="submit">
-                                                    <i class="fas fa-trash me-2"></i>Delete
-                                                </button>
-                                            </form>
+                                            <button class="dropdown-item text-danger" 
+                                                    type="button"
+                                                    data-project-id="{{ $project->id }}"
+                                                    data-project-name="{{ $project->name }}"
+                                                    onclick="openDeleteModal(this.getAttribute('data-project-id'), this.getAttribute('data-project-name'))">
+                                                <i class="fas fa-trash me-2"></i>Delete
+                                            </button>
                                         </li>
                                     </ul>
                                 </div>
@@ -178,6 +177,32 @@
     @endif
 </div>
 
+<!-- DELETE CONFIRMATION MODAL -->
+<div class="delete-modal" id="deleteModal">
+    <div class="delete-modal-content">
+        <div class="delete-modal-header">
+            <div class="delete-icon">
+                <i class="fas fa-trash" style="color: white; font-size: 24px;"></i>
+            </div>
+            <h3 class="delete-modal-title">Delete Project?</h3>
+            <p class="delete-modal-text">
+                Are you sure you want to delete "<span id="deleteModalProjectName"></span>"? 
+                This action cannot be undone.
+            </p>
+        </div>
+        <div class="delete-modal-body">
+            <button type="button" class="btn-delete-cancel" onclick="closeDeleteModal()">Cancel</button>
+            <button type="button" class="btn-delete-confirm" onclick="confirmDelete()">Yes, Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- Hidden form untuk delete -->
+<form id="deleteProjectForm" method="POST" style="display: none;">
+    @csrf
+    @method('DELETE')
+</form>
+
 <style>
 .project-card {
     transition: all 0.3s ease;
@@ -188,7 +213,7 @@
     box-shadow: 0 10px 20px rgba(111, 66, 193, 0.1) !important;
 }
 
-/* ✅ Fix untuk tab - hilangkan border & outline */
+/* Fix untuk tab - hilangkan border & outline */
 .nav-pills .nav-link {
     color: #6c757d;
     background: transparent !important;
@@ -244,5 +269,161 @@
 .dropdown-toggle::after {
     display: none;
 }
+
+/* Delete Confirmation Modal */
+    .delete-modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        z-index: 20000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .delete-modal.active {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .delete-modal-content {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+        width: 100%;
+        max-width: 480px;
+        transform: scale(0.8) translateY(30px);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        overflow: hidden;
+    }
+
+    .delete-modal.active .delete-modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    .delete-modal-header {
+        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+        padding: 32px;
+        text-align: center;
+        border-bottom: 1px solid #fecaca;
+    }
+
+    .delete-icon {
+        width: 64px;
+        height: 64px;
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 16px;
+        box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+    }
+
+    .delete-modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0 0 8px 0;
+    }
+
+    .delete-modal-text {
+        color: #6b7280;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    .delete-modal-body {
+        padding: 24px 32px 32px;
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+    }
+
+    .btn-delete-cancel {
+        background: #f3f4f6;
+        color: #374151;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-delete-cancel:hover {
+        background: #e5e7eb;
+        transform: translateY(-1px);
+    }
+
+    .btn-delete-confirm {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-delete-confirm:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    }
+}
 </style>
+
+<script>
+let deleteProjectId = null;
+let deleteFormAction = '';
+
+function openDeleteModal(projectId, projectName) {
+    console.log('Opening delete modal for:', projectId, projectName);
+    deleteProjectId = projectId;
+    deleteFormAction = `/projects/${projectId}`;
+    
+    document.getElementById('deleteModalProjectName').textContent = projectName;
+    document.getElementById('deleteModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.remove('active');
+    document.body.style.overflow = 'auto';
+    deleteProjectId = null;
+}
+
+function confirmDelete() {
+    if (deleteFormAction) {
+        const form = document.getElementById('deleteProjectForm');
+        form.action = deleteFormAction;
+        form.submit();
+    }
+}
+
+// Close modal when clicking outside
+document.getElementById('deleteModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeDeleteModal();
+    }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        if (document.getElementById('deleteModal')?.classList.contains('active')) {
+            closeDeleteModal();
+        }
+    }
+});
+</script>
 </x-layout>
