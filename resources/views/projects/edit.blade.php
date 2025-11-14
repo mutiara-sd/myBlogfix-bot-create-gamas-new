@@ -3,7 +3,7 @@
             <!-- Header -->
             <div class="d-flex align-items-center mb-4">
                 <a href="{{ route('projects.index', $project) }}" class="btn btn-outline-secondary me-3">
-                    <i class="fas fa-arrow-left me-1"></i>Back
+                    <i class="fas fa-arrow-left me"></i>
                 </a>
                 <div>
                     <h2 class="text-dark fw-bold mb-1">Edit Project</h2>

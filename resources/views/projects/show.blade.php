@@ -5,7 +5,7 @@
         <div class="col-md-8">
             <div class="d-flex align-items-center mb-3">
                 <a href="{{ route('projects.index') }}" class="btn btn-outline-secondary me-3">
-                    <i class="fas fa-arrow-left me-1"></i>Back
+                    <i class="fas fa-arrow-left me"></i>
                 </a>
                 <div>
                     <h1 class="text-dark fw-bold mb-1">{{ $project->name }}</h1>
