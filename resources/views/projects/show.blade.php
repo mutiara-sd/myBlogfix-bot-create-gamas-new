@@ -25,12 +25,13 @@
         </div>
         <div class="col-md-4 text-md-end">
             <div class="btn-group" role="group">
-                <a href="{{ route('projects.edit', $project) }}" class="btn btn-outline-primary">
-                    <i class="fas fa-edit me-2"></i>Edit
+                <a href="{{ route('projects.edit', $project) }}" class="btn btn-outline-primary-toggle border-2">
+                    <i class="fas fa-edit me-2"></i>
                 </a>
                 <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                        <i class="fas fa-cog me-2"></i>Actions
+                    <button class="btn btn-sm btn-outline-primary dropdown-toggle border-0" 
+                        data-bs-toggle="dropdown">
+                        <i class="fas fa-ellipsis-v"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
@@ -274,10 +275,21 @@
                     <div class="mb-3">
                         <label class="text-muted small">Owner</label>
                         <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center me-2" 
-                                 style="width: 32px; height: 32px;">
-                                <small class="text-white fw-bold">{{ strtoupper(substr($project->owner->name, 0, 1)) }}</small>
-                            </div>
+                            @if($project->owner->profile_picture)
+                                <!-- Jika ada foto profil, tampilkan foto -->
+                                <img src="{{ filter_var($project->owner->profile_picture, FILTER_VALIDATE_URL)
+                                        ? $project->owner->profile_picture
+                                        : asset('storage/' . $project->owner->profile_picture) }}"
+                                    alt="{{ $project->owner->name }}"
+                                    class="rounded-circle me-2"
+                                    style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #e2e8f0;">
+                            @else
+                                <!-- Jika belum ada foto profil, tampilkan inisial -->
+                                <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center me-2" 
+                                    style="width: 32px; height: 32px;">
+                                    <small class="text-white fw-bold">{{ strtoupper(substr($project->owner->name, 0, 1)) }}</small>
+                                </div>
+                            @endif
                             <div>
                                 <div class="fw-semibold">{{ $project->owner->name }}</div>
                                 <small class="text-muted">{{ $project->owner->email }}</small>
