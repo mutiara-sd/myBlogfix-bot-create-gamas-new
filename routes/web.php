@@ -25,6 +25,7 @@ use App\Http\Controllers\ReminderController;
 use App\Http\Controllers\MinuteDecisionController;
 use App\Http\Controllers\AgendaController;
 use App\Http\Controllers\RiskController;
+use App\Http\Controllers\SearchController;
 
 // Middleware
 use App\Http\Middleware\AdminMiddleware;
@@ -134,6 +135,9 @@ Route::post('/telegram/webhook', function (Request $request) {
 */
 Route::middleware(['auth'])->group(function () {
 
+    // GLOBAL SEARCH - Tambahkan ini di paling atas setelah middleware auth
+    Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
+    
     // PROJECT
     Route::resource('projects', ProjectController::class);
     Route::patch('projects/{project}/archive', [ProjectController::class, 'archive'])->name('projects.archive');

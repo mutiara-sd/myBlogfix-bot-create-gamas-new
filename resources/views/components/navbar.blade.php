@@ -9,7 +9,7 @@
                     </span>
                     <span class="logo-lg">
                         <div class="d-flex align-items-center">
-                            <i class="fas fa-rocket me-2" style="font-size: 20px; color: #0d6efd;"></i>
+                            <i class="fas fa-rocket me-2" style="font-size: 20px; color: #6f42c1;"></i>
                             <span style="font-size: 20px; font-weight: bold; color: #495057;">NotulenTracker</span>
                         </div>
                     </span>
@@ -21,13 +21,410 @@
                 <i class="fa fa-fw fa-bars"></i>
             </button>
 
-            <!-- SEARCH BAR -->
-            <div class="ms-3 flex-grow-1" style="max-width: 400px;">
+            <!-- PASTE INI DI NAVBAR/LAYOUT KAMU -->
+
+            <!-- Search Bar Container -->
+            <div class="flex-grow-1 mx-3" style="max-width: 700px; min-width: 300px;">
                 <div class="position-relative">
-                    <input type="text" class="form-control ps-5" placeholder="Search tasks, projects, users..." style="border-radius: 25px;">
-                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+                    <input 
+                        type="text" 
+                        id="globalSearch" 
+                        class="form-control ps-5 pe-3" 
+                        placeholder="Search projects, meetings, users..." 
+                        style="border-radius: 25px; border: 1px solid rgba(111, 66, 193, 0.15); height: 44px; font-size: 14px; width: 100%;"
+                        autocomplete="off"
+                    >
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #6f42c1; opacity: 0.6;"></i>
+                </div>
+                <!-- Results Dropdown -->
+                <div id="searchDropdown" class="search-dropdown">
+                    <div id="searchLoading" class="text-center py-3" style="display: none;">
+                        <div class="spinner-border spinner-border-sm text-primary"></div>
+                    </div>
+                    <div id="searchResults"></div>
                 </div>
             </div>
+
+            <!-- CSS untuk Search -->
+            <style>
+            .search-dropdown {
+                position: absolute;
+                top: calc(100% + 10px);
+                left: 0;
+                right: 0;
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 8px 32px rgba(111, 66, 193, 0.15), 0 2px 8px rgba(0,0,0,0.08);
+                max-height: 480px;
+                overflow-y: auto;
+                z-index: 9999;
+                display: none;
+                border: 1px solid rgba(111, 66, 193, 0.1);
+                animation: slideDown 0.2s ease;
+            }
+
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translateY(-10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .search-dropdown.show {
+                display: block;
+            }
+
+            .search-dropdown::-webkit-scrollbar {
+                width: 6px;
+            }
+
+            .search-dropdown::-webkit-scrollbar-track {
+                background: transparent;
+            }
+
+            .search-dropdown::-webkit-scrollbar-thumb {
+                background: rgba(111, 66, 193, 0.2);
+                border-radius: 10px;
+            }
+
+            .search-dropdown::-webkit-scrollbar-thumb:hover {
+                background: rgba(111, 66, 193, 0.3);
+            }
+
+            .search-category {
+                background: #f5f3ff;
+                padding: 10px 18px;
+                font-weight: 700;
+                font-size: 11px;
+                color: #6f42c1;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                border-bottom: 1px solid rgba(111, 66, 193, 0.08);
+                backdrop-filter: blur(10px);
+            }
+
+            .search-item {
+                display: flex;
+                align-items: center;
+                padding: 14px 18px;
+                gap: 14px;
+                border-bottom: 1px solid #f5f3ff;
+                cursor: pointer;
+                transition: background 0.2s ease;
+                text-decoration: none;
+                color: inherit;
+            }
+
+            .search-item:hover {
+                background: #f8f9fa;
+            }
+
+            .search-item:last-child {
+                border-bottom: none;
+            }
+
+            .search-icon {
+                width: 44px;
+                height: 44px;
+                border-radius: 12px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+                flex-shrink: 0;
+            }
+
+            .search-item:hover .search-icon {
+                /* Hapus efek scale */
+            }
+
+            .search-icon.project {
+                background: rgba(111, 66, 193, 0.08);
+                color: #6f42c1;
+            }
+
+            .search-icon.meeting {
+                background: rgba(99, 102, 241, 0.08);
+                color: #6366f1;
+            }
+
+            .search-icon.user img {
+                width: 44px;
+                height: 44px;
+                border-radius: 12px;
+                object-fit: cover;
+                border: 2px solid #f3f4f6;
+            }
+
+            .search-icon.user.no-image {
+                background: #6f42c1;
+                color: white;
+                font-weight: 600;
+                font-size: 16px;
+            }
+
+            .search-content {
+                flex: 1;
+                min-width: 0;
+            }
+
+            .search-title {
+                font-weight: 600;
+                font-size: 14px;
+                color: #2d3748;
+                margin-bottom: 4px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .search-item:hover .search-title {
+                color: #2d3748; /* Tetap sama, ga berubah warna */
+            }
+
+            .search-meta {
+                font-size: 12px;
+                color: #718096;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .search-meta i {
+                font-size: 11px;
+            }
+
+            .search-badge {
+                padding: 3px 10px;
+                border-radius: 6px;
+                font-size: 10px;
+                font-weight: 600;
+                text-transform: uppercase;
+                letter-spacing: 0.3px;
+            }
+
+            .search-no-results {
+                padding: 48px 24px;
+                text-align: center;
+                color: #a0aec0;
+            }
+
+            .search-no-results i {
+                font-size: 3rem;
+                margin-bottom: 16px;
+                opacity: 0.25;
+                color: #6f42c1;
+            }
+
+            .search-no-results p {
+                margin: 4px 0;
+            }
+
+            .search-no-results p:first-of-type {
+                color: #4a5568;
+                font-weight: 600;
+            }
+
+            /* Loading spinner style */
+            #searchLoading .spinner-border {
+                color: #6f42c1;
+            }
+            </style>
+
+            <!-- JavaScript untuk Search -->
+            <script>
+            (function() {
+                const searchInput = document.getElementById('globalSearch');
+                const searchDropdown = document.getElementById('searchDropdown');
+                const searchLoading = document.getElementById('searchLoading');
+                const searchResults = document.getElementById('searchResults');
+                let searchTimeout;
+
+                if (!searchInput) return;
+
+                // Event: Input search
+                searchInput.addEventListener('input', function() {
+                    const query = this.value.trim();
+                    
+                    if (query.length < 2) {
+                        hideDropdown();
+                        return;
+                    }
+
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        performSearch(query);
+                    }, 300);
+                });
+
+                // Fungsi: Perform Search
+                function performSearch(query) {
+                    console.log('🔍 Searching for:', query);
+                    
+                    showDropdown();
+                    searchLoading.style.display = 'block';
+                    searchResults.innerHTML = '';
+
+                    fetch(`/search?q=${encodeURIComponent(query)}`, {
+                        method: 'GET',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(response => {
+                        console.log('📡 Response status:', response.status);
+                        if (!response.ok) throw new Error('Search failed');
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('✅ Results:', data);
+                        searchLoading.style.display = 'none';
+                        displayResults(data, query);
+                    })
+                    .catch(error => {
+                        console.error('❌ Error:', error);
+                        searchLoading.style.display = 'none';
+                        searchResults.innerHTML = `
+                            <div class="search-no-results">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <p>Search error. Please try again.</p>
+                            </div>
+                        `;
+                    });
+                }
+
+                // Fungsi: Display Results
+                function displayResults(data, query) {
+                    let html = '';
+                    let hasResults = false;
+
+                    // PROJECTS
+                    if (data.projects && data.projects.length > 0) {
+                        hasResults = true;
+                        html += '<div class="search-category">Projects</div>';
+                        data.projects.forEach(project => {
+                            const statusClass = project.status === 'active' ? 'success' : 'secondary';
+                            const statusText = project.status === 'active' ? 'Active' : 'Archived';
+                            
+                            html += `
+                                <a href="${project.url}" class="search-item">
+                                    <div class="search-icon project">
+                                        <i class="fas fa-folder"></i>
+                                    </div>
+                                    <div class="search-content">
+                                        <div class="search-title">${escapeHtml(project.name)}</div>
+                                        <div class="search-meta">
+                                            <span>Code: ${escapeHtml(project.code)}</span>
+                                            <span class="search-badge bg-${statusClass} text-white">${statusText}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                    }
+
+                    // MEETINGS
+                    if (data.meetings && data.meetings.length > 0) {
+                        hasResults = true;
+                        html += '<div class="search-category">Meetings</div>';
+                        data.meetings.forEach(meeting => {
+                            html += `
+                                <a href="${meeting.url}" class="search-item">
+                                    <div class="search-icon meeting">
+                                        <i class="fas fa-video"></i>
+                                    </div>
+                                    <div class="search-content">
+                                        <div class="search-title">${escapeHtml(meeting.title)}</div>
+                                        <div class="search-meta">
+                                            <span><i class="far fa-calendar"></i> ${meeting.scheduled_at}</span>
+                                            <span>📍 ${escapeHtml(meeting.location)}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                    }
+
+                    // USERS
+                    if (data.users && data.users.length > 0) {
+                        hasResults = true;
+                        html += '<div class="search-category">👥 Users</div>';
+                        data.users.forEach(user => {
+                            const userIcon = user.profile_picture
+                                ? `<div class="search-icon user"><img src="${user.profile_picture}" alt="${escapeHtml(user.name)}"></div>`
+                                : `<div class="search-icon user no-image">${user.name.charAt(0).toUpperCase()}</div>`;
+                            
+                            html += `
+                                <a href="${user.url}" class="search-item">
+                                    ${userIcon}
+                                    <div class="search-content">
+                                        <div class="search-title">${escapeHtml(user.name)}</div>
+                                        <div class="search-meta">
+                                            <span>@${escapeHtml(user.username)}</span>
+                                            <span>•</span>
+                                            <span>${escapeHtml(user.email)}</span>
+                                        </div>
+                                    </div>
+                                </a>
+                            `;
+                        });
+                    }
+
+                    // NO RESULTS
+                    if (!hasResults) {
+                        html = `
+                            <div class="search-no-results">
+                                <i class="fas fa-search"></i>
+                                <p><strong>No results found</strong></p>
+                                <p style="font-size: 12px;">Try searching for "${escapeHtml(query)}" with different keywords</p>
+                            </div>
+                        `;
+                    }
+
+                    searchResults.innerHTML = html;
+                }
+
+                // Helper: Escape HTML
+                function escapeHtml(text) {
+                    const div = document.createElement('div');
+                    div.textContent = text;
+                    return div.innerHTML;
+                }
+
+                // Helper: Show/Hide Dropdown
+                function showDropdown() {
+                    searchDropdown.classList.add('show');
+                }
+
+                function hideDropdown() {
+                    searchDropdown.classList.remove('show');
+                }
+
+                // Close on click outside
+                document.addEventListener('click', function(e) {
+                    if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
+                        hideDropdown();
+                    }
+                });
+
+                // Close on Escape
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape') {
+                        hideDropdown();
+                        searchInput.blur();
+                    }
+                });
+            })();
+            </script>
         </div>
 
         <div class="d-flex align-items-center">
