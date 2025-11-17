@@ -94,28 +94,16 @@
     </div>
 </div>
 
+<style>
+#status {
+    display: block !important;
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const nameInput = document.getElementById('name');
-    const codePreview = document.getElementById('codePreview');
     const form = document.getElementById('projectForm');
-    
-    function generateCodePreview(name) {
-        if (!name) {
-            codePreview.textContent = 'PROJ001';
-            return;
-        }
-        
-        const baseCode = name.replace(/[^A-Za-z0-9]/g, '').toUpperCase().substring(0, 6);
-        const code = baseCode.length >= 3 ? baseCode : 'PROJ';
-        codePreview.textContent = code + '001';
-    }
-    
-    nameInput.addEventListener('input', function() {
-        generateCodePreview(this.value);
-    });
-    
-    generateCodePreview(nameInput.value);
     
     form.addEventListener('submit', function(e) {
         const name = nameInput.value.trim();

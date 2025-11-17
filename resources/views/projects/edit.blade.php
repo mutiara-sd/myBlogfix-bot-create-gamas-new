@@ -127,8 +127,10 @@
                     </form>
                 </div>
             </div>
+<style>
+#status {
+    display: block !important;
+}
+</style>
 
 </x-layout>
-
-
-
