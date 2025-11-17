@@ -160,6 +160,32 @@ Route::middleware(['auth'])->group(function () {
 
     // MEETING
     Route::resource('meetings', MeetingController::class);
+
+        // MEETING ROUTES - Full CRUD dengan halaman terpisah
+        Route::resource('meetings', MeetingController::class);
+        
+        // AGENDA ROUTES
+        Route::post('meetings/{meeting}/agendas', [AgendaController::class, 'store'])
+            ->name('agendas.store');
+        Route::delete('agendas/{agenda}', [AgendaController::class, 'destroy'])
+            ->name('agendas.destroy');
+        Route::put('agendas/{agenda}', [AgendaController::class, 'update'])
+            ->name('agendas.update');
+        
+        // DECISION ROUTES
+        Route::post('meetings/{meeting}/decisions', [MinuteDecisionController::class, 'store'])
+            ->name('decisions.store');
+        Route::delete('decisions/{decision}', [MinuteDecisionController::class, 'destroy'])
+            ->name('decisions.destroy');
+        Route::put('decisions/{decision}', [MinuteDecisionController::class, 'update'])
+            ->name('decisions.update');
+        
+        // RISK ROUTES
+        Route::post('meetings/{meeting}/risks', [RiskController::class, 'store'])
+            ->name('risks.store');
+        Route::delete('risks/{risk}', [RiskController::class, 'destroy'])
+            ->name('risks.destroy');
+        
     
     // MINUTES (Decision)
     Route::resource('minutes', MinuteController::class)

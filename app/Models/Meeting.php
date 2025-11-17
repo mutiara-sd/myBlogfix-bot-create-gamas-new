@@ -34,17 +34,17 @@ class Meeting extends Model
 
     public function agendas()
     {
-    return $this->hasMany(Agenda::class, 'meeting_id')->orderBy('id', 'asc');
+        return $this->hasMany(Agenda::class, 'meeting_id')->orderBy('id', 'asc');
     }
 
     public function minuteDecisions()
     {
-    return $this->hasMany(MinuteDecision::class, 'meeting_id')->orderBy('id', 'asc');
+        return $this->hasMany(MinuteDecision::class, 'meeting_id')->orderBy('id', 'asc');
     }
 
     public function risks()
     {
+    // Cek file kamu: app/Models/Risk.php (singular)
     return $this->hasMany(Risk::class, 'meeting_id')->orderBy('id', 'asc');
     }
-
 }

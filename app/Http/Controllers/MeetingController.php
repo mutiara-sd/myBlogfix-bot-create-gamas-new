@@ -5,107 +5,130 @@ namespace App\Http\Controllers;
 use App\Models\Meeting;
 use App\Models\Project;
 use App\Models\User;
-use App\Models\Agenda;
-use App\Models\MinuteDecision;
 use Illuminate\Http\Request;
-use App\Models\Risks;
 
 class MeetingController extends Controller
 {
+    /**
+     * Display a listing of meetings
+     */
     public function index(Request $request)
     {
-    $projects = Project::all();
-    $users = User::all();
+        $projects = Project::all();
+        $users = User::all();
 
-    // pakai eager load biar relasi tiap meeting beda
-    $meetings = Meeting::with([
+        // Query dengan eager loading
+        $query = Meeting::with([
             'project',
             'organizer',
             'agendas',
             'minuteDecisions',
             'risks'
-        ])
-        ->when($request->project_id, fn($q, $projectId) => $q->where('project_id', $projectId))
-        ->orderBy('scheduled_at', 'desc')
-        ->get();
-
-    // optional: force refresh relasi
-    $meetings->each->load('agendas', 'minuteDecisions', 'risks');
-
-    return view('meetings.index', compact('meetings', 'projects', 'users'));
-}
-
-
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'project_id'   => 'required|exists:projects,id',
-            'title'        => 'required|string|max:255',
-            'scheduled_at' => 'required|date',
-            'location'     => 'nullable|string|max:255',
-            'organizer_id' => 'required|exists:users,id',
-            'status'       => 'nullable|in:draft,done,cancelled',
         ]);
 
-        Meeting::create([
-            'project_id'   => $request->project_id,
-            'title'        => $request->title,
-            'scheduled_at' => $request->scheduled_at,
-            'location'     => $request->location,
-            'organizer_id' => $request->organizer_id,
-            'status'       => $request->status ?? 'draft',
-        ]);
+        // Filter by project
+        if ($request->filled('project_id')) {
+            $query->where('project_id', $request->project_id);
+        }
 
-        return redirect()->route('meetings.index')
-            ->with('success', 'Meeting berhasil dibuat!');
+        // Filter by status
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $meetings = $query->withCount(['agendas', 'minuteDecisions', 'risks'])
+                         ->orderBy('scheduled_at', 'desc')
+                         ->paginate(12);
+
+        return view('meetings.index', compact('meetings', 'projects', 'users'));
     }
 
+    /**
+     * Show the form for creating a new meeting
+     */
+    public function create()
+    {
+        $projects = Project::where('status', 'active')->orderBy('name')->get();
+        $users = User::orderBy('name')->get();
+
+        return view('meetings.create', compact('projects', 'users'));
+    }
+
+    /**
+     * Store a newly created meeting
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'title' => 'required|string|max:255',
+            'scheduled_at' => 'required|date',
+            'location' => 'nullable|string|max:255',
+            'organizer_id' => 'required|exists:users,id',
+            'status' => 'required|in:draft,done,cancelled',
+        ]);
+
+        $meeting = Meeting::create($validated);
+
+        return redirect()->route('meetings.show', $meeting)
+                        ->with('success', 'Meeting created successfully!');
+    }
+
+    /**
+     * Display the specified meeting
+     */
     public function show(Meeting $meeting)
     {
-        // Load relationships untuk detail view
-        $meeting->load(['project', 'organizer', 'agendas', 'minuteDecisions']);
-        
+        $meeting->load([
+            'project',
+            'organizer',
+            'agendas',
+            'minuteDecisions',
+            'risks'
+        ]);
+
         return view('meetings.show', compact('meeting'));
     }
 
+    /**
+     * Show the form for editing the specified meeting
+     */
     public function edit(Meeting $meeting)
     {
-        $projects = Project::all();
-        $users = User::all();
-        
+        $projects = Project::orderBy('name')->get();
+        $users = User::orderBy('name')->get();
+
         return view('meetings.edit', compact('meeting', 'projects', 'users'));
     }
 
+    /**
+     * Update the specified meeting
+     */
     public function update(Request $request, Meeting $meeting)
     {
-        $request->validate([
-            'project_id'   => 'required|exists:projects,id',
-            'title'        => 'required|string|max:255',
+        $validated = $request->validate([
+            'project_id' => 'required|exists:projects,id',
+            'title' => 'required|string|max:255',
             'scheduled_at' => 'required|date',
-            'location'     => 'nullable|string|max:255',
+            'location' => 'nullable|string|max:255',
             'organizer_id' => 'required|exists:users,id',
-            'status'       => 'in:draft,done,cancelled',
+            'status' => 'required|in:draft,done,cancelled',
         ]);
 
-        $meeting->update([
-            'project_id'   => $request->project_id,
-            'title'        => $request->title,
-            'scheduled_at' => $request->scheduled_at,
-            'location'     => $request->location,
-            'organizer_id' => $request->organizer_id,
-            'status'       => $request->status,
-        ]);
+        $meeting->update($validated);
 
-        return redirect()->route('meetings.index')
-            ->with('success', 'Meeting berhasil diperbarui!');
+        return redirect()->route('meetings.show', $meeting)
+                        ->with('success', 'Meeting updated successfully!');
     }
 
+    /**
+     * Remove the specified meeting
+     */
     public function destroy(Meeting $meeting)
     {
         $meeting->delete();
 
         return redirect()->route('meetings.index')
-            ->with('success', 'Meeting berhasil dihapus!');
+                        ->with('success', 'Meeting deleted successfully!');
     }
 }
