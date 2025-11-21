@@ -114,9 +114,6 @@
                         <h5 class="card-title mb-0 fw-bold" style="color: #2d3748;">
                             <i class="fas fa-edit me-2" style="color: #8b5cf6;"></i>Notulen Editor
                         </h5>
-                        <span class="badge" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-size: 0.85rem;">
-                            {{ $meeting->agendas->count() + $meeting->minuteDecisions->count() + $meeting->risks->count() }} items
-                        </span>
                     </div>
                 </div>
                 <div class="card-body p-4" style="background: #fafbfc;">
@@ -345,24 +342,48 @@
 
                     <!-- ACTION BUTTONS -->
                     <div class="d-flex gap-2 pt-3 mt-4" style="border-top: 2px solid #e9ecef;">
+                        <form action="{{ route('meetings.update', $meeting) }}" method="POST" class="flex-fill">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="draft">
+                            <input type="hidden" name="project_id" value="{{ $meeting->project_id }}">
+                            <input type="hidden" name="title" value="{{ $meeting->title }}">
+                            <input type="hidden" name="scheduled_at" value="{{ $meeting->scheduled_at }}">
+                            <input type="hidden" name="location" value="{{ $meeting->location }}">
+                            <input type="hidden" name="organizer_id" value="{{ $meeting->organizer_id }}">
+                            <button type="submit" class="btn w-100" 
+                                style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; border: 2px solid rgba(139, 92, 246, 0.2); font-weight: 600;"
+                                onmouseover="this.style.background='rgba(139, 92, 246, 0.15)'"
+                                onmouseout="this.style.background='rgba(139, 92, 246, 0.1)'">
+                                <i class="fas fa-save me-2"></i>Save Draft
+                            </button>
+                        </form>
+                        
                         <button type="button" class="btn flex-fill" 
-                            style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; border: 2px solid rgba(139, 92, 246, 0.2); font-weight: 600;"
-                            onmouseover="this.style.background='rgba(139, 92, 246, 0.15)'"
-                            onmouseout="this.style.background='rgba(139, 92, 246, 0.1)'">
-                            <i class="fas fa-save me-2"></i>Save Draft
-                        </button>
-                        <button type="button" class="btn flex-fill" 
+                            onclick="submitForReview()"
                             style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 2px solid rgba(59, 130, 246, 0.2); font-weight: 600;"
                             onmouseover="this.style.background='rgba(59, 130, 246, 0.15)'"
                             onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">
                             <i class="fas fa-paper-plane me-2"></i>Submit for Review
                         </button>
-                        <button type="button" class="btn flex-fill" 
-                            style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 2px solid rgba(16, 185, 129, 0.2); font-weight: 600;"
-                            onmouseover="this.style.background='rgba(16, 185, 129, 0.15)'"
-                            onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'">
-                            <i class="fas fa-check-double me-2"></i>Approve
-                        </button>
+                        
+                        <form action="{{ route('meetings.update', $meeting) }}" method="POST" class="flex-fill">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="status" value="done">
+                            <input type="hidden" name="project_id" value="{{ $meeting->project_id }}">
+                            <input type="hidden" name="title" value="{{ $meeting->title }}">
+                            <input type="hidden" name="scheduled_at" value="{{ $meeting->scheduled_at }}">
+                            <input type="hidden" name="location" value="{{ $meeting->location }}">
+                            <input type="hidden" name="organizer_id" value="{{ $meeting->organizer_id }}">
+                            <button type="submit" class="btn w-100" 
+                                onclick="return confirm('Mark this meeting as approved and done?')"
+                                style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 2px solid rgba(16, 185, 129, 0.2); font-weight: 600;"
+                                onmouseover="this.style.background='rgba(16, 185, 129, 0.15)'"
+                                onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'">
+                                <i class="fas fa-check-double me-2"></i>Approve
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -381,11 +402,11 @@
                     <div class="mb-3">
                         <label class="text-muted small">Scheduled</label>
                         <div class="fw-semibold">
-                            <i class="fas fa-calendar me-1" style="color: #8b5cf6;"></i>
+                            <i class="fas fa-calendar me-1"></i>
                             {{ $meeting->scheduled_at->format('M d, Y') }}
                         </div>
                         <div class="fw-semibold">
-                            <i class="fas fa-clock me-1" style="color: #8b5cf6;"></i>
+                            <i class="fas fa-clock me-1"></i>
                             {{ $meeting->scheduled_at->format('H:i') }}
                         </div>
                     </div>
@@ -393,7 +414,7 @@
                     <div class="mb-3">
                         <label class="text-muted small">Location</label>
                         <div class="fw-semibold">
-                            <i class="fas fa-map-marker-alt me-1" style="color: #8b5cf6;"></i>
+                            <i class="fas fa-map-marker-alt me-1"></i>
                             {{ $meeting->location ?? 'No location specified' }}
                         </div>
                     </div>
@@ -401,10 +422,21 @@
                     <div class="mb-3">
                         <label class="text-muted small">Organizer</label>
                         <div class="d-flex align-items-center">
-                            <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center me-2" 
-                                style="width: 32px; height: 32px;">
-                                <small class="text-white fw-bold">{{ strtoupper(substr($meeting->organizer->name, 0, 1)) }}</small>
-                            </div>
+                            @if($meeting->organizer->profile_picture)
+                                <!-- Jika ada foto profil, tampilkan foto -->
+                                <img src="{{ filter_var($meeting->organizer->profile_picture, FILTER_VALIDATE_URL)
+                                        ? $meeting->organizer->profile_picture
+                                        : asset('storage/' . $meeting->organizer->profile_picture) }}"
+                                    alt="{{ $meeting->organizer->name }}"
+                                    class="rounded-circle me-2"
+                                    style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #e2e8f0;">
+                            @else
+                                <!-- Jika belum ada foto profil, tampilkan inisial -->
+                                <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center me-2" 
+                                    style="width: 32px; height: 32px;">
+                                    <small class="text-white fw-bold">{{ strtoupper(substr($meeting->organizer->name, 0, 1)) }}</small>
+                                </div>
+                            @endif
                             <div>
                                 <div class="fw-semibold">{{ $meeting->organizer->name }}</div>
                                 <small class="text-muted">{{ $meeting->organizer->email }}</small>
@@ -416,7 +448,6 @@
                     <div class="mb-3">
                         <label class="text-muted small">Project</label>
                         <div class="fw-semibold">
-                            <i class="fas fa-project-diagram me-1" style="color: #8b5cf6;"></i>
                             {{ $meeting->project->name }}
                         </div>
                     </div>

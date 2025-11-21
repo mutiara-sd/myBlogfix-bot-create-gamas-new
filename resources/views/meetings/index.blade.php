@@ -161,7 +161,7 @@
                         
                         <!-- Card Footer -->
                         <div class="card-footer bg-transparent border-0 pt-0">
-                            <a href="{{ route('meetings.show', $meeting) }}" class="btn btn-outline-primary btn-sm w-100" style="border-color: #8b5cf6; color: #8b5cf6;">
+                            <a href="{{ route('meetings.show', $meeting) }}" class="btn btn-outline-primary btn-sm w-100">
                                 <i class="fas fa-arrow-right me-2"></i>View Details
                             </a>
                         </div>

@@ -9,11 +9,10 @@
 
     <!-- Create Form Card -->
     <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
+        <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-plus-circle me-2" style="color: #8b5cf6;"></i>Create New Meeting
+                        <i style="color: #8b5cf6;"></i>Create New Meeting
                     </h5>
                 </div>
                 
@@ -24,8 +23,8 @@
                         <!-- Project -->
                         <div class="mb-4">
                             <label for="project_id" class="form-label fw-semibold">
-                                <i class="fas fa-project-diagram me-1" style="color: #8b5cf6;"></i>
-                                Project <span class="text-danger">*</span>
+                                <i style="color: #8b5cf6;"></i>
+                                Project <span class="text-danger"></span>
                             </label>
                             <select name="project_id" 
                                     id="project_id"
@@ -48,8 +47,8 @@
                         <!-- Meeting Title -->
                         <div class="mb-4">
                             <label for="title" class="form-label fw-semibold">
-                                <i class="fas fa-heading me-1" style="color: #8b5cf6;"></i>
-                                Meeting Title <span class="text-danger">*</span>
+                                <i style="color: #8b5cf6;"></i>
+                                Meeting Title <span class="text-danger"></span>
                             </label>
                             <input type="text" 
                                    class="form-control @error('title') is-invalid @enderror" 
@@ -69,8 +68,8 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="scheduled_at" class="form-label fw-semibold">
-                                    <i class="fas fa-calendar-alt me-1" style="color: #8b5cf6;"></i>
-                                    Date & Time <span class="text-danger">*</span>
+                                    <i style="color: #8b5cf6;"></i>
+                                    Date & Time <span class="text-danger"></span>
                                 </label>
                                 <input type="datetime-local" 
                                        class="form-control @error('scheduled_at') is-invalid @enderror" 
@@ -87,7 +86,7 @@
 
                             <div class="col-md-6">
                                 <label for="location" class="form-label fw-semibold">
-                                    <i class="fas fa-map-marker-alt me-1" style="color: #8b5cf6;"></i>
+                                    <i style="color: #8b5cf6;"></i>
                                     Location
                                 </label>
                                 <input type="text" 
@@ -112,8 +111,8 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="organizer_id" class="form-label fw-semibold">
-                                    <i class="fas fa-user-tie me-1" style="color: #8b5cf6;"></i>
-                                    Organizer <span class="text-danger">*</span>
+                                    <i style="color: #8b5cf6;"></i>
+                                    Organizer <span class="text-danger"></span>
                                 </label>
                                 <select name="organizer_id" 
                                         id="organizer_id"
@@ -135,7 +134,7 @@
 
                             <div class="col-md-6">
                                 <label for="status" class="form-label fw-semibold">
-                                    <i class="fas fa-flag me-1" style="color: #8b5cf6;"></i>
+                                    <i style="color: #8b5cf6;"></i>
                                     Initial Status
                                 </label>
                                 <select class="form-select @error('status') is-invalid @enderror" 
@@ -162,15 +161,14 @@
                         <!-- Form Actions -->
                         <div class="d-flex gap-2 mt-4 pt-3 border-top">
                             <button type="submit" class="btn btn-primary flex-fill" style="background: #8b5cf6; border-color: #8b5cf6;">
-                                <i class="fas fa-plus-circle me-2"></i>Create Meeting
+                                Create Meeting
                             </button>
                             <a href="{{ route('meetings.index') }}" class="btn btn-outline-secondary flex-fill">
-                                <i class="fas fa-times me-2"></i>Cancel
+                                Cancel
                             </a>
                         </div>
                     </form>
                 </div>
-            </div>
         </div>
     </div>
 </div>
