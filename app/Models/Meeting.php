@@ -47,4 +47,14 @@ class Meeting extends Model
     // Cek file kamu: app/Models/Risk.php (singular)
     return $this->hasMany(Risk::class, 'meeting_id')->orderBy('id', 'asc');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(MeetingComment::class)->latest();
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(MeetingAttachment::class)->latest();
+    }
 }

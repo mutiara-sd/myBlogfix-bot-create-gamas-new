@@ -340,6 +340,268 @@
                         @endif
                     </div>
 
+                    <!-- ATTACHMENTS SECTION -->
+                    <div class="notulen-section mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-semibold mb-0" style="color: #4b5563;">
+                                <i class="fas fa-paperclip me-2" style="color: #6366f1;"></i>Attachments
+                                @if($meeting->attachments->count() > 0)
+                                    <span class="badge rounded-pill ms-2" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; font-size: 0.75rem;">
+                                        {{ $meeting->attachments->count() }}
+                                    </span>
+                                @endif
+                            </h6>
+                            <div class="text-end">
+                                <button type="button" class="btn btn-sm rounded-pill" 
+                                    style="background: rgba(99, 102, 241, 0.1); color: #6366f1; border: none; font-weight: 600; padding: 6px 16px;"
+                                    onclick="document.getElementById('fileInput').click()"
+                                    onmouseover="this.style.background='rgba(99, 102, 241, 0.2)'"
+                                    onmouseout="this.style.background='rgba(99, 102, 241, 0.1)'">
+                                    <i class="fas fa-upload me-1"></i>Upload
+                                </button>
+                                <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">Max: 10MB per file</small>
+                            </div>
+                        </div>
+
+                        <!-- Form Upload (Hidden) -->
+                        <form action="{{ route('attachments.store', $meeting) }}" method="POST" enctype="multipart/form-data" id="attachmentForm">
+                            @csrf
+                            <input type="file" id="fileInput" name="file" style="display: none;" 
+                                onchange="document.getElementById('attachmentForm').submit()"
+                                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar">
+                        </form>
+
+                        <!-- List Attachments -->
+                        @if ($meeting->attachments->count() > 0)
+                            <div class="attachments-list">
+                                @foreach ($meeting->attachments as $attachment)
+                                    <div class="attachment-item d-flex align-items-center gap-3 p-3 mb-2 rounded" 
+                                        style="background: white; border-left: 3px solid #6366f1; transition: all 0.2s;"
+                                        onmouseover="this.style.boxShadow='0 2px 8px rgba(99, 102, 241, 0.15)'"
+                                        onmouseout="this.style.boxShadow='none'">
+                                        
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
+                                            style="width: 40px; height: 40px; background: rgba(99, 102, 241, 0.1);">
+                                            <i class="fas {{ $attachment->file_icon }}"></i>
+                                        </div>
+                                        
+                                        <div class="flex-grow-1" style="min-width: 0;">
+                                            <div class="fw-semibold text-truncate" style="color: #2d3748;" title="{{ $attachment->file_name }}">
+                                                {{ $attachment->file_name }}
+                                            </div>
+                                            <small class="text-muted">
+                                                <i class="fas fa-user me-1"></i>{{ $attachment->uploader->name }} • 
+                                                <i class="fas fa-clock me-1"></i>{{ $attachment->created_at->diffForHumans() }} • 
+                                                <i class="fas fa-hdd me-1"></i>{{ $attachment->file_size_human }}
+                                            </small>
+                                        </div>
+                                        
+                                        <div class="d-flex gap-2 flex-shrink-0">
+                                            <a href="{{ route('attachments.download', $attachment) }}" 
+                                            class="btn btn-sm rounded-circle" 
+                                            style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: none; width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                            onmouseover="this.style.background='rgba(16, 185, 129, 0.2)'"
+                                            onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'"
+                                            title="Download">
+                                                <i class="fas fa-download" style="font-size: 12px;"></i>
+                                            </a>
+                                            
+                                            <form action="{{ route('attachments.destroy', $attachment) }}" method="POST" class="d-inline">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Delete this file?')" 
+                                                    class="btn btn-sm rounded-circle" 
+                                                    style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                                    onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'"
+                                                    onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'"
+                                                    title="Delete">
+                                                    <i class="fas fa-trash-alt" style="font-size: 12px;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-5 rounded" style="background: white; border: 2px dashed #e5e7eb;">
+                                <i class="fas fa-paperclip mb-3" style="font-size: 2.5rem; color: #d1d5db;"></i>
+                                <p class="text-muted mb-0">No attachments yet. Click "Upload" to add files.</p>
+                            </div>
+                        @endif
+                    </div>
+
+                    <!-- COMMENTS SECTION -->
+                    <div class="notulen-section mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h6 class="fw-semibold mb-0" style="color: #4b5563;">
+                                <i class="fas fa-comments me-2" style="color: #8b5cf6;"></i>Comments
+                            </h6>
+                            <span class="badge rounded-pill" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-size: 0.85rem; padding: 6px 12px;">
+                                {{ $meeting->comments->count() }} {{ Str::plural('comment', $meeting->comments->count()) }}
+                            </span>
+                        </div>
+
+                        <!-- Comment Form -->
+                        <form action="{{ route('comments.store', $meeting) }}" method="POST" enctype="multipart/form-data" class="mb-4" id="commentForm">
+                            @csrf
+                            <div class="d-flex gap-2 align-items-start p-3 rounded" style="background: white; border: 2px solid #e5e7eb;">
+                                <!-- User Avatar -->
+                                <div class="flex-shrink-0">
+                                    @if(Auth::user()->profile_picture)
+                                        <img src="{{ filter_var(Auth::user()->profile_picture, FILTER_VALIDATE_URL)
+                                                ? Auth::user()->profile_picture
+                                                : asset('storage/' . Auth::user()->profile_picture) }}"
+                                            alt="{{ Auth::user()->name }}"
+                                            class="rounded-circle"
+                                            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
+                                    @else
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                            style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                            {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                        </div>
+                                    @endif
+                                </div>
+                                
+                                <!-- Input Area -->
+                                <div class="flex-grow-1">
+                                    <textarea name="comment_text" rows="2" placeholder="Add a comment..." required 
+                                        class="form-control border-0 p-0 mb-2" 
+                                        style="resize: none; font-size: 0.95rem; line-height: 1.5;"
+                                        oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'"></textarea>
+                                    
+                                    <!-- File Preview Area -->
+                                    <div id="filePreview" style="display: none;" class="mb-2 p-2 rounded" style="background: #f9fafb; border: 1px dashed #d1d5db;">
+                                        <div class="d-flex align-items-center gap-2">
+                                            <i class="fas fa-paperclip text-muted"></i>
+                                            <span id="fileName" class="text-muted small"></span>
+                                            <span id="fileSize" class="badge bg-light text-dark"></span>
+                                            <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-auto" onclick="removeFile()">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <input type="file" name="attachment" id="commentAttachment" style="display: none;" 
+                                                accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar"
+                                                onchange="handleFileSelect(this)">
+                                            <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="document.getElementById('commentAttachment').click()">
+                                                <i class="fas fa-paperclip me-1"></i>Attach file
+                                            </button>
+                                            <small class="text-muted ms-2">(Max: 5MB)</small>
+                                        </div>
+                                        <button type="submit" class="btn btn-sm" 
+                                            style="background: #8b5cf6; color: white; padding: 6px 20px; border-radius: 20px; font-weight: 600;">
+                                            <i class="fas fa-paper-plane me-1"></i>Post Comment
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- Comments List -->
+                        @forelse ($meeting->comments as $comment)
+                            <div class="comment-item d-flex gap-3 p-3 mb-3 rounded" 
+                                style="background: white; border-left: 3px solid #8b5cf6; transition: all 0.2s;"
+                                onmouseover="this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.15)'"
+                                onmouseout="this.style.boxShadow='none'">
+                                
+                                <!-- User Avatar -->
+                                <div class="flex-shrink-0">
+                                    @if($comment->user->profile_picture)
+                                        <img src="{{ filter_var($comment->user->profile_picture, FILTER_VALIDATE_URL)
+                                                ? $comment->user->profile_picture
+                                                : asset('storage/' . $comment->user->profile_picture) }}"
+                                            alt="{{ $comment->user->name }}"
+                                            class="rounded-circle"
+                                            style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
+                                    @else
+                                        <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                            style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                            {{ strtoupper(substr($comment->user->name, 0, 1)) }}
+                                        </div>
+                                    @endif
+                                </div>
+                                
+                                <!-- Comment Content -->
+                                <div class="flex-grow-1" style="min-width: 0;">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <strong style="color: #2d3748; font-size: 0.95rem;">{{ $comment->user->name }}</strong>
+                                            <small class="text-muted ms-2">
+                                                <i class="fas fa-clock me-1"></i>{{ $comment->created_at->diffForHumans() }}
+                                            </small>
+                                        </div>
+                                        
+                                        @if($comment->user_id === Auth::id())
+                                            <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" onclick="return confirm('Delete this comment?')" 
+                                                    class="btn btn-sm rounded-circle" 
+                                                    style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                                    onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'"
+                                                    onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'"
+                                                    title="Delete comment">
+                                                    <i class="fas fa-trash-alt" style="font-size: 11px;"></i>
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                    
+                                    <!-- Comment Text -->
+                                    <p class="mb-2" style="color: #4b5563; line-height: 1.6; word-wrap: break-word; word-break: break-word; white-space: pre-wrap;">{{ $comment->comment_text }}</p>
+                                    
+                                    <!-- Comment Attachment (if exists) -->
+                                    @if($comment->attachment_path)
+                                        <div class="mt-2 p-2 rounded d-inline-flex align-items-center gap-2" 
+                                            style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2);">
+                                            <i class="fas {{ $comment->attachment_icon }}"></i>
+                                            <a href="{{ route('comments.download', $comment) }}" class="text-decoration-none" style="color: #4b5563;">
+                                                <span class="fw-semibold">{{ $comment->attachment_name }}</span>
+                                                <small class="text-muted ms-1">({{ $comment->attachment_size_human }})</small>
+                                            </a>
+                                            <a href="{{ route('comments.download', $comment) }}" class="btn btn-sm btn-link p-0 ms-1" title="Download">
+                                                <i class="fas fa-download" style="font-size: 12px;"></i>
+                                            </a>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-5 rounded" style="background: white; border: 2px dashed #e5e7eb;">
+                                <i class="fas fa-comment-dots mb-3" style="font-size: 2.5rem; color: #d1d5db;"></i>
+                                <p class="text-muted mb-0">No comments yet. Be the first to comment!</p>
+                            </div>
+                        @endforelse
+                    </div>
+
+                    <script>
+                    function handleFileSelect(input) {
+                        const file = input.files[0];
+                        if (file) {
+                            const maxSize = 5 * 1024 * 1024; // 5MB
+                            if (file.size > maxSize) {
+                                alert('File size exceeds 5MB limit!');
+                                input.value = '';
+                                return;
+                            }
+                            
+                            document.getElementById('filePreview').style.display = 'block';
+                            document.getElementById('fileName').textContent = file.name;
+                            
+                            const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+                            document.getElementById('fileSize').textContent = sizeInMB + ' MB';
+                        }
+                    }
+
+                    function removeFile() {
+                        document.getElementById('commentAttachment').value = '';
+                        document.getElementById('filePreview').style.display = 'none';
+                    }
+                    </script>
+
                     <!-- ACTION BUTTONS -->
                     <div class="d-flex gap-2 pt-3 mt-4" style="border-top: 2px solid #e9ecef;">
                         <form action="{{ route('meetings.update', $meeting) }}" method="POST" class="flex-fill">
