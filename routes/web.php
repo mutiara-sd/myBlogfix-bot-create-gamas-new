@@ -26,6 +26,7 @@ use App\Http\Controllers\RiskController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MeetingCommentController;
 use App\Http\Controllers\MeetingAttachmentController;
+use App\Http\Controllers\ProgressUpdateController;
 
 // Middleware
 use App\Http\Middleware\AdminMiddleware;
@@ -114,7 +115,7 @@ Route::post('/telegram/webhook', function (Request $request) {
         $username = $from['username'] ?? '';
 
         $text = "Halo {$firstName} 👋\n\n".
-                "Telegram ID kamu: `{$chatId}`\n".
+                "Telegram ID kamu: {$chatId}\n".
                 "Username: @{$username}";
 
         Http::post("https://api.telegram.org/bot" . env('TELEGRAM_BOT_TOKEN') . "/sendMessage", [
@@ -130,13 +131,13 @@ Route::post('/telegram/webhook', function (Request $request) {
 
 /*
 |--------------------------------------------------------------------------
-| PROJECT, MEETING, MINUTES & RELATED ROUTES
+| PROJECT, MEETING, MINUTES, TASKS & RELATED ROUTES
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->group(function () {
 
-    // GLOBAL SEARCH - Tambahkan ini di paling atas setelah middleware auth
-    Route::get('/search', [App\Http\Controllers\SearchController::class, 'search'])->name('search');
+    // GLOBAL SEARCH 
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
     
     // PROJECT
     Route::resource('projects', ProjectController::class);
@@ -185,6 +186,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('risks.store');
         Route::delete('risks/{risk}', [RiskController::class, 'destroy'])
             ->name('risks.destroy');
+        Route::put('risks/{risk}', [RiskController::class, 'update'])
+            ->name('risks.update');
         
         // COMMENTS ROUTES
         Route::post('meetings/{meeting}/comments', [App\Http\Controllers\MeetingCommentController::class, 'store'])
@@ -215,26 +218,49 @@ Route::middleware(['auth'])->group(function () {
         ->name('decisions.destroy');
     Route::put('/decisions/{decision}', [MinuteDecisionController::class, 'update'])
         ->name('decisions.update');
-
-    // AGENDAS
-    // (tanpa route GET karena semua tampil di meetings/index)
-    Route::post('/meetings/{meeting}/agendas', [AgendaController::class, 'store'])
-        ->name('agendas.store');
-    Route::delete('/agendas/{agenda}', [AgendaController::class, 'destroy'])
-        ->name('agendas.destroy');
-    Route::put('/agendas/{agenda}', [AgendaController::class, 'update'])
-        ->name('agendas.update');
     
-    // RISKS
-    Route::post('/meetings/{meeting}/risks', [RiskController::class, 'store'])
-        ->name('risks.store');
-    Route::delete('/risks/{risk}', [RiskController::class, 'destroy'])
-        ->name('risks.destroy');
 
-
-
-    // TASKS, COMMENTS, ATTACHMENTS, REMINDERS
+    // ==========================================
+    // TASK ROUTES - LENGKAP & TERINTEGRASI
+    // ==========================================
+    
+    // Resource routes untuk CRUD Task
     Route::resource('tasks', TaskController::class);
-    Route::post('tasks/{task}/progress', [TaskProgressController::class, 'store'])->name('tasks.progress.store');
-    Route::post('reminders', [ReminderController::class, 'store'])->name('reminders.store');
+    
+    // Quick status update (untuk dropdown di task detail page)
+    Route::patch('tasks/{task}/status', [TaskController::class, 'updateStatus'])
+         ->name('tasks.update-status');
+    
+    // Bulk actions (untuk update multiple tasks sekaligus)
+    Route::post('tasks/bulk-update', [TaskController::class, 'bulkUpdate'])
+         ->name('tasks.bulk-update');
+    
+    // ==========================================
+    // PROGRESS UPDATE ROUTES (untuk Task)
+    // ==========================================
+    
+    // Store progress update
+    Route::post('tasks/{task}/progress', [ProgressUpdateController::class, 'store'])
+         ->name('progress.store');
+    
+    // Delete progress update (jika perlu bisa hapus progress)
+    Route::delete('progress/{progressUpdate}', [ProgressUpdateController::class, 'destroy'])
+         ->name('progress.destroy');
+
+
+    // ==========================================
+    // REMINDER ROUTES
+    // ==========================================
+    
+    // Store reminder (untuk Task, Meeting, dll)
+    Route::post('reminders', [ReminderController::class, 'store'])
+         ->name('reminders.store');
+    
+    // Delete reminder (jika perlu hapus reminder)
+    Route::delete('reminders/{reminder}', [ReminderController::class, 'destroy'])
+         ->name('reminders.destroy');
+    
+    // Mark reminder as sent (untuk system)
+    Route::patch('reminders/{reminder}/mark-sent', [ReminderController::class, 'markAsSent'])
+         ->name('reminders.mark-sent');
 });
