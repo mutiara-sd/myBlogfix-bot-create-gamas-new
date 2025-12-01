@@ -132,9 +132,9 @@
                                         name="status" 
                                         required>
                                     <option value="todo" {{ old('status', 'todo') == 'todo' ? 'selected' : '' }}>To Do</option>
-                                    <option value="in_progress" {{ old('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                    <option value="in_progress" {{ old('status') == 'doing' ? 'selected' : '' }}>Doing</option>
                                     <option value="review" {{ old('status') == 'review' ? 'selected' : '' }}>Review</option>
-                                    <option value="completed" {{ old('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="completed" {{ old('status') == 'done' ? 'selected' : '' }}>Done</option>
                                     <option value="blocked" {{ old('status') == 'blocked' ? 'selected' : '' }}>Blocked</option>
                                 </select>
                                 @error('status')
