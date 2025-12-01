@@ -159,7 +159,7 @@
                 </div>
                 <div class="card-body">
                     <!-- Add Comment Form -->
-                    <form action="{{ route('comments.store') }}" method="POST" class="mb-4">
+                    <form action="{{ route('comments.store', $task->id) }}" method="POST"> class="mb-4">
                         @csrf
                         <input type="hidden" name="commentable_type" value="App\Models\Task">
                         <input type="hidden" name="commentable_id" value="{{ $task->id }}">

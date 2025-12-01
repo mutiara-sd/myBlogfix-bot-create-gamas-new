@@ -24,13 +24,42 @@ class Task extends Model
         'weight',
     ];
 
+    protected $casts = [
+        'due_date' => 'datetime',
+    ];
+
     public function project()
     {
         return $this->belongsTo(Project::class);
     }
 
+    public function assignee()
+    {
+        return $this->belongsTo(User::class, 'assignee_id');
+    }
+
     public function labels()
     {
         return $this->belongsToMany(Label::class, 'task_label', 'task_id', 'label_id');
+    }
+
+    public function progressUpdates()
+    {
+    return $this->hasMany(ProgressUpdate::class);
+    }
+
+    public function comments()
+    {
+    return $this->hasMany(Comment::class);
+    }
+
+    public function attachments()
+    {
+    return $this->hasMany(Attachment::class);
+    }
+    
+    public function minute()
+    {
+    return $this->hasMany(Minute::class);
     }
 }
