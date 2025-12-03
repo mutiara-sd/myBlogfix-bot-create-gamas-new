@@ -217,37 +217,59 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-list me-2 text-warning"></i>Recent Tasks
                         </h5>
-                        <a href="#" class="btn btn-sm btn-outline-primary">View All Tasks</a>
+                        <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-outline-primary">View All Tasks</a>
                     </div>
                 </div>
                 <div class="card-body">
                     @if($project->tasks->count() > 0)
                         <div class="list-group list-group-flush">
                             @foreach($project->tasks->take(5) as $task)
-                                <div class="list-group-item px-0">
+                                <a href="{{ route('tasks.show', $task->id) }}" class="list-group-item px-0 text-decoration-none hover-task-item">
                                     <div class="d-flex align-items-center">
                                         <div class="flex-grow-1">
-                                            <h6 class="mb-1">{{ $task->title }}</h6>
+                                            <h6 class="mb-1 text-dark">{{ $task->title }}</h6>
                                             <small class="text-muted">{{ $task->created_at->diffForHumans() }}</small>
                                         </div>
-                                        <span class="badge bg-{{ $task->status === 'completed' ? 'success' : ($task->status === 'in_progress' ? 'warning' : 'secondary') }}">
-                                            {{ ucfirst(str_replace('_', ' ', $task->status)) }}
-                                        </span>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="badge bg-{{ $task->status === 'completed' ? 'success' : ($task->status === 'in_progress' ? 'warning' : 'secondary') }}">
+                                                {{ ucfirst(str_replace('_', ' ', $task->status)) }}
+                                            </span>
+                                            <i class="fas fa-chevron-right text-muted"></i>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             @endforeach
                         </div>
                     @else
                         <div class="text-center text-muted py-4">
                             <i class="fas fa-plus-circle fa-2x mb-3"></i>
                             <p class="mb-3">No tasks yet. Create your first task!</p>
-                            <button class="btn btn-sm btn-primary" style="background:#6f42c1; border-color:#6f42c1;" disabled>
+                            <a href="{{ route('tasks.create', ['project_id' => $project->id]) }}" 
+                            class="btn btn-sm btn-primary" 
+                            style="background:#6f42c1; border-color:#6f42c1;">
                                 <i class="fas fa-plus me-1"></i>Add Task
-                            </button>
+                            </a>
                         </div>
                     @endif
                 </div>
             </div>
+
+            <style>
+            .hover-task-item {
+                transition: all 0.2s ease;
+                border-radius: 8px;
+                border: none !important;
+            }
+
+            .hover-task-item:hover {
+                background-color: #f8f9fa;
+                transform: translateX(5px);
+            }
+
+            .hover-task-item:hover h6 {
+                color: #0d6efd !important;
+            }
+            </style>
         </div>
 
         <!-- Right Column -->
@@ -306,24 +328,29 @@
                         <h5 class="card-title mb-0">
                             <i class="fas fa-calendar me-2 text-info"></i>Recent Meetings
                         </h5>
-                        <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
+                        <a href="{{ route('meetings.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
                     </div>
                 </div>
                 <div class="card-body">
                     @if($project->meetings->count() > 0)
                         @foreach($project->meetings->take(3) as $meeting)
-                            <div class="d-flex align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }}">
-                                <div class="flex-shrink-0 me-3">
-                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
-                                         style="width: 40px; height: 40px; background: rgba(13, 202, 240, 0.1);">
-                                        <i class="fas fa-video text-info"></i>
+                            <a href="{{ route('meetings.show', $meeting->id) }}" class="text-decoration-none">
+                                <div class="d-flex align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }} hover-card">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
+                                            style="width: 40px; height: 40px; background: rgba(13, 202, 240, 0.1);">
+                                            <i class="fas fa-video text-info"></i>
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1 text-dark">{{ $meeting->title }}</h6>
+                                        <small class="text-muted">{{ $meeting->scheduled_at->format('M d, Y H:i') }}</small>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <i class="fas fa-chevron-right text-muted"></i>
                                     </div>
                                 </div>
-                                <div class="flex-grow-1">
-                                    <h6 class="mb-1">{{ $meeting->title }}</h6>
-                                    <small class="text-muted">{{ $meeting->scheduled_at->format('M d, Y H:i') }}</small>
-                                </div>
-                            </div>
+                            </a>
                         @endforeach
                     @else
                         <div class="text-center text-muted py-3">
@@ -334,6 +361,24 @@
                 </div>
             </div>
 
+            <style>
+            .hover-card {
+                transition: all 0.2s ease;
+                border-radius: 8px;
+                padding: 8px;
+                margin: -8px;
+            }
+
+            .hover-card:hover {
+                background-color: #f8f9fa;
+                transform: translateX(5px);
+            }
+
+            a.text-decoration-none:hover .hover-card h6 {
+                color: #0d6efd !important;
+            }
+            </style>
+
             <!-- Quick Actions -->
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
@@ -343,21 +388,15 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <button class="btn btn-outline-primary" disabled>
+                        <a href="{{ route('tasks.create') }}" class="btn btn-outline-primary" disabled>
                             <i class="fas fa-plus me-2"></i>Add Task
-                        </button>
+                        </a>
                         <button class="btn btn-outline-info" disabled>
                             <i class="fas fa-calendar-plus me-2"></i>Schedule Meeting
-                        </button>
-                        <button class="btn btn-outline-success" disabled>
-                            <i class="fas fa-file-upload me-2"></i>Upload File
                         </button>
                         <button class="btn btn-outline-secondary" disabled>
                             <i class="fas fa-share me-2"></i>Share Project
                         </button>
-                    </div>
-                    <div class="text-center mt-3">
-                        <small class="text-muted">More features coming soon!</small>
                     </div>
                 </div>
             </div>

@@ -159,7 +159,7 @@
                 </div>
                 <div class="card-body">
                     <!-- Add Comment Form -->
-                    <form action="{{ route('comments.store', $task->id) }}" method="POST"> class="mb-4">
+                    <form action="{{ route('comments.store', $task->id) }}" method="POST" class="mb-4">
                         @csrf
                         <input type="hidden" name="commentable_type" value="App\Models\Task">
                         <input type="hidden" name="commentable_id" value="{{ $task->id }}">
@@ -281,17 +281,6 @@
                                  aria-valuemin="0" 
                                  aria-valuemax="100">
                             </div>
-                        </div>
-                    </div>
-
-                    <!-- Weight -->
-                    <div class="mb-3">
-                        <label class="text-muted small mb-1">Weight/Complexity</label>
-                        <div class="d-flex align-items-center">
-                            @for($i = 1; $i <= 5; $i++)
-                                <i class="fas fa-star {{ $i <= ($task->weight / 2) ? 'text-warning' : 'text-muted' }} me-1"></i>
-                            @endfor
-                            <span class="ms-2 small text-muted">({{ $task->weight }}/10)</span>
                         </div>
                     </div>
 

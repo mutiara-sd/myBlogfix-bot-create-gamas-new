@@ -8,7 +8,7 @@
         </div>
         <div class="col-md-4 text-md-end">
             <a href="{{ route('tasks.create') }}" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
-                <i class="fas fa-plus me-2"></i>Create New Task
+                <i class="fas fa-plus me-2"></i>New Task
             </a>
         </div>
     </div>
