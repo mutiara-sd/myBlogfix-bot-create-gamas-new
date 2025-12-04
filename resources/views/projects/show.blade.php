@@ -388,7 +388,7 @@
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ route('tasks.create') }}" class="btn btn-outline-primary" disabled>
+                        <a href="{{ route('tasks.create') }}" class="btn btn-outline-primary">
                             <i class="fas fa-plus me-2"></i>Add Task
                         </a>
                         <button class="btn btn-outline-info" disabled>

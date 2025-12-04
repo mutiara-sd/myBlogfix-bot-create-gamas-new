@@ -62,7 +62,7 @@
                         <div class="row mb-4">
                             <div class="col-md-6">
                                 <label for="project_id" class="form-label fw-semibold">
-                                    Project <span class="text-danger">*</span>
+                                    Project <span class="text-danger"></span>
                                 </label>
                                 <select class="form-select @error('project_id') is-invalid @enderror" 
                                         id="project_id" 
@@ -102,7 +102,7 @@
                         <div class="row mb-4">
                             <div class="col-md-4">
                                 <label for="priority" class="form-label fw-semibold">
-                                    Priority <span class="text-danger">*</span>
+                                    Priority <span class="text-danger"></span>
                                 </label>
                                 <select class="form-select @error('priority') is-invalid @enderror" 
                                         id="priority" 
@@ -120,16 +120,16 @@
 
                             <div class="col-md-4">
                                 <label for="status" class="form-label fw-semibold">
-                                    Status <span class="text-danger">*</span>
+                                    Status <span class="text-danger"></span>
                                 </label>
                                 <select class="form-select @error('status') is-invalid @enderror" 
                                         id="status" 
                                         name="status" 
                                         required>
                                     <option value="todo" {{ old('status', $task->status) == 'todo' ? 'selected' : '' }}>To Do</option>
-                                    <option value="in_progress" {{ old('status', $task->status) == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                                    <option value="doing" {{ old('status', $task->status) == 'doing' ? 'selected' : '' }}>Doing</option>
                                     <option value="review" {{ old('status', $task->status) == 'review' ? 'selected' : '' }}>Review</option>
-                                    <option value="completed" {{ old('status', $task->status) == 'completed' ? 'selected' : '' }}>Completed</option>
+                                    <option value="done" {{ old('status', $task->status) == 'done' ? 'selected' : '' }}>Done</option>
                                     <option value="blocked" {{ old('status', $task->status) == 'blocked' ? 'selected' : '' }}>Blocked</option>
                                 </select>
                                 @error('status')
@@ -162,23 +162,6 @@
                                        max="100"
                                        value="{{ old('progress_percent', $task->progress_percent) }}">
                                 @error('progress_percent')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                            <div class="col-md-6">
-                                <label for="weight" class="form-label fw-semibold">
-                                    Task Weight/Complexity (1-10)
-                                </label>
-                                <input type="number" 
-                                       class="form-control @error('weight') is-invalid @enderror" 
-                                       id="weight" 
-                                       name="weight" 
-                                       min="1" 
-                                       max="10"
-                                       value="{{ old('weight', $task->weight) }}">
-                                <small class="text-muted">Rate the complexity from 1 (simple) to 10 (very complex)</small>
-                                @error('weight')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
@@ -238,33 +221,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!-- Priority Guide -->
-                <div class="card border-0 shadow-sm">
-                    <div class="card-header bg-white py-3">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-flag me-2 text-danger"></i>Priority Guide
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <span class="badge bg-danger mb-1">Urgent</span>
-                            <p class="small text-muted mb-0">Critical issues, immediate attention required</p>
-                        </div>
-                        <div class="mb-3">
-                            <span class="badge bg-warning mb-1">High</span>
-                            <p class="small text-muted mb-0">Important tasks, should be done soon</p>
-                        </div>
-                        <div class="mb-3">
-                            <span class="badge bg-info mb-1">Medium</span>
-                            <p class="small text-muted mb-0">Standard priority tasks</p>
-                        </div>
-                        <div class="mb-0">
-                            <span class="badge bg-secondary mb-1">Low</span>
-                            <p class="small text-muted mb-0">Nice to have, can wait</p>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -275,7 +231,7 @@
                     <div class="card-body p-4">
                         <div class="d-flex justify-content-between align-items-center">
                             <a href="{{ route('tasks.show', $task) }}" class="btn btn-outline-secondary">
-                                <i class="fas fa-times me-2"></i>Cancel
+                                Cancel
                             </a>
                             <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
                                 <i class="fas fa-save me-2"></i>Update Task
@@ -302,6 +258,12 @@
 .form-check-input:checked {
     background-color: #6f42c1;
     border-color: #6f42c1;
+}
+</style>
+
+<style>
+#status {
+    display: block !important;
 }
 </style>
 </x-layout>

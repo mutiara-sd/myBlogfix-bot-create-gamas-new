@@ -69,7 +69,7 @@ class TaskController extends Controller
         $stats = [
             'total' => Task::count(),
             'completed' => Task::whereIn('status', ['done', 'completed'])->count(),
-            'in_progress' => Task::where('status', 'in_progress')->count(),
+            'in_progress' => Task::where('status', 'doing')->count(),
             'overdue' => Task::where('due_date', '<', now())
                 ->whereNotIn('status', ['done', 'completed'])
                 ->count(),
@@ -103,7 +103,7 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'assignee_id' => 'nullable|exists:users,id',
             'priority' => 'required|in:low,med,high,urgent',
-            'status' => 'required|in:todo,in_progress,review,done,completed,blocked',
+            'status' => 'required|in:todo,doing,review,done,completed,blocked',
             'due_date' => 'nullable|date',
             'weight' => 'nullable|integer|min:1|max:10',
             'labels' => 'nullable|array',
@@ -160,7 +160,7 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'assignee_id' => 'nullable|exists:users,id',
             'priority' => 'required|in:low,med,high,urgent',
-            'status' => 'required|in:todo,in_progress,review,done,completed,blocked',
+            'status' => 'required|in:todo,doing,review,done,completed,blocked',
             'due_date' => 'nullable|date',
             'progress_percent' => 'nullable|integer|min:0|max:100',
             'weight' => 'nullable|integer|min:1|max:10',
@@ -190,7 +190,7 @@ class TaskController extends Controller
     public function updateStatus(Request $request, Task $task)
     {
         $validated = $request->validate([
-            'status' => 'required|in:todo,in_progress,review,done,completed,blocked',
+            'status' => 'required|in:todo,doing,review,done,completed,blocked',
         ]);
 
         $task->update($validated);

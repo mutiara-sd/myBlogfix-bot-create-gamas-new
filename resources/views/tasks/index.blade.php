@@ -119,9 +119,9 @@
                     <select name="status" class="form-select">
                         <option value="">All Status</option>
                         <option value="todo" {{ request('status') == 'todo' ? 'selected' : '' }}>To Do</option>
-                        <option value="in_progress" {{ request('status') == 'in_progress' ? 'selected' : '' }}>In Progress</option>
+                        <option value="doing" {{ request('status') == 'doing' ? 'selected' : '' }}>Doing</option>
                         <option value="review" {{ request('status') == 'review' ? 'selected' : '' }}>Review</option>
-                        <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                        <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
                         <option value="blocked" {{ request('status') == 'blocked' ? 'selected' : '' }}>Blocked</option>
                     </select>
                 </div>

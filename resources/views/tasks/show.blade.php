@@ -208,6 +208,146 @@
                     @endif
                 </div>
             </div>
+            <!-- Attachments Section -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-paperclip me-2 text-warning"></i>Attachments ({{ $task->attachments->count() }})
+                        </h5>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAttachmentModal">
+                            <i class="fas fa-plus me-1"></i>Add File
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if($task->attachments->count() > 0)
+                        <div class="row g-3">
+                            @foreach($task->attachments as $attachment)
+                                <div class="col-md-6">
+                                    <div class="attachment-item p-3 border rounded d-flex align-items-center hover-attachment">
+                                        <div class="flex-shrink-0 me-3">
+                                            @php
+                                                $extension = strtolower(pathinfo($attachment->filename, PATHINFO_EXTENSION));
+                                                $iconData = match($extension) {
+                                                    'pdf' => ['icon' => 'fa-file-pdf', 'color' => 'text-danger', 'bg' => 'rgba(220, 38, 38, 0.1)'],
+                                                    'doc', 'docx' => ['icon' => 'fa-file-word', 'color' => 'text-primary', 'bg' => 'rgba(37, 99, 235, 0.1)'],
+                                                    'xls', 'xlsx' => ['icon' => 'fa-file-excel', 'color' => 'text-success', 'bg' => 'rgba(34, 197, 94, 0.1)'],
+                                                    'ppt', 'pptx' => ['icon' => 'fa-file-powerpoint', 'color' => 'text-warning', 'bg' => 'rgba(245, 158, 11, 0.1)'],
+                                                    'jpg', 'jpeg', 'png', 'gif', 'svg' => ['icon' => 'fa-file-image', 'color' => 'text-info', 'bg' => 'rgba(14, 165, 233, 0.1)'],
+                                                    'zip', 'rar', '7z' => ['icon' => 'fa-file-archive', 'color' => 'text-secondary', 'bg' => 'rgba(107, 114, 128, 0.1)'],
+                                                    default => ['icon' => 'fa-file', 'color' => 'text-muted', 'bg' => 'rgba(156, 163, 175, 0.1)'],
+                                                };
+                                            @endphp
+                                            <div class="rounded d-inline-flex align-items-center justify-content-center" 
+                                                 style="width: 48px; height: 48px; background: {{ $iconData['bg'] }};">
+                                                <i class="fas {{ $iconData['icon'] }} {{ $iconData['color'] }} fa-lg"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 min-w-0">
+                                            <h6 class="mb-1 text-truncate">{{ $attachment->filename }}</h6>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-user me-1"></i>{{ $attachment->user->name }}
+                                                </small>
+                                                <small class="text-muted">•</small>
+                                                <small class="text-muted">{{ $attachment->created_at->diffForHumans() }}</small>
+                                            </div>
+                                        </div>
+                                        <div class="flex-shrink-0 ms-2">
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-light" data-bs-toggle="dropdown">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end">
+                                                    <li>
+                                                        <a class="dropdown-item" href="{{ route('attachments.download', $attachment) }}">
+                                                            <i class="fas fa-download me-2"></i>Download
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <form action="{{ route('attachments.destroy', $attachment) }}" method="POST" 
+                                                              onsubmit="return confirm('Delete this attachment?')">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="dropdown-item text-danger">
+                                                                <i class="fas fa-trash me-2"></i>Delete
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-paperclip fa-2x mb-3"></i>
+                            <p class="mb-0">No attachments yet. Add files to this task!</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
+
+            <!-- Reminders Section -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-bell me-2 text-danger"></i>Reminders
+                        </h5>
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addReminderModal">
+                            <i class="fas fa-plus me-1"></i>Add Reminder
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if(isset($task->reminders) && $task->reminders->count() > 0)
+                        @foreach($task->reminders as $reminder)
+                            <div class="reminder-item p-3 border rounded mb-3 {{ !$loop->last ? '' : 'mb-0' }}">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div class="flex-grow-1">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fas fa-clock text-primary me-2"></i>
+                                            <strong>{{ $reminder->remind_at->format('M d, Y H:i') }}</strong>
+                                        </div>
+                                        <div class="d-flex gap-2 flex-wrap">
+                                            @if($reminder->notify_telegram)
+                                                <span class="badge bg-info">
+                                                    <i class="fab fa-telegram me-1"></i>Telegram
+                                                </span>
+                                            @endif
+                                            @if($reminder->notify_email)
+                                                <span class="badge bg-secondary">
+                                                    <i class="fas fa-envelope me-1"></i>Email
+                                                </span>
+                                            @endif
+                                        </div>
+                                        @if($reminder->note)
+                                            <p class="text-muted mb-0 mt-2 small">{{ $reminder->note }}</p>
+                                        @endif
+                                    </div>
+                                    <form action="{{ route('reminders.destroy', $reminder) }}" method="POST" 
+                                          onsubmit="return confirm('Delete this reminder?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class="text-center text-muted py-4">
+                            <i class="fas fa-bell-slash fa-2x mb-3"></i>
+                            <p class="mb-0">No reminders set</p>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </div>
 
         <!-- Right Column -->
@@ -368,6 +508,88 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Add Attachment Modal -->
+<div class="modal fade" id="addAttachmentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-paperclip me-2"></i>Add Attachment
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('attachments.store', $task) }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Select File</label>
+                        <input type="file" name="file" class="form-control" required>
+                        <small class="text-muted">Max file size: 10MB</small>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Description (Optional)</label>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Add a description..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
+                        <i class="fas fa-upload me-2"></i>Upload
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Add Reminder Modal -->
+<div class="modal fade" id="addReminderModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="fas fa-bell me-2"></i>Add Reminder
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{{ route('reminders.store', $task) }}" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Remind Date & Time</label>
+                        <input type="datetime-local" name="remind_at" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Notification Channels</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="notify_telegram" value="1" id="notifyTelegram">
+                            <label class="form-check-label" for="notifyTelegram">
+                                <i class="fab fa-telegram me-1 text-info"></i>Telegram
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="notify_email" value="1" id="notifyEmail" checked>
+                            <label class="form-check-label" for="notifyEmail">
+                                <i class="fas fa-envelope me-1 text-secondary"></i>Email
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Note (Optional)</label>
+                        <textarea name="note" class="form-control" rows="2" placeholder="Add a note..."></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
+                        <i class="fas fa-bell me-2"></i>Set Reminder
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -554,6 +776,27 @@
 .btn-delete-confirm:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+}
+
+.hover-attachment {
+    transition: all 0.2s ease;
+}
+
+.hover-attachment:hover {
+    background-color: #f9fafb;
+    border-color: #6f42c1 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.reminder-item {
+    background: #f9fafb;
+    transition: all 0.2s ease;
+}
+
+.reminder-item:hover {
+    background: #f3f4f6;
+    border-color: #6f42c1 !important;
 }
 </style>
 
