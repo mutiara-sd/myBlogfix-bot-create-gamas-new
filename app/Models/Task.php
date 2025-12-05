@@ -9,7 +9,7 @@ class Task extends Model
 {
     use HasFactory;
 
-    protected $table = 'tasks'; // biar jelas, walaupun defaultnya sama
+    protected $table = 'tasks';
 
     protected $fillable = [
         'project_id',
@@ -50,7 +50,7 @@ class Task extends Model
 
     public function comments()
     {
-    return $this->hasMany(Comment::class);
+    return $this->morphMany(Comment::class, 'commentable', 'commentable_type', 'commentable_id');
     }
 
     public function attachments()

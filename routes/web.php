@@ -27,6 +27,8 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\MeetingCommentController;
 use App\Http\Controllers\MeetingAttachmentController;
 use App\Http\Controllers\ProgressUpdateController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AttachmentController;
 
 // Middleware
 use App\Http\Middleware\AdminMiddleware;
@@ -190,22 +192,25 @@ Route::middleware(['auth'])->group(function () {
             ->name('risks.update');
         
         // COMMENTS ROUTES
-        Route::post('meetings/{meeting}/comments', [App\Http\Controllers\MeetingCommentController::class, 'store'])
-            ->name('comments.store');
-        Route::delete('comments/{comment}', [App\Http\Controllers\MeetingCommentController::class, 'destroy'])
-            ->name('comments.destroy');
-        Route::put('comments/{comment}', [App\Http\Controllers\MeetingCommentController::class, 'update'])
-            ->name('comments.update');
-        Route::get('comments/{comment}/download', [App\Http\Controllers\MeetingCommentController::class, 'downloadAttachment'])
-            ->name('comments.download');
+        Route::post('meetings/{meeting}/comments', [MeetingCommentController::class, 'store'])
+            ->name('meetings.comments.store');  
+
+        Route::delete('meetings/comments/{comment}', [MeetingCommentController::class, 'destroy'])
+            ->name('meetings.comments.destroy');
+
+        Route::put('meetings/comments/{comment}', [MeetingCommentController::class, 'update'])
+            ->name('meetings.comments.update');
+
+        Route::get('meetings/comments/{comment}/download', [MeetingCommentController::class, 'downloadAttachment'])
+            ->name('meetings.comments.download'); 
 
         // ATTACHMENTS ROUTES
         Route::post('meetings/{meeting}/attachments', [App\Http\Controllers\MeetingAttachmentController::class, 'store'])
-            ->name('attachments.store');
-        Route::get('attachments/{attachment}/download', [App\Http\Controllers\MeetingAttachmentController::class, 'download'])
-            ->name('attachments.download');
-        Route::delete('attachments/{attachment}', [App\Http\Controllers\MeetingAttachmentController::class, 'destroy'])
-            ->name('attachments.destroy');
+            ->name('meetings.attachments.store');
+        Route::get('meetings/attachments/{attachment}/download', [App\Http\Controllers\MeetingAttachmentController::class, 'download'])
+            ->name('meetings.attachments.download');
+        Route::delete('meetings/attachments/{attachment}', [App\Http\Controllers\MeetingAttachmentController::class, 'destroy'])
+            ->name('meetings.attachments.destroy');
         
     
     // MINUTES (Decision)
@@ -263,4 +268,22 @@ Route::middleware(['auth'])->group(function () {
     // Mark reminder as sent (untuk system)
     Route::patch('reminders/{reminder}/mark-sent', [ReminderController::class, 'markAsSent'])
          ->name('reminders.mark-sent');
+
+
+    //-----------------------------------------
+    //             COMMENT SECTION
+    //-----------------------------------------
+
+    // Comments untuk Tasks
+    Route::post('/tasks/{task}/comments', [CommentController::class, 'storeForTask'])->name('tasks.comments.store');
+    Route::delete('tasks/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+    Route::get('tasks/comments/{comment}/download', [CommentController::class, 'download'])->name('comments.download');
+
+    // ATTACHMENT ROUTES (untuk Task)
+    Route::post('tasks/{task}/attachments', [AttachmentController::class, 'store'])
+        ->name('tasks.attachments.store');
+    Route::get('tasks/attachments/{attachment}/download', [AttachmentController::class, 'download'])
+        ->name('tasks.attachments.download');
+    Route::delete('tasks/attachments/{attachment}', [AttachmentController::class, 'destroy'])
+        ->name('tasks.attachments.destroy');
 });

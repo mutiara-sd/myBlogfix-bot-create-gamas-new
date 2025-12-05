@@ -151,63 +151,158 @@
             </div>
 
             <!-- Comments Section -->
-            <div class="card border-0 shadow-sm">
+            <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white py-3">
-                    <h5 class="card-title mb-0">
-                        <i class="fas fa-comments me-2 text-success"></i>Comments ({{ $task->comments->count() }})
-                    </h5>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title mb-0">
+                            <i class="fas fa-comments me-2" style="color: #8b5cf6;"></i>Comments
+                        </h5>
+                        <span class="badge rounded-pill" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-size: 0.85rem; padding: 6px 12px;">
+                            {{ $task->comments->count() }} {{ Str::plural('comment', $task->comments->count()) }}
+                        </span>
+                    </div>
                 </div>
                 <div class="card-body">
-                    <!-- Add Comment Form -->
-                    <form action="{{ route('comments.store', $task->id) }}" method="POST" class="mb-4">
+                    <!-- Comment Form -->
+                    <form action="{{ route('tasks.comments.store', $task) }}" method="POST" enctype="multipart/form-data" class="mb-4" id="commentForm">
                         @csrf
-                        <input type="hidden" name="commentable_type" value="App\Models\Task">
-                        <input type="hidden" name="commentable_id" value="{{ $task->id }}">
-                        <div class="mb-3">
-                            <textarea class="form-control" 
-                                      name="body" 
-                                      rows="3" 
-                                      placeholder="Write a comment..." 
-                                      required></textarea>
+                
+                        <div class="d-flex gap-2 align-items-start p-3 rounded" style="background: white; border: 2px solid #e5e7eb;">
+                            <!-- User Avatar -->
+                            <div class="flex-shrink-0">
+                                @if(Auth::user()->profile_picture)
+                                    <img src="{{ filter_var(Auth::user()->profile_picture, FILTER_VALIDATE_URL) ? Auth::user()->profile_picture : asset('storage/' . Auth::user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
+                                @else
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                        {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
+                                    </div>
+                                @endif
+                            </div>
+                            
+                            <!-- Input Area -->
+                            <div class="flex-grow-1">
+                                <textarea name="body" rows="2" placeholder="Add a comment..." required class="form-control border-0 p-0 mb-2" style="resize: none; font-size: 0.95rem; line-height: 1.5;" oninput="this.style.height = 'auto'; this.style.height = this.scrollHeight + 'px'"></textarea>
+                                
+                                <!-- File Preview Area -->
+                                <div id="filePreview" style="display: none;" class="mb-2 p-2 rounded" style="background: #f9fafb; border: 1px dashed #d1d5db;">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <i class="fas fa-paperclip text-muted"></i>
+                                        <span id="fileName" class="text-muted small"></span>
+                                        <span id="fileSize" class="badge bg-light text-dark"></span>
+                                        <button type="button" class="btn btn-sm btn-link text-danger p-0 ms-auto" onclick="removeFile()">
+                                            <i class="fas fa-times"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <input type="file" name="attachment" id="commentAttachment" style="display: none;" accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.jpg,.jpeg,.png,.gif,.zip,.rar" onchange="handleFileSelect(this)">
+                                        <button type="button" class="btn btn-sm btn-link text-muted p-0" onclick="document.getElementById('commentAttachment').click()">
+                                            <i class="fas fa-paperclip me-1"></i>Attach file
+                                        </button>
+                                        <small class="text-muted ms-2">(Max: 5MB)</small>
+                                    </div>
+                                    <button type="submit" class="btn btn-sm" style="background: #8b5cf6; color: white; padding: 6px 20px; border-radius: 20px; font-weight: 600;">
+                                        <i class="fas fa-paper-plane me-1"></i>Post Comment
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
-                            <i class="fas fa-paper-plane me-2"></i>Post Comment
-                        </button>
                     </form>
 
                     <!-- Comments List -->
-                    @if($task->comments->count() > 0)
-                        <div class="comments-list">
-                            @foreach($task->comments as $comment)
-                                <div class="comment-item {{ !$loop->last ? 'border-bottom pb-3 mb-3' : '' }}">
-                                    <div class="d-flex">
-                                        @if($comment->user->profile_picture)
-                                            <img src="{{ filter_var($comment->user->profile_picture, FILTER_VALIDATE_URL)
-                                                    ? $comment->user->profile_picture
-                                                    : asset('storage/' . $comment->user->profile_picture) }}"
-                                                alt="{{ $comment->user->name }}"
-                                                class="rounded-circle me-3"
-                                                style="width: 40px; height: 40px; object-fit: cover;">
-                                        @else
-                                            <div class="rounded-circle d-inline-flex align-items-center justify-content-center me-3" 
-                                                style="width: 40px; height: 40px; background: #6f42c1;">
-                                                <span class="text-white fw-bold">{{ strtoupper(substr($comment->user->name, 0, 1)) }}</span>
-                                            </div>
-                                        @endif
-                                        <div class="flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                                <strong>{{ $comment->user->name }}</strong>
-                                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                                            </div>
-                                            <p class="mb-0">{{ $comment->body }}</p>
-                                        </div>
+                    @forelse ($task->comments as $comment)
+                        <div class="comment-item d-flex gap-3 p-3 mb-3 rounded" style="background: white; border-left: 3px solid #8b5cf6; transition: all 0.2s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.15)'" onmouseout="this.style.boxShadow='none'">
+                            
+                            <!-- User Avatar -->
+                            <div class="flex-shrink-0">
+                                @if($comment->user->profile_picture)
+                                    <img src="{{ filter_var($comment->user->profile_picture, FILTER_VALIDATE_URL) ? $comment->user->profile_picture : asset('storage/' . $comment->user->profile_picture) }}" alt="{{ $comment->user->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
+                                @else
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                        {{ strtoupper(substr($comment->user->name, 0, 1)) }}
                                     </div>
+                                @endif
+                            </div>
+                            
+                            <!-- Comment Content -->
+                            <div class="flex-grow-1" style="min-width: 0;">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <strong style="color: #2d3748; font-size: 0.95rem;">{{ $comment->user->name }}</strong>
+                                        <small class="text-muted ms-2">
+                                            <i class="fas fa-clock me-1"></i>{{ $comment->created_at->diffForHumans() }}
+                                        </small>
+                                    </div>
+                                    
+                                    @if($comment->user_id === Auth::id())
+                                        <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" onclick="return confirm('Delete this comment?')" class="btn btn-sm rounded-circle" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; width: 28px; height: 28px; padding: 0; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='rgba(239, 68, 68, 0.2)'" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'" title="Delete comment">
+                                                <i class="fas fa-trash-alt" style="font-size: 11px;"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
-                            @endforeach
+                                
+                                <!-- Comment Text -->
+                                <p class="mb-2" style="color: #4b5563; line-height: 1.6; word-wrap: break-word; word-break: break-word; white-space: pre-wrap;">{{ $comment->body }}</p>
+                                
+                                <!-- Comment Attachment (if exists) -->
+                                @if(isset($comment->attachment_path) && $comment->attachment_path)
+                                    <div class="mt-2 p-2 rounded d-inline-flex align-items-center gap-2" style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2);">
+                                        <i class="fas fa-paperclip"></i>
+                                        <a href="{{ route('comments.download', $comment) }}" class="text-decoration-none" style="color: #4b5563;">
+                                            <span class="fw-semibold">{{ basename($comment->attachment_path) }}</span>
+                                        </a>
+                                        <a href="{{ route('comments.download', $comment) }}" class="btn btn-sm btn-link p-0 ms-1" title="Download">
+                                            <i class="fas fa-download" style="font-size: 12px;"></i>
+                                        </a>
+                                    </div>
+                                @endif
+                            </div>
                         </div>
-                    @endif
+                    @empty
+                        <div class="text-center py-5 rounded" style="background: white; border: 2px dashed #e5e7eb;">
+                            <i class="fas fa-comment-dots mb-3" style="font-size: 2.5rem; color: #d1d5db;"></i>
+                            <p class="text-muted mb-0">No comments yet. Be the first to comment!</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
+
+            <script>
+            function handleFileSelect(input) {
+                const file = input.files[0];
+                if (file) {
+                    const maxSize = 5 * 1024 * 1024; // 5MB
+                    if (file.size > maxSize) {
+                        alert('File size must be less than 5MB');
+                        input.value = '';
+                        return;
+                    }
+                    
+                    document.getElementById('filePreview').style.display = 'block';
+                    document.getElementById('fileName').textContent = file.name;
+                    document.getElementById('fileSize').textContent = formatFileSize(file.size);
+                }
+            }
+
+            function removeFile() {
+                document.getElementById('commentAttachment').value = '';
+                document.getElementById('filePreview').style.display = 'none';
+            }
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const sizes = ['Bytes', 'KB', 'MB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i];
+            }
+            </script>
             <!-- Attachments Section -->
             <div class="card border-0 shadow-sm mt-4">
                 <div class="card-header bg-white py-3">
@@ -228,7 +323,7 @@
                                     <div class="attachment-item p-3 border rounded d-flex align-items-center hover-attachment">
                                         <div class="flex-shrink-0 me-3">
                                             @php
-                                                $extension = strtolower(pathinfo($attachment->filename, PATHINFO_EXTENSION));
+                                                $extension = strtolower(pathinfo($attachment->name, PATHINFO_EXTENSION));
                                                 $iconData = match($extension) {
                                                     'pdf' => ['icon' => 'fa-file-pdf', 'color' => 'text-danger', 'bg' => 'rgba(220, 38, 38, 0.1)'],
                                                     'doc', 'docx' => ['icon' => 'fa-file-word', 'color' => 'text-primary', 'bg' => 'rgba(37, 99, 235, 0.1)'],
@@ -245,10 +340,12 @@
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 min-w-0">
-                                            <h6 class="mb-1 text-truncate">{{ $attachment->filename }}</h6>
+                                            <h6 class="mb-1" style="word-break: break-word; line-height: 1.3;">
+                                                {{ $attachment->name }}
+                                            </h6>
                                             <div class="d-flex align-items-center gap-2">
                                                 <small class="text-muted">
-                                                    <i class="fas fa-user me-1"></i>{{ $attachment->user->name }}
+                                                    <i class="fas fa-user me-1"></i>{{ $attachment->user->name ?? 'Unknown' }}
                                                 </small>
                                                 <small class="text-muted">•</small>
                                                 <small class="text-muted">{{ $attachment->created_at->diffForHumans() }}</small>
@@ -261,12 +358,12 @@
                                                 </button>
                                                 <ul class="dropdown-menu dropdown-menu-end">
                                                     <li>
-                                                        <a class="dropdown-item" href="{{ route('attachments.download', $attachment) }}">
+                                                        <a class="dropdown-item" href="{{ route('tasks.attachments.download', $attachment) }}">
                                                             <i class="fas fa-download me-2"></i>Download
                                                         </a>
                                                     </li>
                                                     <li>
-                                                        <form action="{{ route('attachments.destroy', $attachment) }}" method="POST" 
+                                                        <form action="{{ route('tasks.attachments.destroy', $attachment) }}" method="POST" 
                                                               onsubmit="return confirm('Delete this attachment?')">
                                                             @csrf
                                                             @method('DELETE')
@@ -521,17 +618,13 @@
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <form action="{{ route('attachments.store', $task) }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('tasks.attachments.store', $task) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label fw-semibold">Select File</label>
                         <input type="file" name="file" class="form-control" required>
                         <small class="text-muted">Max file size: 10MB</small>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold">Description (Optional)</label>
-                        <textarea name="description" class="form-control" rows="3" placeholder="Add a description..."></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">

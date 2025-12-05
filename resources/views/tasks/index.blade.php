@@ -56,7 +56,7 @@
                          style="width: 60px; height: 60px; background: rgba(255, 193, 7, 0.1);">
                         <i class="fas fa-spinner fa-2x text-warning"></i>
                     </div>
-                    <h3 class="fw-bold mb-1">{{ $stats['in_progress'] }}</h3>
+                    <h3 class="fw-bold mb-1">{{ $stats['doing'] }}</h3>
                     <p class="text-muted mb-0">In Progress</p>
                 </div>
             </div>

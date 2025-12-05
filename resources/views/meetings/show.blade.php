@@ -364,7 +364,7 @@
                         </div>
 
                         <!-- Form Upload (Hidden) -->
-                        <form action="{{ route('attachments.store', $meeting) }}" method="POST" enctype="multipart/form-data" id="attachmentForm">
+                        <form action="{{ route('meetings.attachments.store', $meeting) }}" method="POST" enctype="multipart/form-data" id="attachmentForm">
                             @csrf
                             <input type="file" id="fileInput" name="file" style="display: none;" 
                                 onchange="document.getElementById('attachmentForm').submit()"
@@ -397,7 +397,7 @@
                                         </div>
                                         
                                         <div class="d-flex gap-2 flex-shrink-0">
-                                            <a href="{{ route('attachments.download', $attachment) }}" 
+                                            <a href="{{ route('meetings.attachments.download', $attachment) }}" 
                                             class="btn btn-sm rounded-circle" 
                                             style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: none; width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
                                             onmouseover="this.style.background='rgba(16, 185, 129, 0.2)'"
@@ -406,7 +406,7 @@
                                                 <i class="fas fa-download" style="font-size: 12px;"></i>
                                             </a>
                                             
-                                            <form action="{{ route('attachments.destroy', $attachment) }}" method="POST" class="d-inline">
+                                            <form action="{{ route('meetings.attachments.destroy', $attachment) }}" method="POST" class="d-inline">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" onclick="return confirm('Delete this file?')" 
@@ -442,7 +442,7 @@
                         </div>
 
                         <!-- Comment Form -->
-                        <form action="{{ route('comments.store', $meeting) }}" method="POST" enctype="multipart/form-data" class="mb-4" id="commentForm">
+                        <form action="{{ route('meetings.comments.store', $meeting) }}" method="POST" enctype="multipart/form-data" class="mb-4" id="commentForm">
                             @csrf
                             <div class="d-flex gap-2 align-items-start p-3 rounded" style="background: white; border: 2px solid #e5e7eb;">
                                 <!-- User Avatar -->
@@ -535,7 +535,7 @@
                                         </div>
                                         
                                         @if($comment->user_id === Auth::id())
-                                            <form action="{{ route('comments.destroy', $comment) }}" method="POST">
+                                            <form action="{{ route('meetings.comments.destroy', $comment) }}" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" onclick="return confirm('Delete this comment?')" 
@@ -558,11 +558,11 @@
                                         <div class="mt-2 p-2 rounded d-inline-flex align-items-center gap-2" 
                                             style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2);">
                                             <i class="fas {{ $comment->attachment_icon }}"></i>
-                                            <a href="{{ route('comments.download', $comment) }}" class="text-decoration-none" style="color: #4b5563;">
+                                            <a href="{{ route('meetings.comments.download', $comment) }}" class="text-decoration-none" style="color: #4b5563;">
                                                 <span class="fw-semibold">{{ $comment->attachment_name }}</span>
                                                 <small class="text-muted ms-1">({{ $comment->attachment_size_human }})</small>
                                             </a>
-                                            <a href="{{ route('comments.download', $comment) }}" class="btn btn-sm btn-link p-0 ms-1" title="Download">
+                                            <a href="{{ route('meetings.comments.download', $comment) }}" class="btn btn-sm btn-link p-0 ms-1" title="Download">
                                                 <i class="fas fa-download" style="font-size: 12px;"></i>
                                             </a>
                                         </div>

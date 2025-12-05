@@ -1,5 +1,5 @@
 <?php
-// app/Http/Controllers/TaskController.php
+
 namespace App\Http\Controllers;
 
 use App\Models\Task;
@@ -69,7 +69,7 @@ class TaskController extends Controller
         $stats = [
             'total' => Task::count(),
             'completed' => Task::whereIn('status', ['done', 'completed'])->count(),
-            'in_progress' => Task::where('status', 'doing')->count(),
+            'doing' => Task::where('status', 'doing')->count(),
             'overdue' => Task::where('due_date', '<', now())
                 ->whereNotIn('status', ['done', 'completed'])
                 ->count(),
@@ -130,13 +130,14 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
+        // EAGER LOAD semua relasi yang dibutuhkan
         $task->load([
             'project', 
             'assignee', 
             'labels', 
-            'progressUpdates.creator', 
-            'comments.user', 
-            'attachments',
+            'progressUpdates.user',       // ← Load user di progressUpdates
+            'comments.user',               // ← Load user di comments
+            'attachments.user',            // ← TAMBAHAN INI (PENTING!)
             'minute.meeting'
         ]);
 
