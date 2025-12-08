@@ -62,4 +62,8 @@ class Task extends Model
     {
     return $this->hasMany(Minute::class);
     }
+    public function reminders()
+    {
+        return $this->morphMany(Reminder::class, 'remindable')->orderBy('remind_at');
+    }
 }

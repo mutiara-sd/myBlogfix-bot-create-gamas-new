@@ -642,39 +642,136 @@
 <div class="modal fade" id="addReminderModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    <i class="fas fa-bell me-2"></i>Add Reminder
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <form action="{{ route('reminders.store', $task) }}" method="POST">
+            <form action="{{ route('reminders.store') }}" method="POST">
                 @csrf
+                
+                <!-- Hidden fields untuk polymorphic relationship -->
+                <input type="hidden" name="remindable_type" value="App\Models\Task">
+                <input type="hidden" name="remindable_id" value="{{ $task->id }}">
+                
+                <div class="modal-header">
+                    <h5 class="modal-title">
+                        <i class="fas fa-bell me-2"></i>Add Reminder
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                
                 <div class="modal-body">
+                    <!-- Remind At -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Remind Date & Time</label>
-                        <input type="datetime-local" name="remind_at" class="form-control" required>
+                        <label for="remind_at" class="form-label fw-semibold">
+                            Remind Me At <span class="text-danger">*</span>
+                        </label>
+                        <input type="datetime-local" 
+                               class="form-control @error('remind_at') is-invalid @enderror" 
+                               id="remind_at" 
+                               name="remind_at" 
+                               value="{{ old('remind_at') }}"
+                               min="{{ now()->format('Y-m-d\TH:i') }}"
+                               required>
+                        @error('remind_at')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="text-muted">Set when you want to be reminded</small>
                     </div>
+
+                    <!-- Notification Channels -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Notification Channels</label>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="notify_telegram" value="1" id="notifyTelegram">
-                            <label class="form-check-label" for="notifyTelegram">
-                                <i class="fab fa-telegram me-1 text-info"></i>Telegram
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="notify_email" value="1" id="notifyEmail" checked>
-                            <label class="form-check-label" for="notifyEmail">
-                                <i class="fas fa-envelope me-1 text-secondary"></i>Email
-                            </label>
-                        </div>
+                        <label class="form-label fw-semibold">
+                            Notification Channel <span class="text-danger">*</span>
+                        </label>
+                        
+                        @if(auth()->user()->telegram_id)
+                            <div class="form-check">
+                                <input class="form-check-input @error('notify_telegram') is-invalid @enderror" 
+                                       type="checkbox" 
+                                       name="notify_telegram" 
+                                       id="notifyTelegram"
+                                       value="1"
+                                       {{ old('notify_telegram') ? 'checked' : '' }}>
+                                <label class="form-check-label" for="notifyTelegram">
+                                    <i class="fab fa-telegram text-info me-1"></i>
+                                    Telegram
+                                    <span class="badge bg-success ms-2">Connected</span>
+                                </label>
+                            </div>
+                        @else
+                            <div class="form-check">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="notifyTelegramDisabled"
+                                       disabled>
+                                <label class="form-check-label text-muted" for="notifyTelegramDisabled">
+                                    <i class="fab fa-telegram me-1"></i>
+                                    Telegram
+                                    <span class="badge bg-warning ms-2">Not Connected</span>
+                                </label>
+                                <small class="d-block text-muted">
+                                    Please add your Telegram ID in 
+                                    <a href="{{ route('profile') }}" target="_blank">profile settings</a>
+                                </small>
+                            </div>
+                        @endif
+
+                        @if(auth()->user()->email)
+                            <div class="form-check mt-2">
+                                <input class="form-check-input @error('notify_email') is-invalid @enderror" 
+                                       type="checkbox" 
+                                       name="notify_email" 
+                                       id="notifyEmail"
+                                       value="1"
+                                       {{ old('notify_email', true) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="notifyEmail">
+                                    <i class="fas fa-envelope text-secondary me-1"></i>
+                                    Email ({{ auth()->user()->email }})
+                                    <span class="badge bg-success ms-2">Connected</span>
+                                </label>
+                            </div>
+                        @else
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="notifyEmailDisabled"
+                                       disabled>
+                                <label class="form-check-label text-muted" for="notifyEmailDisabled">
+                                    <i class="fas fa-envelope me-1"></i>
+                                    Email
+                                    <span class="badge bg-warning ms-2">Not Connected</span>
+                                </label>
+                                <small class="d-block text-muted">
+                                    Please add your email in 
+                                    <a href="{{ route('profile') }}" target="_blank">profile settings</a>
+                                </small>
+                            </div>
+                        @endif
+
+                        @error('notification')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                        @error('notify_telegram')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
+                        @error('notify_email')
+                            <div class="text-danger small mt-1">{{ $message }}</div>
+                        @enderror
                     </div>
+
+                    <!-- Note (Optional) -->
                     <div class="mb-3">
-                        <label class="form-label fw-semibold">Note (Optional)</label>
-                        <textarea name="note" class="form-control" rows="2" placeholder="Add a note..."></textarea>
+                        <label for="note" class="form-label fw-semibold">Note (Optional)</label>
+                        <textarea class="form-control @error('note') is-invalid @enderror" 
+                                  id="note" 
+                                  name="note" 
+                                  rows="3"
+                                  maxlength="500"
+                                  placeholder="Add a custom message for this reminder...">{{ old('note') }}</textarea>
+                        @error('note')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                        <small class="text-muted">Max 500 characters</small>
                     </div>
                 </div>
+                
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
@@ -685,6 +782,19 @@
         </div>
     </div>
 </div>
+
+<!-- Script untuk auto-show modal kalau ada validation error -->
+@if($errors->any())
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cek apakah error dari reminder form
+        @if($errors->has('remind_at') || $errors->has('notify_telegram') || $errors->has('notify_email') || $errors->has('notification') || $errors->has('note'))
+            var reminderModal = new bootstrap.Modal(document.getElementById('addReminderModal'));
+            reminderModal.show();
+        @endif
+    });
+</script>
+@endif
 
 <!-- Delete Modal -->
 <div class="delete-modal" id="deleteModal">

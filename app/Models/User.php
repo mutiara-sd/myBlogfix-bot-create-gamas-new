@@ -22,10 +22,14 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'username',
-        'telegram_id',
-        'telegram_username',
+        'email',              
+        'telegram_id',        
+        'telegram_username',  
         'password',
-        'role_id',
+        'role',
+        'role_id',           
+        'theme',
+        'theme_preferences',
         'profile_picture',
         'is_verified',
     ];
@@ -66,5 +70,20 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function reminders()
+    {
+        return $this->hasMany(Reminder::class);
+    }
+
+    public function hasTelegramId()
+    {
+        return !empty($this->telegram_id);
+    }
+
+    public function hasEmail()
+    {
+        return !empty($this->email);
     }
 }

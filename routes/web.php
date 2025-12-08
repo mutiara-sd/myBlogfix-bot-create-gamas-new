@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Schedule;
 
 // Controllers
 use App\Http\Controllers\AdminController;
@@ -257,17 +258,25 @@ Route::middleware(['auth'])->group(function () {
     // REMINDER ROUTES
     // ==========================================
     
-    // Store reminder (untuk Task, Meeting, dll)
+    // REMINDER ROUTES
     Route::post('reminders', [ReminderController::class, 'store'])
          ->name('reminders.store');
-    
-    // Delete reminder (jika perlu hapus reminder)
+         
     Route::delete('reminders/{reminder}', [ReminderController::class, 'destroy'])
          ->name('reminders.destroy');
-    
-    // Mark reminder as sent (untuk system)
+         
     Route::patch('reminders/{reminder}/mark-sent', [ReminderController::class, 'markAsSent'])
          ->name('reminders.mark-sent');
+         
+    Route::post('reminders/send-pending', [ReminderController::class, 'sendPendingReminders'])
+         ->name('reminders.send-pending');
+    
+    Route::get('/run-reminders', [ReminderController::class, 'sendPendingReminders'])
+        ->name('reminders.run');
+
+    // Jalankan setiap menit untuk cek reminder
+    Schedule::command('reminders:send')->everyMinute();
+
 
 
     //-----------------------------------------
