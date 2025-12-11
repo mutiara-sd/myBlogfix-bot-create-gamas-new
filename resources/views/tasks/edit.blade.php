@@ -165,6 +165,23 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                            <div class="col-md-6">
+                                <label for="weight" class="form-label fw-semibold">
+                                    Task Weight/Complexity (1-5)
+                                </label>
+                                <input type="number" 
+                                       class="form-control @error('weight') is-invalid @enderror" 
+                                       id="weight" 
+                                       name="weight" 
+                                       min="1" 
+                                       max="5"
+                                       value="{{ old('weight', $task->weight) }}">
+                                <small class="text-muted">Rate the complexity from 1 (simple) to 5 (very complex)</small>
+                                @error('weight')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
                         </div>
 
                         <!-- Labels -->

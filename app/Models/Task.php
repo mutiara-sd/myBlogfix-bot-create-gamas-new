@@ -28,6 +28,7 @@ class Task extends Model
         'due_date' => 'datetime',
     ];
 
+    // Relationships
     public function project()
     {
         return $this->belongsTo(Project::class);
@@ -45,23 +46,24 @@ class Task extends Model
 
     public function progressUpdates()
     {
-    return $this->hasMany(ProgressUpdate::class);
+        return $this->hasMany(ProgressUpdate::class)->orderBy('created_at', 'desc');
     }
 
     public function comments()
     {
-    return $this->morphMany(Comment::class, 'commentable', 'commentable_type', 'commentable_id');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function attachments()
     {
-    return $this->hasMany(Attachment::class);
+        return $this->hasMany(Attachment::class);
     }
     
     public function minute()
     {
-    return $this->hasMany(Minute::class);
+        return $this->belongsTo(Minute::class);
     }
+
     public function reminders()
     {
         return $this->morphMany(Reminder::class, 'remindable')->orderBy('remind_at');

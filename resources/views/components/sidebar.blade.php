@@ -32,16 +32,6 @@
                         <span>Tasks</span>
                     </a>
                 </li>
-
-                <!-- DIVIDER -->
-                <li class="menu-title" style="margin-top: 25px;">Account</li>
-
-                <li>
-                    <a href="/settings" class="waves-effect">
-                        <i class="fas fa-cog" style="font-size: 16px; width: 20px;"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
             </ul>
         </div>
     </div>

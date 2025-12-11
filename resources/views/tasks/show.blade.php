@@ -124,7 +124,7 @@
                                     <div class="timeline-content">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
-                                                <strong>{{ $update->creator->name }}</strong>
+                                                <strong>{{ $update->user->name }}</strong>
                                                 <span class="badge bg-primary ms-2">{{ $update->percent }}%</span>
                                             </div>
                                             <small class="text-muted">{{ $update->created_at->diffForHumans() }}</small>
@@ -470,7 +470,7 @@
                                         class="rounded-circle me-2"
                                         style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #e2e8f0;">
                                 @else
-                                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center me-2" 
+                                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center me-2" 
                                         style="width: 32px; height: 32px; background: #6f42c1;">
                                         <small class="text-white fw-bold">{{ strtoupper(substr($task->assignee->name, 0, 1)) }}</small>
                                     </div>
@@ -577,36 +577,96 @@
 <!-- Add Progress Modal -->
 <div id="addProgressModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
     <div class="card border-0 shadow-lg" style="width: 500px; max-width: 90%;">
-        <div class="card-header bg-white py-3">
-            <h5 class="card-title mb-0">Add Progress Update</h5>
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="card-title mb-0">
+                <i class="fas fa-chart-line me-2" style="color: #6f42c1;"></i>
+                Add Progress Update
+            </h5>
+            <button type="button" class="btn-close" onclick="document.getElementById('addProgressModal').style.display='none'"></button>
         </div>
         <form action="{{ route('progress.store', $task) }}" method="POST">
             @csrf
             <div class="card-body">
+                <!-- Progress Percentage -->
                 <div class="mb-3">
-                    <label class="form-label fw-semibold">Progress (%)</label>
-                    <input type="number" name="percent" class="form-control" min="0" max="100" required>
+                    <label class="form-label fw-semibold">
+                        Progress (%) <span class="text-danger">*</span>
+                    </label>
+                    <div class="input-group">
+                        <input type="number" 
+                               name="percent" 
+                               class="form-control" 
+                               min="0" 
+                               max="100" 
+                               value="{{ old('percent', $task->progress_percent) }}"
+                               required
+                               id="progressInput"
+                               oninput="updateProgressPreview(this.value)">
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <!-- Progress Preview -->
+                    <div class="mt-2">
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar" 
+                                 id="progressPreview"
+                                 role="progressbar" 
+                                 style="width: {{ $task->progress_percent }}%; background: #6f42c1;"
+                                 aria-valuenow="{{ $task->progress_percent }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                            </div>
+                        </div>
+                        <small class="text-muted">Current: {{ $task->progress_percent }}%</small>
+                    </div>
                 </div>
+
+                <!-- Note -->
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Note</label>
-                    <textarea name="note" class="form-control" rows="3"></textarea>
+                    <textarea name="note" 
+                              class="form-control" 
+                              rows="3" 
+                              placeholder="Describe what has been done...">{{ old('note') }}</textarea>
+                    <small class="text-muted">Max 1000 characters</small>
                 </div>
+
+                <!-- Is Blocked Checkbox -->
                 <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="is_blocked" value="1" id="isBlocked">
+                    <input class="form-check-input" 
+                           type="checkbox" 
+                           name="is_blocked" 
+                           value="1" 
+                           id="isBlocked"
+                           {{ old('is_blocked') ? 'checked' : '' }}>
                     <label class="form-check-label" for="isBlocked">
+                        <i class="fas fa-exclamation-triangle text-danger me-1"></i>
                         Task is blocked
                     </label>
                 </div>
             </div>
             <div class="card-footer bg-white py-3">
                 <div class="d-flex justify-content-end gap-2">
-                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('addProgressModal').style.display='none'">Cancel</button>
-                    <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">Save Update</button>
+                    <button type="button" 
+                            class="btn btn-secondary" 
+                            onclick="document.getElementById('addProgressModal').style.display='none'">
+                        Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
+                        <i class="fas fa-save me-1"></i>Save Update
+                    </button>
                 </div>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+function updateProgressPreview(value) {
+    const preview = document.getElementById('progressPreview');
+    preview.style.width = value + '%';
+    preview.setAttribute('aria-valuenow', value);
+}
+</script>
 
 <!-- Add Attachment Modal -->
 <div class="modal fade" id="addAttachmentModal" tabindex="-1">

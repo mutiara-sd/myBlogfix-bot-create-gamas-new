@@ -22,7 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Model::preventLazyLoading();
+        //Model::preventLazyLoading();
+        Model::preventLazyLoading(!app()->isProduction());
         Livewire::component('assurance.bot.bot-create-gamas', BotCreateGamasLivewire::class);
     }
 }

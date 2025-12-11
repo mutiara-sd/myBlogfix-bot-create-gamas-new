@@ -252,7 +252,7 @@ Route::middleware(['auth'])->group(function () {
     // Delete progress update (jika perlu bisa hapus progress)
     Route::delete('progress/{progressUpdate}', [ProgressUpdateController::class, 'destroy'])
          ->name('progress.destroy');
-
+    
 
     // ==========================================
     // REMINDER ROUTES

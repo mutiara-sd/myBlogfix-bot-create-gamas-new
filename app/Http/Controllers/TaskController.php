@@ -130,18 +130,23 @@ class TaskController extends Controller
 
     public function show(Task $task)
     {
-        // EAGER LOAD semua relasi yang dibutuhkan
-        $task->load([
-            'project', 
-            'assignee', 
-            'labels', 
-            'progressUpdates.user',       // ← Load user di progressUpdates
-            'comments.user',               // ← Load user di comments
-            'attachments.user',            // ← TAMBAHAN INI (PENTING!)
-            'minute.meeting'
-        ]);
+    // Force refresh
+    $task->refresh();
+    
+    $task->load([
+        'project', 
+        'assignee', 
+        'labels', 
+        'progressUpdates' => function($query) {
+            $query->orderBy('created_at', 'desc')->with('user');
+        },
+        'comments.user',
+        'attachments.user',
+        'minute.meeting',
+        'reminders'
+    ]);
 
-        return view('tasks.show', compact('task'));
+    return view('tasks.show', compact('task'));
     }
 
     public function edit(Task $task)
