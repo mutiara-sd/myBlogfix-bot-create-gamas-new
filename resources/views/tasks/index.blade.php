@@ -243,7 +243,7 @@
                                         @php
                                             $statusColors = [
                                                 'todo' => 'secondary',
-                                                'in_progress' => 'warning',
+                                                'doing' => 'warning',
                                                 'review' => 'info',
                                                 'completed' => 'success',
                                                 'done' => 'success',
@@ -294,7 +294,9 @@
                                             </a>
                                             <button class="btn btn-sm btn-outline-danger" 
                                                     type="button"
-                                                    onclick="openDeleteModal({{ $task->id }}, '{{ $task->title }}')"
+                                                    data-task-id="{{ $task->id }}"
+                                                    data-task-title="{{ $task->title }}"
+                                                    onclick="openDeleteModal(this.dataset.taskId, this.dataset.taskTitle)"
                                                     title="Delete">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -326,7 +328,7 @@
     </div>
 </div>
 
-<!-- Delete Modal -->
+<!-- DELETE CONFIRMATION MODAL -->
 <div class="delete-modal" id="deleteModal">
     <div class="delete-modal-content">
         <div class="delete-modal-header">
@@ -335,7 +337,7 @@
             </div>
             <h3 class="delete-modal-title">Delete Task?</h3>
             <p class="delete-modal-text">
-                Are you sure you want to delete "<span id="deleteModalTaskName"></span>"? 
+                Are you sure you want to delete "<span id="deleteModalTaskTitle"></span>"? 
                 This action cannot be undone.
             </p>
         </div>
@@ -346,6 +348,7 @@
     </div>
 </div>
 
+<!-- Hidden form untuk delete -->
 <form id="deleteTaskForm" method="POST" style="display: none;">
     @csrf
     @method('DELETE')
@@ -484,11 +487,11 @@
 let deleteTaskId = null;
 let deleteFormAction = '';
 
-function openDeleteModal(taskId, taskName) {
+function openDeleteModal(taskId, taskTitle) {
     deleteTaskId = taskId;
-    deleteFormAction = /tasks/${taskId};
+    deleteFormAction = `/tasks/${taskId}`;
     
-    document.getElementById('deleteModalTaskName').textContent = taskName;
+    document.getElementById('deleteModalTaskTitle').textContent = taskTitle;
     document.getElementById('deleteModal').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -507,19 +510,17 @@ function confirmDelete() {
     }
 }
 
-// Close modal when clicking outside
+// Close modal saat klik outside
 document.getElementById('deleteModal')?.addEventListener('click', function(e) {
     if (e.target === this) {
         closeDeleteModal();
     }
 });
 
-// Close modal with Escape key
+// Close modal dengan Escape key
 document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        if (document.getElementById('deleteModal')?.classList.contains('active')) {
-            closeDeleteModal();
-        }
+    if (e.key === 'Escape' && document.getElementById('deleteModal')?.classList.contains('active')) {
+        closeDeleteModal();
     }
 });
 </script>
