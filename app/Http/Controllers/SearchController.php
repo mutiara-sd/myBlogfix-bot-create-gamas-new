@@ -20,7 +20,7 @@ class SearchController extends Controller
                 return response()->json([
                     'projects' => [],
                     'meetings' => [],
-                    'users' => [],
+                    'tasks' => [],
                     'message' => 'Query too short'
                 ]);
             }
@@ -28,7 +28,7 @@ class SearchController extends Controller
             $results = [
                 'projects' => [],
                 'meetings' => [],
-                'users' => [],
+                'tasks' => [],
                 'success' => true
             ];
 
@@ -38,7 +38,7 @@ class SearchController extends Controller
                     ->where('name', 'like', "%{$query}%")
                     ->orWhere('code', 'like', "%{$query}%")
                     ->limit(5)
-                    ->get(['id', 'name', 'code', 'status']);
+                    ->get(['id', 'name', 'code', 'status', 'description']);
                 
                 $results['projects'] = $projects->map(function($project) {
                     return [
@@ -46,6 +46,7 @@ class SearchController extends Controller
                         'name' => $project->name,
                         'code' => $project->code,
                         'status' => $project->status,
+                        'description' => $project->description ?? 'No description',
                         'url' => url('/projects/' . $project->id)
                     ];
                 })->toArray();
@@ -56,14 +57,21 @@ class SearchController extends Controller
                 $results['projects'] = [];
             }
 
-            // 2. SEARCH MEETINGS - Pakai DB Query langsung
+            // 2. SEARCH MEETINGS 
             try {
                 // Cek dulu apakah tabel meetings ada
                 if (DB::getSchemaBuilder()->hasTable('meetings')) {
                     $meetings = DB::table('meetings')
-                        ->where('title', 'like', "%{$query}%")
+                        ->leftJoin('projects', 'meetings.project_id', '=', 'projects.id')
+                        ->where('meetings.title', 'like', "%{$query}%")
                         ->limit(5)
-                        ->get(['id', 'title', 'scheduled_at', 'location']);
+                        ->get([
+                            'meetings.id',
+                            'meetings.title',
+                            'meetings.scheduled_at',
+                            'meetings.location',
+                            'projects.name as project_name'
+                        ]);
                     
                     $results['meetings'] = $meetings->map(function($meeting) {
                         return [
@@ -71,6 +79,7 @@ class SearchController extends Controller
                             'title' => $meeting->title,
                             'scheduled_at' => date('d M Y, H:i', strtotime($meeting->scheduled_at)),
                             'location' => $meeting->location ?? '-',
+                            'project_name' => $meeting->project_name ?? 'No Project',
                             'url' => url('/meetings/' . $meeting->id)
                         ];
                     })->toArray();
@@ -84,39 +93,49 @@ class SearchController extends Controller
                 $results['meetings'] = [];
             }
 
-            // 3. SEARCH USERS - Pakai DB Query langsung
+            // 3. SEARCH TASKS 
             try {
-                $users = DB::table('users')
-                    ->where('name', 'like', "%{$query}%")
-                    ->orWhere('username', 'like', "%{$query}%")
-                    ->orWhere('email', 'like', "%{$query}%")
-                    ->limit(5)
-                    ->get(['id', 'name', 'username', 'email', 'profile_picture']);
-                
-                $results['users'] = $users->map(function($user) {
-                    $profilePic = null;
-                    if (!empty($user->profile_picture)) {
-                        if (filter_var($user->profile_picture, FILTER_VALIDATE_URL)) {
-                            $profilePic = $user->profile_picture;
-                        } else {
-                            $profilePic = asset('storage/' . $user->profile_picture);
-                        }
-                    }
+                if (DB::getSchemaBuilder()->hasTable('tasks')) {
+                    $tasks = DB::table('tasks')
+                        ->leftJoin('projects', 'tasks.project_id', '=', 'projects.id')
+                        ->leftJoin('users', 'tasks.assignee_id', '=', 'users.id')
+                        ->where('tasks.title', 'like', "%{$query}%")
+                        ->orWhere('tasks.description', 'like', "%{$query}%")
+                        ->limit(5)
+                        ->get([
+                            'tasks.id',
+                            'tasks.title',
+                            'tasks.status',
+                            'tasks.priority',
+                            'tasks.due_date',
+                            'tasks.description',
+                            'tasks.progress_percent',
+                            'projects.name as project_name',
+                            'users.name as assignee_name'
+                        ]);
                     
-                    return [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'username' => $user->username ?? explode('@', $user->email)[0],
-                        'email' => $user->email,
-                        'profile_picture' => $profilePic,
-                        'url' => '#'
-                    ];
-                })->toArray();
-                
-                Log::info('✅ Users found', ['count' => count($results['users'])]);
+                    $results['tasks'] = $tasks->map(function($task) {
+                        return [
+                            'id' => $task->id,
+                            'title' => $task->title,
+                            'status' => $task->status,
+                            'priority' => $task->priority,
+                            'project_name' => $task->project_name ?? 'No Project',
+                            'assignee_name' => $task->assignee_name ?? 'Unassigned',
+                            'due_date' => $task->due_date ? date('M d, Y', strtotime($task->due_date)) : 'No due date',
+                            'description' => $task->description ?? 'No description',
+                            'progress_percent' => $task->progress_percent ?? 0,
+                            'url' => url('/tasks/' . $task->id)
+                        ];
+                    })->toArray();
+                    
+                    Log::info('✅ Tasks found', ['count' => count($results['tasks'])]);
+                } else {
+                    Log::warning('⚠️ Tasks table not found');
+                }
             } catch (\Exception $e) {
-                Log::error('❌ Users search error: ' . $e->getMessage());
-                $results['users'] = [];
+                Log::error('❌ Tasks search error: ' . $e->getMessage());
+                $results['tasks'] = [];
             }
 
             Log::info('🎉 Search completed successfully');
@@ -130,7 +149,7 @@ class SearchController extends Controller
             return response()->json([
                 'projects' => [],
                 'meetings' => [],
-                'users' => [],
+                'tasks' => [],
                 'error' => $e->getMessage(),
                 'success' => false
             ], 500);

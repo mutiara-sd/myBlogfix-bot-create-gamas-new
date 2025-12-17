@@ -21,8 +21,6 @@
                 <i class="fa fa-fw fa-bars"></i>
             </button>
 
-            <!-- PASTE INI DI NAVBAR/LAYOUT KAMU -->
-
             <!-- Search Bar Container -->
             <div class="flex-grow-1 mx-3" style="max-width: 700px; min-width: 300px;">
                 <div class="position-relative">
@@ -30,7 +28,7 @@
                         type="text" 
                         id="globalSearch" 
                         class="form-control ps-5 pe-3" 
-                        placeholder="Search projects, meetings, users..." 
+                        placeholder="Search projects, meetings, or tasks..." 
                         style="border-radius: 25px; border: 1px solid rgba(111, 66, 193, 0.15); height: 44px; font-size: 14px; width: 100%;"
                         autocomplete="off"
                     >
@@ -112,7 +110,7 @@
 
             .search-item {
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
                 padding: 14px 18px;
                 gap: 14px;
                 border-bottom: 1px solid #f5f3ff;
@@ -141,10 +139,6 @@
                 flex-shrink: 0;
             }
 
-            .search-item:hover .search-icon {
-                /* Hapus efek scale */
-            }
-
             .search-icon.project {
                 background: rgba(111, 66, 193, 0.08);
                 color: #6f42c1;
@@ -155,19 +149,9 @@
                 color: #6366f1;
             }
 
-            .search-icon.user img {
-                width: 44px;
-                height: 44px;
-                border-radius: 12px;
-                object-fit: cover;
-                border: 2px solid #f3f4f6;
-            }
-
-            .search-icon.user.no-image {
-                background: #6f42c1;
-                color: white;
-                font-weight: 600;
-                font-size: 16px;
+            .search-icon.task {
+                background: rgba(16, 185, 129, 0.08);
+                color: #10b981;
             }
 
             .search-content {
@@ -185,8 +169,15 @@
                 text-overflow: ellipsis;
             }
 
-            .search-item:hover .search-title {
-                color: #2d3748; /* Tetap sama, ga berubah warna */
+            .search-description {
+                font-size: 12px;
+                color: #718096;
+                margin-bottom: 6px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-line-clamp: 1;
+                -webkit-box-orient: vertical;
             }
 
             .search-meta {
@@ -233,7 +224,6 @@
                 font-weight: 600;
             }
 
-            /* Loading spinner style */
             #searchLoading .spinner-border {
                 color: #6f42c1;
             }
@@ -250,7 +240,6 @@
 
                 if (!searchInput) return;
 
-                // Event: Input search
                 searchInput.addEventListener('input', function() {
                     const query = this.value.trim();
                     
@@ -265,7 +254,6 @@
                     }, 300);
                 });
 
-                // Fungsi: Perform Search
                 function performSearch(query) {
                     console.log('🔍 Searching for:', query);
                     
@@ -302,7 +290,6 @@
                     });
                 }
 
-                // Fungsi: Display Results
                 function displayResults(data, query) {
                     let html = '';
                     let hasResults = false;
@@ -310,10 +297,10 @@
                     // PROJECTS
                     if (data.projects && data.projects.length > 0) {
                         hasResults = true;
-                        html += '<div class="search-category">Projects</div>';
+                        html += '<div class="search-category">📁 Projects</div>';
                         data.projects.forEach(project => {
                             const statusClass = project.status === 'active' ? 'success' : 'secondary';
-                            const statusText = project.status === 'active' ? 'Active' : 'Archived';
+                            const statusText = project.status === 'active' ? 'Active' : project.status;
                             
                             html += `
                                 <a href="${project.url}" class="search-item">
@@ -322,8 +309,9 @@
                                     </div>
                                     <div class="search-content">
                                         <div class="search-title">${escapeHtml(project.name)}</div>
+                                        <div class="search-description">${escapeHtml(project.description || 'No description')}</div>
                                         <div class="search-meta">
-                                            <span>Code: ${escapeHtml(project.code)}</span>
+                                            <span>📋 ${escapeHtml(project.code)}</span>
                                             <span class="search-badge bg-${statusClass} text-white">${statusText}</span>
                                         </div>
                                     </div>
@@ -344,6 +332,7 @@
                                     </div>
                                     <div class="search-content">
                                         <div class="search-title">${escapeHtml(meeting.title)}</div>
+                                        <div class="search-description">📁 ${escapeHtml(meeting.project_name)}</div>
                                         <div class="search-meta">
                                             <span><i class="far fa-calendar"></i> ${meeting.scheduled_at}</span>
                                             <span>📍 ${escapeHtml(meeting.location)}</span>
@@ -354,24 +343,40 @@
                         });
                     }
 
-                    // USERS
-                    if (data.users && data.users.length > 0) {
+                    // TASKS 
+                    if (data.tasks && data.tasks.length > 0) {
                         hasResults = true;
-                        html += '<div class="search-category">👥 Users</div>';
-                        data.users.forEach(user => {
-                            const userIcon = user.profile_picture
-                                ? `<div class="search-icon user"><img src="${user.profile_picture}" alt="${escapeHtml(user.name)}"></div>`
-                                : `<div class="search-icon user no-image">${user.name.charAt(0).toUpperCase()}</div>`;
+                        html += '<div class="search-category">✓ Tasks</div>';
+                        data.tasks.forEach(task => {
+                            const priorityColors = {
+                                'urgent': 'danger',
+                                'high': 'warning', 
+                                'medium': 'info',
+                                'low': 'secondary'
+                            };
+                            const statusColors = {
+                                'todo': 'secondary',
+                                'doing': 'warning',
+                                'progress': 'warning',
+                                'review': 'info',
+                                'done': 'success',
+                                'completed': 'success',
+                                'blocked': 'danger'
+                            };
                             
                             html += `
-                                <a href="${user.url}" class="search-item">
-                                    ${userIcon}
+                                <a href="${task.url}" class="search-item">
+                                    <div class="search-icon task">
+                                        <i class="fas fa-tasks"></i>
+                                    </div>
                                     <div class="search-content">
-                                        <div class="search-title">${escapeHtml(user.name)}</div>
+                                        <div class="search-title">${escapeHtml(task.title)}</div>
+                                        <div class="search-description">${escapeHtml(task.description || 'No description')}</div>
                                         <div class="search-meta">
-                                            <span>@${escapeHtml(user.username)}</span>
-                                            <span>•</span>
-                                            <span>${escapeHtml(user.email)}</span>
+                                            <span>📁 ${escapeHtml(task.project_name)}</span>
+                                            <span class="search-badge bg-${priorityColors[task.priority.toLowerCase()] || 'secondary'} text-white">${task.priority}</span>
+                                            <span class="search-badge bg-${statusColors[task.status.toLowerCase()] || 'secondary'} text-white">${task.status}</span>
+                                            <span>📅 ${task.due_date}</span>
                                         </div>
                                     </div>
                                 </a>
@@ -393,14 +398,12 @@
                     searchResults.innerHTML = html;
                 }
 
-                // Helper: Escape HTML
                 function escapeHtml(text) {
                     const div = document.createElement('div');
                     div.textContent = text;
                     return div.innerHTML;
                 }
 
-                // Helper: Show/Hide Dropdown
                 function showDropdown() {
                     searchDropdown.classList.add('show');
                 }
@@ -409,14 +412,12 @@
                     searchDropdown.classList.remove('show');
                 }
 
-                // Close on click outside
                 document.addEventListener('click', function(e) {
                     if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
                         hideDropdown();
                     }
                 });
 
-                // Close on Escape
                 document.addEventListener('keydown', function(e) {
                     if (e.key === 'Escape') {
                         hideDropdown();
@@ -511,22 +512,17 @@
 </header>
 
 <script>
-    // Functions for dropdown actions
     function openNewTaskModal() {
         console.log('Opening new task modal...');
-        // Add your modal opening logic here
     }
     
     function openScheduleModal() {
         console.log('Opening schedule modal...');
-        // Add your modal opening logic here
     }
     
     function openTeamModal() {
         console.log('Opening team modal...');
-        // Add your modal opening logic here
     }
 </script>
 
-<!-- Tambahkan ini di akhir file navbar.blade.php -->
 @include('livewire.assurance.bot.partials.project-modal')
