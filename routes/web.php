@@ -30,6 +30,7 @@ use App\Http\Controllers\MeetingAttachmentController;
 use App\Http\Controllers\ProgressUpdateController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\DashboardController;
 
 // Middleware
 use App\Http\Middleware\AdminMiddleware;
@@ -47,8 +48,8 @@ Route::middleware([EnsureAuthenticated::class])->group(function () {
     // Redirect root to dashboard
     Route::get('/', fn() => redirect()->route('dashboard'));
 
-    Route::get('/dashboard', fn() => view('dashboard', ['title' => 'Dashboard']))->name('dashboard');
-
+    // Dashboard pakai DashboardController
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     // Static pages
     Route::view('/calendar', 'app-calendar', ['title' => 'Calendar']);
     Route::view('/chat', 'chat', ['title' => 'Chat']);
