@@ -187,30 +187,30 @@
                     @if(isset($tasks) && $tasks->count() > 0)
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
-                                <thead class="table-light">
+                                <thead class="bg-light">
                                     <tr>
                                         <th scope="col" class="ps-4" style="width: 5%">
                                             <div class="form-check">
                                                 <input class="form-check-input" type="checkbox" id="selectAll">
                                             </div>
                                         </th>
-                                        <th scope="col" class="fw-semibold text-muted" style="width: 35%">TITLE</th>
-                                        <th scope="col" class="fw-semibold text-muted" style="width: 20%">PROJECT</th>
-                                        <th scope="col" class="fw-semibold text-muted" style="width: 15%">ASSIGNEE</th>
-                                        <th scope="col" class="fw-semibold text-muted" style="width: 12%">DUE</th>
-                                        <th scope="col" class="fw-semibold text-muted" style="width: 8%">STATUS</th>
-                                        <th scope="col" class="fw-semibold text-muted" style="width: 5%">%</th>
+                                        <th scope="col" class="fw-semibold text-muted px-3 py-3" style="width: 35%">TITLE</th>
+                                        <th scope="col" class="fw-semibold text-muted px-3 py-3" style="width: 20%">PROJECT</th>
+                                        <th scope="col" class="fw-semibold text-muted px-3 py-3" style="width: 15%">ASSIGNEE</th>
+                                        <th scope="col" class="fw-semibold text-muted px-3 py-3" style="width: 12%">DUE</th>
+                                        <th scope="col" class="fw-semibold text-muted px-3 py-3" style="width: 8%">STATUS</th>
+                                        <th scope="col" class="fw-semibold text-muted px-3 py-3" style="width: 5%">%</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach($tasks as $task)
                                         <tr>
-                                            <td class="ps-4">
+                                            <td class="ps-4 py-3">
                                                 <div class="form-check">
                                                     <input class="form-check-input" type="checkbox" value="{{ $task->id }}">
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="px-3 py-3">
                                                 <div class="d-flex align-items-center">
                                                     <div class="me-3">
                                                         @php
@@ -236,10 +236,10 @@
                                                     </div>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="px-3 py-3">
                                                 @if($task->project)
                                                     <a href="{{ route('projects.show', $task->project) }}" class="text-decoration-none">
-                                                        <span class="badge bg-primary bg-opacity-10 text-primary px-3 py-2 rounded-pill">
+                                                        <span class="badge px-3 py-2 rounded-pill" style="background-color: rgba(111, 66, 193, 0.1); color: #6f42c1; font-weight: 500;">
                                                             {{ $task->project->name }}
                                                         </span>
                                                     </a>
@@ -247,7 +247,7 @@
                                                     <span class="text-muted small">No Project</span>
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="px-3 py-3">
                                                 @if($task->assignee)
                                                     <div class="d-flex align-items-center">
                                                         @if($task->assignee->profile_picture)
@@ -258,38 +258,53 @@
                                                                 class="rounded-circle me-2"
                                                                 style="width: 32px; height: 32px; object-fit: cover;">
                                                         @else
-                                                            <div class="avatar-sm bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center me-2">
-                                                                <span class="text-success fw-bold small">{{ strtoupper(substr($task->assignee->name, 0, 2)) }}</span>
+                                                            <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
+                                                                 style="width: 32px; height: 32px; background: rgba(111, 66, 193, 0.1);">
+                                                                <span class="fw-bold small" style="color: #6f42c1;">{{ strtoupper(substr($task->assignee->name, 0, 2)) }}</span>
                                                             </div>
                                                         @endif
-                                                        <span class="fw-medium">{{ $task->assignee->name }}</span>
+                                                        <span class="fw-medium small">{{ $task->assignee->name }}</span>
                                                     </div>
                                                 @else
                                                     <span class="text-muted small">Unassigned</span>
                                                 @endif
                                             </td>
-                                            <td>
+                                            <td class="px-3 py-3">
                                                 @if($task->due_date)
                                                     @php
                                                         $isOverdue = $task->due_date->isPast() && !in_array($task->status, ['completed', 'done']);
-                                                        $dueClass = $isOverdue ? 'text-danger' : ($task->due_date->isToday() ? 'text-warning' : 'text-muted');
+                                                        $dueClass = $isOverdue ? 'text-danger fw-semibold' : ($task->due_date->isToday() ? 'text-warning fw-semibold' : 'text-muted');
                                                     @endphp
-                                                    <span class="{{ $dueClass }} fw-medium">
+                                                    <span class="{{ $dueClass }} small">
                                                         {{ $task->due_date->format('M d, Y') }}
+                                                        @if($isOverdue)
+                                                            <i class="fas fa-exclamation-circle ms-1"></i>
+                                                        @endif
                                                     </span>
                                                 @else
-                                                    <span class="text-muted">-</span>
+                                                    <span class="text-muted small">-</span>
                                                 @endif
                                             </td>
-                                            <td>
-                                                <span class="badge bg-{{ $color }} bg-opacity-10 text-{{ $color }} px-3 py-1 rounded-pill">
+                                            <td class="px-3 py-3">
+                                                @php
+                                                    $statusColors = [
+                                                        'todo' => 'secondary',
+                                                        'doing' => 'warning',
+                                                        'review' => 'info',
+                                                        'completed' => 'success',
+                                                        'done' => 'success',
+                                                        'blocked' => 'danger'
+                                                    ];
+                                                    $statusBg = $statusColors[$task->status] ?? 'secondary';
+                                                @endphp
+                                                <span class="badge bg-{{ $statusBg }} px-3 py-1 rounded-pill" style="font-weight: 500;">
                                                     {{ ucfirst($task->status) }}
                                                 </span>
                                             </td>
-                                            <td>
+                                            <td class="px-3 py-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress me-2" style="width: 50px; height: 6px;">
-                                                        <div class="progress-bar bg-{{ $color }}" role="progressbar" style="width: {{ $task->progress_percent ?? 0 }}%"></div>
+                                                    <div class="progress me-2" style="width: 50px; height: 6px; background-color: rgba(111, 66, 193, 0.1);">
+                                                        <div class="progress-bar" role="progressbar" style="width: {{ $task->progress_percent ?? 0 }}%; background-color: #6f42c1;"></div>
                                                     </div>
                                                     <small class="text-muted fw-medium">{{ $task->progress_percent ?? 0 }}%</small>
                                                 </div>
@@ -318,7 +333,7 @@
                             <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">No tasks found</h5>
                             <p class="text-muted">Try adjusting your filters or create a new task</p>
-                            <a href="{{ route('tasks.create') }}" class="btn btn-primary mt-3">
+                            <a href="{{ route('tasks.create') }}" class="btn btn-primary mt-3" style="background: #6f42c1; border-color: #6f42c1;">
                                 <i class="fas fa-plus me-2"></i>Create New Task
                             </a>
                         </div>
@@ -328,6 +343,20 @@
         </div>
     </div>
 </x-layout>
+
+<style>
+.card {
+    transition: all 0.2s ease;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(111, 66, 193, 0.05);
+}
+
+.badge {
+    font-weight: 500;
+}
+</style>
 
 <script>
     // Auto-refresh time every minute

@@ -6,18 +6,47 @@
     <title>OTP Verification</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .btn-navy {
-            background-color: #023669; 
+        :root {
+            --telkom-red: #E30613;
+            --telkom-red-dark: #C8161D;
+            --telkom-red-light: #ffebee;
+        }
+        
+        .btn-telkom {
+            background-color: var(--telkom-red);
+            border-color: var(--telkom-red);
             color: white;
         }
-        .btn-navy:hover {
-            background-color: #001f3f; 
+        
+        .btn-telkom:hover {
+            background-color: var(--telkom-red-dark);
+            border-color: var(--telkom-red-dark);
             color: white;
+        }
+        
+        .text-telkom {
+            color: var(--telkom-red);
+        }
+        
+        .form-control:focus {
+            border-color: var(--telkom-red);
+            box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.25);
+        }
+        
+        .logo-txt {
+            font-weight: bold;
+            color: var(--telkom-red);
+            margin-left: 0.5rem;
         }
     </style>
 </head>
 <body class="d-flex justify-content-center align-items-center vh-100 bg-light">
     <div class="card shadow p-4" style="width: 24rem;">
+        <div class="text-center mb-3">
+            <img src="{{ asset('assets/images/logo-sm.svg') }}" alt="" height="28">
+            <span class="logo-txt">Telkom Infrastruktur</span>
+        </div>
+        
         <h2 class="text-center fw-bold mb-4">OTP Verification</h2>
         
         @if (session('success'))
@@ -35,7 +64,7 @@
                     <div class="text-danger small">{{ $message }}</div>
                 @enderror
             </div>
-            <button type="submit" class="btn btn-navy w-100">Verify</button>
+            <button type="submit" class="btn btn-telkom w-100">Verify</button>
         </form>
 
         <form id="resendOtpForm" onsubmit="sendOtp(event)" class="mt-3">
