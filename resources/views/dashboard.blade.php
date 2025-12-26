@@ -1,4 +1,94 @@
 <x-layout>
+    <style>
+        :root {
+            --telkom-red: #E30613;
+            --telkom-red-dark: #C8161D;
+            --telkom-red-light: #ffebee;
+        }
+        
+        /* KPI Card Modern Style */
+        .kpi-card {
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+        
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
+        
+        .kpi-card.success {
+            border-left-color: #10b981;
+        }
+        
+        .kpi-card.danger {
+            border-left-color: var(--telkom-red);
+        }
+        
+        .kpi-card.warning {
+            border-left-color: #f59e0b;
+        }
+        
+        .kpi-card.info {
+            border-left-color: #3b82f6;
+        }
+        
+        .kpi-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+        
+        .kpi-label {
+            font-size: 0.95rem;
+            color: #6b7280;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .kpi-subtitle {
+            font-size: 0.875rem;
+        }
+        
+        .kpi-icon {
+            font-size: 1.5rem;
+            opacity: 0.7;
+        }
+        
+        /* Button Primary Telkom */
+        .btn-primary {
+            background-color: var(--telkom-red) !important;
+            border-color: var(--telkom-red) !important;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--telkom-red-dark) !important;
+            border-color: var(--telkom-red-dark) !important;
+        }
+        
+        /* Badge & Progress Bar */
+        .badge.bg-primary {
+            background-color: var(--telkom-red) !important;
+        }
+        
+        .progress-bar.bg-primary {
+            background-color: var(--telkom-red) !important;
+        }
+        
+        /* Table Hover */
+        .table-hover tbody tr:hover {
+            background-color: rgba(227, 6, 19, 0.05);
+        }
+        
+        /* Focus States */
+        .form-select:focus,
+        .form-control:focus {
+            border-color: var(--telkom-red);
+            box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.15);
+        }
+    </style>
+
     <!-- PAGE TITLE WITH DYNAMIC GREETING -->
     <div class="row">
         <div class="col-12">
@@ -90,7 +180,7 @@
                                     <i class="fas fa-filter me-1"></i>Apply Filter
                                 </button>
                                 <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">
-                                    <i class="fas fa-times me-1"></i>Clear
+                                    Clear
                                 </a>
                             </div>
                         </div>
@@ -100,68 +190,66 @@
         </div>
     </div>
 
-    <!-- KPI CARDS -->
+    <!-- KPI CARDS - Modern Minimal Style -->
     <div class="row mb-4">
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card kpi-card success border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <p class="text-muted mb-2 fw-medium">On-time</p>
-                            <h2 class="mb-0 text-success fw-bold">{{ $onTimePercentage ?? 0 }}%</h2>
+                            <p class="kpi-label mb-2">On-Time Tasks</p>
+                            <h2 class="kpi-value text-success mb-0">{{ $onTimePercentage ?? 0 }}%</h2>
                         </div>
-                        <div class="avatar-lg bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center">
-                            <i class="fas fa-clock text-success fs-2"></i>
-                        </div>
+                        <i class="fas fa-check-circle kpi-icon text-success"></i>
+                    </div>
+                    <div class="progress" style="height: 4px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: {{ $onTimePercentage ?? 0 }}%"></div>
                     </div>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card kpi-card danger border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <p class="text-muted mb-2 fw-medium">Overdue</p>
-                            <h2 class="mb-0 text-danger fw-bold">{{ $overdueTasks ?? 0 }}</h2>
+                            <p class="kpi-label mb-2">Overdue Tasks</p>
+                            <h2 class="kpi-value mb-0" style="color: var(--telkom-red);">{{ $overdueTasks ?? 0 }}</h2>
                         </div>
-                        <div class="avatar-lg bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center">
-                            <i class="fas fa-exclamation-triangle text-danger fs-2"></i>
-                        </div>
+                        <i class="fas fa-exclamation-circle kpi-icon" style="color: var(--telkom-red);"></i>
                     </div>
+                    <small class="text-muted kpi-subtitle">Requires immediate attention</small>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card kpi-card warning border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <p class="text-muted mb-2 fw-medium">In Review</p>
-                            <h2 class="mb-0 text-warning fw-bold">{{ $inReviewTasks ?? 0 }}</h2>
+                            <p class="kpi-label mb-2">In Review</p>
+                            <h2 class="kpi-value text-warning mb-0">{{ $inReviewTasks ?? 0 }}</h2>
                         </div>
-                        <div class="avatar-lg bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center">
-                            <i class="fas fa-eye text-warning fs-2"></i>
-                        </div>
+                        <i class="fas fa-eye kpi-icon text-warning"></i>
                     </div>
+                    <small class="text-muted kpi-subtitle">Awaiting approval</small>
                 </div>
             </div>
         </div>
 
         <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card kpi-card info border-0 shadow-sm">
                 <div class="card-body">
-                    <div class="d-flex align-items-center justify-content-between">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
                         <div>
-                            <p class="text-muted mb-2 fw-medium">Blocked</p>
-                            <h2 class="mb-0 text-secondary fw-bold">{{ $blockedTasks ?? 0 }}</h2>
+                            <p class="kpi-label mb-2">Blocked Tasks</p>
+                            <h2 class="kpi-value text-primary mb-0">{{ $blockedTasks ?? 0 }}</h2>
                         </div>
-                        <div class="avatar-lg bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center">
-                            <i class="fas fa-ban text-secondary fs-2"></i>
-                        </div>
+                        <i class="fas fa-ban kpi-icon text-primary"></i>
                     </div>
+                    <small class="text-muted">Need resolution</small>
                 </div>
             </div>
         </div>
@@ -173,7 +261,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
                     <h5 class="card-title mb-0 d-flex align-items-center">
-                        <i class="fas fa-tasks text-primary me-2"></i>
+                        <i class="fas fa-tasks me-2" style="color: var(--telkom-red);"></i>
                         <span class="fw-semibold">Tasks</span>
                     </h5>
                     <div class="d-flex gap-2">
@@ -239,7 +327,7 @@
                                             <td class="px-3 py-3">
                                                 @if($task->project)
                                                     <a href="{{ route('projects.show', $task->project) }}" class="text-decoration-none">
-                                                        <span class="badge px-3 py-2 rounded-pill" style="background-color: rgba(111, 66, 193, 0.1); color: #6f42c1; font-weight: 500;">
+                                                        <span class="badge px-3 py-2 rounded-pill" style="background-color: rgba(227, 6, 19, 0.1); color: var(--telkom-red); font-weight: 500;">
                                                             {{ $task->project->name }}
                                                         </span>
                                                     </a>
@@ -259,8 +347,8 @@
                                                                 style="width: 32px; height: 32px; object-fit: cover;">
                                                         @else
                                                             <div class="rounded-circle d-flex align-items-center justify-content-center me-2" 
-                                                                 style="width: 32px; height: 32px; background: rgba(111, 66, 193, 0.1);">
-                                                                <span class="fw-bold small" style="color: #6f42c1;">{{ strtoupper(substr($task->assignee->name, 0, 2)) }}</span>
+                                                                 style="width: 32px; height: 32px; background: rgba(227, 6, 19, 0.1);">
+                                                                <span class="fw-bold small" style="color: var(--telkom-red);">{{ strtoupper(substr($task->assignee->name, 0, 2)) }}</span>
                                                             </div>
                                                         @endif
                                                         <span class="fw-medium small">{{ $task->assignee->name }}</span>
@@ -273,9 +361,10 @@
                                                 @if($task->due_date)
                                                     @php
                                                         $isOverdue = $task->due_date->isPast() && !in_array($task->status, ['completed', 'done']);
-                                                        $dueClass = $isOverdue ? 'text-danger fw-semibold' : ($task->due_date->isToday() ? 'text-warning fw-semibold' : 'text-muted');
+                                                        $dueClass = $isOverdue ? 'fw-semibold' : ($task->due_date->isToday() ? 'text-warning fw-semibold' : 'text-muted');
+                                                        $dueStyle = $isOverdue ? 'color: var(--telkom-red);' : '';
                                                     @endphp
-                                                    <span class="{{ $dueClass }} small">
+                                                    <span class="{{ $dueClass }} small" style="{{ $dueStyle }}">
                                                         {{ $task->due_date->format('M d, Y') }}
                                                         @if($isOverdue)
                                                             <i class="fas fa-exclamation-circle ms-1"></i>
@@ -303,8 +392,8 @@
                                             </td>
                                             <td class="px-3 py-3">
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress me-2" style="width: 50px; height: 6px; background-color: rgba(111, 66, 193, 0.1);">
-                                                        <div class="progress-bar" role="progressbar" style="width: {{ $task->progress_percent ?? 0 }}%; background-color: #6f42c1;"></div>
+                                                    <div class="progress me-2" style="width: 50px; height: 6px; background-color: rgba(227, 6, 19, 0.1);">
+                                                        <div class="progress-bar" role="progressbar" style="width: {{ $task->progress_percent ?? 0 }}%; background-color: var(--telkom-red);"></div>
                                                     </div>
                                                     <small class="text-muted fw-medium">{{ $task->progress_percent ?? 0 }}%</small>
                                                 </div>
@@ -333,7 +422,7 @@
                             <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
                             <h5 class="text-muted">No tasks found</h5>
                             <p class="text-muted">Try adjusting your filters or create a new task</p>
-                            <a href="{{ route('tasks.create') }}" class="btn btn-primary mt-3" style="background: #6f42c1; border-color: #6f42c1;">
+                            <a href="{{ route('tasks.create') }}" class="btn btn-primary mt-3">
                                 <i class="fas fa-plus me-2"></i>Create New Task
                             </a>
                         </div>
@@ -343,20 +432,6 @@
         </div>
     </div>
 </x-layout>
-
-<style>
-.card {
-    transition: all 0.2s ease;
-}
-
-.table-hover tbody tr:hover {
-    background-color: rgba(111, 66, 193, 0.05);
-}
-
-.badge {
-    font-weight: 500;
-}
-</style>
 
 <script>
     // Auto-refresh time every minute

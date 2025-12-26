@@ -1,15 +1,95 @@
 <header id="page-topbar">
+    <style>
+        :root {
+            --telkom-red: #E30613;
+            --telkom-red-dark: #C8161D;
+            --telkom-red-light: #ffebee;
+        }
+        
+        /* Logo Icon Color */
+        .navbar-brand-box .logo-sm i {
+            color: var(--telkom-red) !important;
+        }
+        
+        .navbar-brand-box .logo-lg i {
+            color: var(--telkom-red) !important;
+        }
+        
+        /* Search Bar */
+        #globalSearch {
+            border: 1px solid rgba(227, 6, 19, 0.15) !important;
+        }
+        
+        #globalSearch:focus {
+            border-color: var(--telkom-red) !important;
+            box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.15) !important;
+        }
+        
+        .fa-search {
+            color: var(--telkom-red) !important;
+        }
+        
+        /* Search Dropdown */
+        .search-dropdown {
+            box-shadow: 0 8px 32px rgba(227, 6, 19, 0.15), 0 2px 8px rgba(0,0,0,0.08);
+            border: 1px solid rgba(227, 6, 19, 0.1);
+        }
+        
+        .search-category {
+            background: var(--telkom-red-light);
+            color: var(--telkom-red);
+        }
+        
+        .search-icon.project {
+            background: rgba(227, 6, 19, 0.08);
+            color: var(--telkom-red);
+        }
+        
+        .search-no-results i {
+            color: var(--telkom-red) !important;
+        }
+        
+        #searchLoading .spinner-border {
+            color: var(--telkom-red);
+        }
+        
+        /* Primary Button */
+        .btn-primary {
+            background-color: var(--telkom-red) !important;
+            border-color: var(--telkom-red) !important;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--telkom-red-dark) !important;
+            border-color: var(--telkom-red-dark) !important;
+        }
+        
+        /* Profile Avatar Background */
+        .avatar-sm.bg-primary {
+            background-color: rgba(227, 6, 19, 0.1) !important;
+        }
+        
+        .avatar-sm.bg-primary i {
+            color: var(--telkom-red) !important;
+        }
+        
+        /* Dropdown Icons */
+        .dropdown-item i.text-primary {
+            color: var(--telkom-red) !important;
+        }
+    </style>
+    
     <div class="navbar-header">
         <div class="d-flex align-items-center">
             <!-- LOGO -->
             <div class="navbar-brand-box">
                 <a href="/dashboard" class="logo logo-dark">
                     <span class="logo-sm">
-                        <i class="fas fa-rocket" style="font-size: 24px; color: #495057;"></i>
+                        <i class="fas fa-rocket" style="font-size: 24px;"></i>
                     </span>
                     <span class="logo-lg">
                         <div class="d-flex align-items-center">
-                            <i class="fas fa-rocket me-2" style="font-size: 20px; color: #6f42c1;"></i>
+                            <i class="fas fa-rocket me-2" style="font-size: 20px;"></i>
                             <span style="font-size: 20px; font-weight: bold; color: #495057;">NotulenTracker</span>
                         </div>
                     </span>
@@ -29,10 +109,10 @@
                         id="globalSearch" 
                         class="form-control ps-5 pe-3" 
                         placeholder="Search projects, meetings, or tasks..." 
-                        style="border-radius: 25px; border: 1px solid rgba(111, 66, 193, 0.15); height: 44px; font-size: 14px; width: 100%;"
+                        style="border-radius: 25px; height: 44px; font-size: 14px; width: 100%;"
                         autocomplete="off"
                     >
-                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3" style="color: #6f42c1; opacity: 0.6;"></i>
+                    <i class="fas fa-search position-absolute top-50 start-0 translate-middle-y ms-3" style="opacity: 0.6;"></i>
                 </div>
                 <!-- Results Dropdown -->
                 <div id="searchDropdown" class="search-dropdown">
@@ -52,12 +132,10 @@
                 right: 0;
                 background: white;
                 border-radius: 16px;
-                box-shadow: 0 8px 32px rgba(111, 66, 193, 0.15), 0 2px 8px rgba(0,0,0,0.08);
                 max-height: 480px;
                 overflow-y: auto;
                 z-index: 9999;
                 display: none;
-                border: 1px solid rgba(111, 66, 193, 0.1);
                 animation: slideDown 0.2s ease;
             }
 
@@ -85,26 +163,24 @@
             }
 
             .search-dropdown::-webkit-scrollbar-thumb {
-                background: rgba(111, 66, 193, 0.2);
+                background: rgba(227, 6, 19, 0.2);
                 border-radius: 10px;
             }
 
             .search-dropdown::-webkit-scrollbar-thumb:hover {
-                background: rgba(111, 66, 193, 0.3);
+                background: rgba(227, 6, 19, 0.3);
             }
 
             .search-category {
-                background: #f5f3ff;
                 padding: 10px 18px;
                 font-weight: 700;
                 font-size: 11px;
-                color: #6f42c1;
                 text-transform: uppercase;
                 letter-spacing: 0.8px;
                 position: sticky;
                 top: 0;
                 z-index: 10;
-                border-bottom: 1px solid rgba(111, 66, 193, 0.08);
+                border-bottom: 1px solid rgba(227, 6, 19, 0.08);
                 backdrop-filter: blur(10px);
             }
 
@@ -113,7 +189,7 @@
                 align-items: flex-start;
                 padding: 14px 18px;
                 gap: 14px;
-                border-bottom: 1px solid #f5f3ff;
+                border-bottom: 1px solid var(--telkom-red-light);
                 cursor: pointer;
                 transition: background 0.2s ease;
                 text-decoration: none;
@@ -137,11 +213,6 @@
                 justify-content: center;
                 font-size: 18px;
                 flex-shrink: 0;
-            }
-
-            .search-icon.project {
-                background: rgba(111, 66, 193, 0.08);
-                color: #6f42c1;
             }
 
             .search-icon.meeting {
@@ -212,7 +283,6 @@
                 font-size: 3rem;
                 margin-bottom: 16px;
                 opacity: 0.25;
-                color: #6f42c1;
             }
 
             .search-no-results p {
@@ -222,10 +292,6 @@
             .search-no-results p:first-of-type {
                 color: #4a5568;
                 font-weight: 600;
-            }
-
-            #searchLoading .spinner-border {
-                color: #6f42c1;
             }
             </style>
 

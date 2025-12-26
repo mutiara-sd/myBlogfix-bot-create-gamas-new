@@ -53,11 +53,11 @@
         </div>
         <div class="col-md-4 text-md-end">
             <div class="btn-group" role="group">
-                <a href="{{ route('tasks.edit', $task) }}" class="btn btn-outline-primary border-2">
-                    <i class="fas fa-edit me-2"></i>Edit
+                <a href="{{ route('tasks.edit', $task) }}" class="btn telkom-btn-outline">
+                    <i class="fas fa-edit me-2"></i>
                 </a>
                 <div class="btn-group" role="group">
-                    <button class="btn btn-outline-primary dropdown-toggle border-0" 
+                    <button class="btn btn-sm telkom-btn-outline dropdown-toggle border-0" 
                         data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-v"></i>
                     </button>
@@ -91,7 +91,7 @@
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white py-3">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-align-left me-2 text-info"></i>Description
+                        <i class="fas fa-align-left me-2" style="color: #E30613;"></i>Description
                     </h5>
                 </div>
                 <div class="card-body">
@@ -108,7 +108,7 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-chart-line me-2 text-primary"></i>Progress Updates
+                            <i class="fas fa-chart-line me-2" style="color: #E30613;"></i>Progress Updates
                         </h5>
                         <button class="btn btn-sm btn-outline-primary" onclick="document.getElementById('addProgressModal').style.display='flex'">
                             <i class="fas fa-plus me-1"></i>Add Update
@@ -120,12 +120,12 @@
                         <div class="timeline">
                             @foreach($task->progressUpdates as $update)
                                 <div class="timeline-item">
-                                    <div class="timeline-marker" style="background: #6f42c1;"></div>
+                                    <div class="timeline-marker" style="background: #E30613;"></div>
                                     <div class="timeline-content">
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
                                                 <strong>{{ $update->user->name }}</strong>
-                                                <span class="badge bg-primary ms-2">{{ $update->percent }}%</span>
+                                                <span class="badge ms-2" style="background: #E30613;">{{ $update->percent }}%</span>
                                             </div>
                                             <small class="text-muted">{{ $update->created_at->diffForHumans() }}</small>
                                         </div>
@@ -155,9 +155,9 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-comments me-2" style="color: #8b5cf6;"></i>Comments
+                            <i class="fas fa-comments me-2" style="color: #E30613;"></i>Comments
                         </h5>
-                        <span class="badge rounded-pill" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-size: 0.85rem; padding: 6px 12px;">
+                        <span class="badge rounded-pill" style="background: rgba(227, 6, 19, 0.1); color: #E30613; font-size: 0.85rem; padding: 6px 12px;">
                             {{ $task->comments->count() }} {{ Str::plural('comment', $task->comments->count()) }}
                         </span>
                     </div>
@@ -173,7 +173,7 @@
                                 @if(Auth::user()->profile_picture)
                                     <img src="{{ filter_var(Auth::user()->profile_picture, FILTER_VALIDATE_URL) ? Auth::user()->profile_picture : asset('storage/' . Auth::user()->profile_picture) }}" alt="{{ Auth::user()->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
                                 @else
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(227, 6, 19, 0.1); color: #E30613; font-weight: 600;">
                                         {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                     </div>
                                 @endif
@@ -203,7 +203,7 @@
                                         </button>
                                         <small class="text-muted ms-2">(Max: 5MB)</small>
                                     </div>
-                                    <button type="submit" class="btn btn-sm" style="background: #8b5cf6; color: white; padding: 6px 20px; border-radius: 20px; font-weight: 600;">
+                                    <button type="submit" class="btn btn-sm" style="background: #E30613; color: white; padding: 6px 20px; border-radius: 20px; font-weight: 600;">
                                         <i class="fas fa-paper-plane me-1"></i>Post Comment
                                     </button>
                                 </div>
@@ -213,14 +213,14 @@
 
                     <!-- Comments List -->
                     @forelse ($task->comments as $comment)
-                        <div class="comment-item d-flex gap-3 p-3 mb-3 rounded" style="background: white; border-left: 3px solid #8b5cf6; transition: all 0.2s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.15)'" onmouseout="this.style.boxShadow='none'">
+                        <div class="comment-item d-flex gap-3 p-3 mb-3 rounded" style="background: white; border-left: 3px solid #E30613; transition: all 0.2s;" onmouseover="this.style.boxShadow='0 2px 8px rgba(227, 6, 19, 0.15)'" onmouseout="this.style.boxShadow='none'">
                             
                             <!-- User Avatar -->
                             <div class="flex-shrink-0">
                                 @if($comment->user->profile_picture)
                                     <img src="{{ filter_var($comment->user->profile_picture, FILTER_VALIDATE_URL) ? $comment->user->profile_picture : asset('storage/' . $comment->user->profile_picture) }}" alt="{{ $comment->user->name }}" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
                                 @else
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; background: rgba(227, 6, 19, 0.1); color: #E30613; font-weight: 600;">
                                         {{ strtoupper(substr($comment->user->name, 0, 1)) }}
                                     </div>
                                 @endif
@@ -308,7 +308,7 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-paperclip me-2 text-warning"></i>Attachments ({{ $task->attachments->count() }})
+                            <i class="fas fa-paperclip me-2" style="color: #E30613;"></i>Attachments ({{ $task->attachments->count() }})
                         </h5>
                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addAttachmentModal">
                             <i class="fas fa-plus me-1"></i>Add File
@@ -393,7 +393,7 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-bell me-2 text-danger"></i>Reminders
+                            <i class="fas fa-bell me-2" style="color: #E30613;"></i>Reminders
                         </h5>
                         <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addReminderModal">
                             <i class="fas fa-plus me-1"></i>Add Reminder
@@ -407,7 +407,7 @@
                                 <div class="d-flex justify-content-between align-items-start">
                                     <div class="flex-grow-1">
                                         <div class="d-flex align-items-center mb-2">
-                                            <i class="fas fa-clock text-primary me-2"></i>
+                                            <i class="fas fa-clock me-2" style="color: #E30613;"></i>
                                             <strong>{{ $reminder->remind_at->format('M d, Y H:i') }}</strong>
                                         </div>
                                         <div class="d-flex gap-2 flex-wrap">
@@ -471,7 +471,7 @@
                                         style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #e2e8f0;">
                                 @else
                                      <div class="rounded-circle d-inline-flex align-items-center justify-content-center me-2" 
-                                        style="width: 32px; height: 32px; background: #6f42c1;">
+                                        style="width: 32px; height: 32px; background: #E30613;">
                                         <small class="text-white fw-bold">{{ strtoupper(substr($task->assignee->name, 0, 1)) }}</small>
                                     </div>
                                 @endif
@@ -513,7 +513,7 @@
                         <div class="progress" style="height: 10px;">
                             <div class="progress-bar" 
                                  role="progressbar" 
-                                 style="width: {{ $task->progress_percent }}%; background: #6f42c1;"
+                                 style="width: {{ $task->progress_percent }}%; background: #E30613;"
                                  aria-valuenow="{{ $task->progress_percent }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="100">
@@ -541,7 +541,7 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-bolt me-2 text-warning"></i>Quick Actions
+                        <i class="fas fa-bolt me-2" style="color: #E30613;"></i>Quick Actions
                     </h5>
                 </div>
                 <div class="card-body">
@@ -579,7 +579,7 @@
     <div class="card border-0 shadow-lg" style="width: 500px; max-width: 90%;">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
             <h5 class="card-title mb-0">
-                <i class="fas fa-chart-line me-2" style="color: #6f42c1;"></i>
+                <i class="fas fa-chart-line me-2" style="color: #E30613;"></i>
                 Add Progress Update
             </h5>
             <button type="button" class="btn-close" onclick="document.getElementById('addProgressModal').style.display='none'"></button>
@@ -610,7 +610,7 @@
                             <div class="progress-bar" 
                                  id="progressPreview"
                                  role="progressbar" 
-                                 style="width: {{ $task->progress_percent }}%; background: #6f42c1;"
+                                 style="width: {{ $task->progress_percent }}%; background: #E30613;"
                                  aria-valuenow="{{ $task->progress_percent }}" 
                                  aria-valuemin="0" 
                                  aria-valuemax="100">
@@ -651,7 +651,7 @@
                             onclick="document.getElementById('addProgressModal').style.display='none'">
                         Cancel
                     </button>
-                    <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
+                    <button type="submit" class="btn btn-primary" style="background: #E30613; border-color: #E30613;">
                         <i class="fas fa-save me-1"></i>Save Update
                     </button>
                 </div>
@@ -689,7 +689,7 @@ function updateProgressPreview(value) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
+                    <button type="submit" class="btn btn-primary" style="background: #E30613; border-color: #E30613;">
                         <i class="fas fa-upload me-2"></i>Upload
                     </button>
                 </div>
@@ -834,7 +834,7 @@ function updateProgressPreview(value) {
                 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary" style="background: #6f42c1; border-color: #6f42c1;">
+                    <button type="submit" class="btn btn-primary" style="background: #E30613; border-color: #E30613;">
                         <i class="fas fa-bell me-2"></i>Set Reminder
                     </button>
                 </div>
@@ -882,6 +882,136 @@ function updateProgressPreview(value) {
 </form>
 
 <style>
+
+/* Telkom Infra Color Scheme */
+:root {
+    --telkom-red: #E30613;
+    --telkom-red-dark: #C00510;
+    --telkom-red-light: #FFE8EA;
+}
+
+/* Primary Colors */
+.telkom-text {
+    color: var(--telkom-red);
+}
+
+.telkom-btn {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn:hover {
+    background: var(--telkom-red-dark) !important;
+    border-color: var(--telkom-red-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(227, 6, 19, 0.3);
+}
+
+.telkom-btn-outline {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn-outline:hover {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+}
+
+.telkom-back-btn {
+    transition: all 0.3s ease;
+}
+
+.telkom-back-btn:hover {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+}
+
+/* Badges */
+.telkom-badge-active {
+    background: var(--telkom-red);
+    color: white;
+}
+
+.telkom-badge-progress {
+    background: var(--telkom-red);
+    font-size: 0.9em;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Stats Cards */
+.telkom-stat-card {
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.telkom-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(227, 6, 19, 0.15) !important;
+    border-color: var(--telkom-red-light);
+}
+
+.telkom-icon-circle {
+    width: 60px;
+    height: 60px;
+    background: var(--telkom-red-light);
+}
+
+/* Progress Bar */
+.telkom-progress {
+    background: linear-gradient(90deg, var(--telkom-red) 0%, #ff4757 100%);
+    transition: width 0.6s ease;
+}
+
+/* Avatar */
+.telkom-avatar {
+    border: 2px solid var(--telkom-red-light);
+}
+
+.telkom-avatar-initial {
+    background: var(--telkom-red);
+}
+
+/* Meeting Icon */
+.telkom-meeting-icon {
+    background: var(--telkom-red-light);
+}
+
+/* Hover Effects */
+.hover-task-item {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    border: none !important;
+}
+
+.hover-task-item:hover {
+    background-color: var(--telkom-red-light);
+    transform: translateX(5px);
+}
+
+.hover-task-item:hover h6 {
+    color: var(--telkom-red) !important;
+}
+
+.hover-card {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+.hover-card:hover {
+    background-color: var(--telkom-red-light);
+    transform: translateX(5px);
+}
+
+a.text-decoration-none:hover .hover-card h6 {
+    color: var(--telkom-red) !important;
+}
+
 .timeline {
     position: relative;
     padding-left: 30px;
@@ -904,7 +1034,7 @@ function updateProgressPreview(value) {
     height: 12px;
     border-radius: 50%;
     border: 3px solid white;
-    box-shadow: 0 0 0 2px #6f42c1;
+    box-shadow: 0 0 0 2px #E30613;
 }
 
 .timeline-item:not(:last-child)::before {
@@ -921,7 +1051,7 @@ function updateProgressPreview(value) {
     background: #f9fafb;
     padding: 15px;
     border-radius: 8px;
-    border-left: 3px solid #6f42c1;
+    border-left: 3px solid #E30613;
 }
 
 .comment-item {
@@ -1047,7 +1177,7 @@ function updateProgressPreview(value) {
 
 .hover-attachment:hover {
     background-color: #f9fafb;
-    border-color: #6f42c1 !important;
+    border-color: #E30613 !important;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
@@ -1059,7 +1189,23 @@ function updateProgressPreview(value) {
 
 .reminder-item:hover {
     background: #f3f4f6;
-    border-color: #6f42c1 !important;
+    border-color: #E30613 !important;
+}
+
+.badge.bg-primary {
+    background: #E30613 !important;
+}
+
+.badge.bg-danger {
+    background: #E30613 !important;
+}
+
+.badge.bg-info {
+    background: #6c757d !important;
+}
+
+.badge.bg-warning {
+    background: #fbbf24 !important;
 }
 </style>
 

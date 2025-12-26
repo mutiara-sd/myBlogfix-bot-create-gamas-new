@@ -12,7 +12,7 @@
                     <div class="d-flex align-items-center gap-3">
                         <span class="text-muted">Code: <strong>{{ $project->code }}</strong></span>
                         @if($project->status === 'active')
-                            <span class="badge bg-success">Active</span>
+                            <span class="badge telkom-badge-active">Active</span>
                         @else
                             <span class="badge bg-secondary">Archived</span>
                         @endif
@@ -25,11 +25,11 @@
         </div>
         <div class="col-md-4 text-md-end">
             <div class="btn-group" role="group">
-                <a href="{{ route('projects.edit', $project) }}" class="btn btn-outline-primary-toggle border-2">
+                <a href="{{ route('projects.edit', $project) }}" class="btn telkom-btn-outline">
                     <i class="fas fa-edit me-2"></i>
                 </a>
                 <div class="btn-group" role="group">
-                    <button class="btn btn-sm btn-outline-primary dropdown-toggle border-0" 
+                    <button class="btn btn-sm telkom-btn-outline dropdown-toggle border-0" 
                         data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-v"></i>
                     </button>
@@ -71,20 +71,19 @@
     <!-- Project Stats Cards -->
     <div class="row mb-4">
         <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 telkom-stat-card">
                 <div class="card-body text-center p-4">
-                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                         style="width: 60px; height: 60px; background: rgba(111, 66, 193, 0.1);">
-                        <i class="fas fa-tasks fa-2x" style="color: #6f42c1;"></i>
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3 telkom-icon-circle">
+                        <i class="fas fa-tasks fa-2x telkom-text"></i>
                     </div>
-                    <h3 class="fw-bold mb-1">{{ $project->tasks->count() }}</h3>
+                    <h3 class="fw-bold mb-1 telkom-text">{{ $project->tasks->count() }}</h3>
                     <p class="text-muted mb-0">Total Tasks</p>
                 </div>
             </div>
         </div>
         
         <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 telkom-stat-card">
                 <div class="card-body text-center p-4">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
                          style="width: 60px; height: 60px; background: rgba(40, 167, 69, 0.1);">
@@ -97,7 +96,7 @@
         </div>
         
         <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 telkom-stat-card">
                 <div class="card-body text-center p-4">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
                          style="width: 60px; height: 60px; background: rgba(255, 193, 7, 0.1);">
@@ -110,7 +109,7 @@
         </div>
         
         <div class="col-lg-3 col-md-6 mb-3">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 telkom-stat-card">
                 <div class="card-body text-center p-4">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
                          style="width: 60px; height: 60px; background: rgba(220, 53, 69, 0.1);">
@@ -131,7 +130,7 @@
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white py-3">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-info-circle me-2 text-info"></i>Project Description
+                        <i class="fas fa-info-circle me-2 telkom-text"></i>Project Description
                     </h5>
                 </div>
                 <div class="card-body">
@@ -148,14 +147,14 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-chart-line me-2 text-primary"></i>Progress Overview
+                            <i class="fas fa-chart-line me-2 telkom-text"></i>Progress Overview
                         </h5>
                         @php
                             $totalTasks = $project->tasks->count();
                             $completedTasks = $project->tasks->where('status', 'completed')->count();
                             $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
                         @endphp
-                        <span class="badge badge-lg" style="background: #6f42c1; font-size: 0.9em;">
+                        <span class="badge badge-lg telkom-badge-progress">
                             {{ $progress }}% Complete
                         </span>
                     </div>
@@ -163,8 +162,8 @@
                 <div class="card-body">
                     <!-- Progress Bar -->
                     <div class="progress mb-3" style="height: 12px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" 
-                             style="background: linear-gradient(45deg, #6f42c1, #9b59b6); width: {{ $progress }}%">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated telkom-progress" 
+                             style="width: {{ $progress }}%">
                         </div>
                     </div>
                     
@@ -215,9 +214,9 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-list me-2 text-warning"></i>Recent Tasks
+                            <i class="fas fa-list me-2 telkom-text"></i>Recent Tasks
                         </h5>
-                        <a href="{{ route('tasks.index') }}" class="btn btn-sm btn-outline-primary">View All Tasks</a>
+                        <a href="{{ route('tasks.index') }}" class="btn btn-sm telkom-btn-outline">View All Tasks</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -245,31 +244,13 @@
                             <i class="fas fa-plus-circle fa-2x mb-3"></i>
                             <p class="mb-3">No tasks yet. Create your first task!</p>
                             <a href="{{ route('tasks.create', ['project_id' => $project->id]) }}" 
-                            class="btn btn-sm btn-primary" 
-                            style="background:#6f42c1; border-color:#6f42c1;">
+                            class="btn btn-sm btn-primary telkom-btn">
                                 <i class="fas fa-plus me-1"></i>Add Task
                             </a>
                         </div>
                     @endif
                 </div>
             </div>
-
-            <style>
-            .hover-task-item {
-                transition: all 0.2s ease;
-                border-radius: 8px;
-                border: none !important;
-            }
-
-            .hover-task-item:hover {
-                background-color: #f8f9fa;
-                transform: translateX(5px);
-            }
-
-            .hover-task-item:hover h6 {
-                color: #0d6efd !important;
-            }
-            </style>
         </div>
 
         <!-- Right Column -->
@@ -278,7 +259,7 @@
             <div class="card border-0 shadow-sm mb-4">
                 <div class="card-header bg-white py-3">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-info me-2 text-secondary"></i>Project Details
+                        <i class="fas fa-info me-2 telkom-text"></i>Project Details
                     </h5>
                 </div>
                 <div class="card-body">
@@ -303,11 +284,11 @@
                                         ? $project->owner->profile_picture
                                         : asset('storage/' . $project->owner->profile_picture) }}"
                                     alt="{{ $project->owner->name }}"
-                                    class="rounded-circle me-2"
-                                    style="width: 32px; height: 32px; object-fit: cover; border: 2px solid #e2e8f0;">
+                                    class="rounded-circle me-2 telkom-avatar"
+                                    style="width: 32px; height: 32px; object-fit: cover;">
                             @else
                                 <!-- Jika belum ada foto profil, tampilkan inisial -->
-                                <div class="rounded-circle bg-primary d-inline-flex align-items-center justify-content-center me-2" 
+                                <div class="rounded-circle telkom-avatar-initial d-inline-flex align-items-center justify-content-center me-2" 
                                     style="width: 32px; height: 32px;">
                                     <small class="text-white fw-bold">{{ strtoupper(substr($project->owner->name, 0, 1)) }}</small>
                                 </div>
@@ -326,9 +307,9 @@
                 <div class="card-header bg-white py-3">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0">
-                            <i class="fas fa-calendar me-2 text-info"></i>Recent Meetings
+                            <i class="fas fa-calendar me-2 telkom-text"></i>Recent Meetings
                         </h5>
-                        <a href="{{ route('meetings.index') }}" class="btn btn-sm btn-outline-primary">View All</a>
+                        <a href="{{ route('meetings.index') }}" class="btn btn-sm telkom-btn-outline">View All</a>
                     </div>
                 </div>
                 <div class="card-body">
@@ -337,9 +318,9 @@
                             <a href="{{ route('meetings.show', $meeting->id) }}" class="text-decoration-none">
                                 <div class="d-flex align-items-center mb-3 pb-3 {{ !$loop->last ? 'border-bottom' : '' }} hover-card">
                                     <div class="flex-shrink-0 me-3">
-                                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center" 
-                                            style="width: 40px; height: 40px; background: rgba(13, 202, 240, 0.1);">
-                                            <i class="fas fa-video text-info"></i>
+                                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center telkom-meeting-icon" 
+                                            style="width: 40px; height: 40px;">
+                                            <i class="fas fa-video telkom-text"></i>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1">
@@ -361,37 +342,19 @@
                 </div>
             </div>
 
-            <style>
-            .hover-card {
-                transition: all 0.2s ease;
-                border-radius: 8px;
-                padding: 8px;
-                margin: -8px;
-            }
-
-            .hover-card:hover {
-                background-color: #f8f9fa;
-                transform: translateX(5px);
-            }
-
-            a.text-decoration-none:hover .hover-card h6 {
-                color: #0d6efd !important;
-            }
-            </style>
-
             <!-- Quick Actions -->
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
                     <h5 class="card-title mb-0">
-                        <i class="fas fa-bolt me-2 text-warning"></i>Quick Actions
+                        <i class="fas fa-bolt me-2 telkom-text"></i>Quick Actions
                     </h5>
                 </div>
                 <div class="card-body">
                     <div class="d-grid gap-2">
-                        <a href="{{ route('tasks.create') }}" class="btn btn-outline-primary">
+                        <a href="{{ route('tasks.create') }}" class="btn telkom-btn-outline">
                             <i class="fas fa-plus me-2"></i>Add Task
                         </a>
-                        <button class="btn btn-outline-info" disabled>
+                        <button class="btn btn-outline-secondary" disabled>
                             <i class="fas fa-calendar-plus me-2"></i>Schedule Meeting
                         </button>
                         <button class="btn btn-outline-secondary" disabled>
@@ -431,14 +394,136 @@
 </form>
 
 <style>
-.progress-bar {
-    transition: width 0.6s ease;
+/* Telkom Infra Color Scheme */
+:root {
+    --telkom-red: #E30613;
+    --telkom-red-dark: #C00510;
+    --telkom-red-light: #FFE8EA;
 }
 
-.badge-lg {
+/* Primary Colors */
+.telkom-text {
+    color: var(--telkom-red);
+}
+
+.telkom-btn {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn:hover {
+    background: var(--telkom-red-dark) !important;
+    border-color: var(--telkom-red-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(227, 6, 19, 0.3);
+}
+
+.telkom-btn-outline {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn-outline:hover {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+}
+
+.telkom-back-btn {
+    transition: all 0.3s ease;
+}
+
+.telkom-back-btn:hover {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+}
+
+/* Badges */
+.telkom-badge-active {
+    background: var(--telkom-red);
+    color: white;
+}
+
+.telkom-badge-progress {
+    background: var(--telkom-red);
+    font-size: 0.9em;
     padding: 0.5rem 0.75rem;
 }
 
+/* Stats Cards */
+.telkom-stat-card {
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.telkom-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(227, 6, 19, 0.15) !important;
+    border-color: var(--telkom-red-light);
+}
+
+.telkom-icon-circle {
+    width: 60px;
+    height: 60px;
+    background: var(--telkom-red-light);
+}
+
+/* Progress Bar */
+.telkom-progress {
+    background: linear-gradient(90deg, var(--telkom-red) 0%, #ff4757 100%);
+    transition: width 0.6s ease;
+}
+
+/* Avatar */
+.telkom-avatar {
+    border: 2px solid var(--telkom-red-light);
+}
+
+.telkom-avatar-initial {
+    background: var(--telkom-red);
+}
+
+/* Meeting Icon */
+.telkom-meeting-icon {
+    background: var(--telkom-red-light);
+}
+
+/* Hover Effects */
+.hover-task-item {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    border: none !important;
+}
+
+.hover-task-item:hover {
+    background-color: var(--telkom-red-light);
+    transform: translateX(5px);
+}
+
+.hover-task-item:hover h6 {
+    color: var(--telkom-red) !important;
+}
+
+.hover-card {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+.hover-card:hover {
+    background-color: var(--telkom-red-light);
+    transform: translateX(5px);
+}
+
+a.text-decoration-none:hover .hover-card h6 {
+    color: var(--telkom-red) !important;
+}
+
+/* Cards */
 .card {
     transition: all 0.2s ease;
 }
@@ -447,125 +532,121 @@
     transform: translateY(-2px);
 }
 
+/* Buttons */
 .btn:disabled {
     opacity: 0.6;
     cursor: not-allowed;
 }
 
-.rounded-circle {
-    transition: all 0.2s ease;
+/* Delete Confirmation Modal */
+.delete-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 20000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
 }
 
-/* Delete Confirmation Modal */
-    .delete-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(8px);
-        z-index: 20000;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
+.delete-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
 
-    .delete-modal.active {
-        opacity: 1;
-        visibility: visible;
-    }
+.delete-modal-content {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 480px;
+    transform: scale(0.8) translateY(30px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+}
 
-    .delete-modal-content {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
-        width: 100%;
-        max-width: 480px;
-        transform: scale(0.8) translateY(30px);
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        overflow: hidden;
-    }
+.delete-modal.active .delete-modal-content {
+    transform: scale(1) translateY(0);
+}
 
-    .delete-modal.active .delete-modal-content {
-        transform: scale(1) translateY(0);
-    }
+.delete-modal-header {
+    background: linear-gradient(135deg, var(--telkom-red-light) 0%, #ffd1d4 100%);
+    padding: 32px;
+    text-align: center;
+    border-bottom: 1px solid #ffb3b8;
+}
 
-    .delete-modal-header {
-        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        padding: 32px;
-        text-align: center;
-        border-bottom: 1px solid #fecaca;
-    }
+.delete-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--telkom-red) 0%, var(--telkom-red-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 8px 24px rgba(227, 6, 19, 0.4);
+}
 
-    .delete-icon {
-        width: 64px;
-        height: 64px;
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 16px;
-        box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
-    }
+.delete-modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 8px 0;
+}
 
-    .delete-modal-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1f2937;
-        margin: 0 0 8px 0;
-    }
+.delete-modal-text {
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
 
-    .delete-modal-text {
-        color: #6b7280;
-        line-height: 1.5;
-        margin: 0;
-    }
+.delete-modal-body {
+    padding: 24px 32px 32px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
 
-    .delete-modal-body {
-        padding: 24px 32px 32px;
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-    }
+.btn-delete-cancel {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
 
-    .btn-delete-cancel {
-        background: #f3f4f6;
-        color: #374151;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
+.btn-delete-cancel:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
 
-    .btn-delete-cancel:hover {
-        background: #e5e7eb;
-        transform: translateY(-1px);
-    }
+.btn-delete-confirm {
+    background: linear-gradient(135deg, var(--telkom-red) 0%, var(--telkom-red-dark) 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
 
-    .btn-delete-confirm {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
-
-    .btn-delete-confirm:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
-    }
-    
+.btn-delete-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(227, 6, 19, 0.4);
+}
 </style>
 
 <script>

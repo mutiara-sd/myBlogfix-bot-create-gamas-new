@@ -30,11 +30,11 @@
         </div>
         <div class="col-md-4 text-md-end">
             <div class="btn-group" role="group">
-                <a href="{{ route('meetings.edit', $meeting) }}" class="btn btn-outline-primary border-2">
-                    <i class="fas fa-edit me-2"></i>Edit
+                <a href="{{ route('meetings.edit', $meeting) }}" class="btn telkom-btn-outline">
+                    <i class="fas fa-edit me-2"></i>
                 </a>
                 <div class="btn-group" role="group">
-                    <button class="btn btn-sm btn-outline-primary dropdown-toggle border-0" 
+                    <button class="btn btn-sm telkom-btn-outline dropdown-toggle border-0" 
                         data-bs-toggle="dropdown">
                         <i class="fas fa-ellipsis-v"></i>
                     </button>
@@ -66,8 +66,8 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-4">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                         style="width: 60px; height: 60px; background: rgba(139, 92, 246, 0.1);">
-                        <i class="fas fa-list fa-2x" style="color: #8b5cf6;"></i>
+                         style="width: 60px; height: 60px; background: rgba(227, 6, 19, 0.1);">
+                        <i class="fas fa-list fa-2x" style="color: #E30613;"></i>
                     </div>
                     <h3 class="fw-bold mb-1">{{ $meeting->agendas->count() }}</h3>
                     <p class="text-muted mb-0">Agenda Items</p>
@@ -79,8 +79,8 @@
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center p-4">
                     <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" 
-                         style="width: 60px; height: 60px; background: rgba(59, 130, 246, 0.1);">
-                        <i class="fas fa-check-circle fa-2x" style="color: #3b82f6;"></i>
+                         style="width: 60px; height: 60px; background: rgba(227, 6, 19, 0.1);">
+                        <i class="fas fa-check-circle fa-2x" style="color: #E30613;"></i>
                     </div>
                     <h3 class="fw-bold mb-1">{{ $meeting->minuteDecisions->count() }}</h3>
                     <p class="text-muted mb-0">Decisions Made</p>
@@ -108,11 +108,11 @@
         <div class="col-lg-8 mb-4">
             
             <!-- Notulen Editor Card -->
-            <div class="card border-0 shadow-sm mb-4" style="border-left: 4px solid #8b5cf6 !important;">
+            <div class="card border-0 shadow-sm mb-4" style="border-left: 4px solid #E30613 !important;">
                 <div class="card-header py-3" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); border-bottom: 2px solid #e9ecef;">
                     <div class="d-flex justify-content-between align-items-center">
                         <h5 class="card-title mb-0 fw-bold" style="color: #2d3748;">
-                            <i class="fas fa-edit me-2" style="color: #8b5cf6;"></i>Notulen Editor
+                            <i class="fas fa-edit me-2" style="color: #E30613;"></i>Notulen Editor
                         </h5>
                     </div>
                 </div>
@@ -122,13 +122,13 @@
                     <div class="notulen-section mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-semibold mb-0" style="color: #4b5563;">
-                                <i class="fas fa-list-ul me-2" style="color: #8b5cf6;"></i>Agenda
+                                <i class="fas fa-list-ul me-2" style="color: #E30613;"></i>Agenda
                             </h6>
                             <button type="button" class="btn btn-sm rounded-pill" 
-                                style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; border: none; font-weight: 600; padding: 6px 16px;"
+                                style="background: rgba(227, 6, 19, 0.1); color: #E30613; border: none; font-weight: 600; padding: 6px 16px;"
                                 onclick="toggleAgendaForm()"
-                                onmouseover="this.style.background='rgba(139, 92, 246, 0.2)'"
-                                onmouseout="this.style.background='rgba(139, 92, 246, 0.1)'">
+                                onmouseover="this.style.background='rgba(227, 6, 19, 0.2)'"
+                                onmouseout="this.style.background='rgba(227, 6, 19, 0.1)'">
                                 <i class="fas fa-plus me-1"></i>Add
                             </button>
                         </div>
@@ -140,7 +140,7 @@
                                 <div class="input-group shadow-sm">
                                     <input type="text" name="agenda_text" placeholder="Enter agenda item..." required 
                                         class="form-control border-0" style="background: white; padding: 12px 16px;">
-                                    <button type="submit" class="btn" style="background: #8b5cf6; color: white; padding: 12px 20px;">
+                                    <button type="submit" class="btn" style="background: #E30613; color: white; padding: 12px 20px;">
                                         <i class="fas fa-check me-1"></i>Save
                                     </button>
                                     <button type="button" onclick="toggleAgendaForm()" class="btn btn-light">
@@ -155,11 +155,11 @@
                             <div class="agenda-list">
                                 @foreach ($meeting->agendas as $index => $agenda)
                                     <div class="agenda-item d-flex align-items-start gap-3 p-3 mb-2 rounded" 
-                                         style="background: white; border-left: 3px solid #8b5cf6; transition: all 0.2s;"
-                                         onmouseover="this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.15)'"
+                                         style="background: white; border-left: 3px solid #E30613; transition: all 0.2s;"
+                                         onmouseover="this.style.boxShadow='0 2px 8px rgba(227, 6, 19, 0.15)'"
                                          onmouseout="this.style.boxShadow='none'">
                                         <span class="badge rounded-circle d-flex align-items-center justify-content-center" 
-                                              style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; width: 28px; height: 28px; font-weight: 600;">
+                                              style="background: rgba(227, 6, 19, 0.1); color: #E30613; width: 28px; height: 28px; font-weight: 600;">
                                             {{ $index + 1 }}
                                         </span>
                                         <span class="flex-grow-1" style="color: #2d3748; line-height: 1.6;">{{ $agenda->agenda_text }}</span>
@@ -189,7 +189,7 @@
                     <div class="notulen-section mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-semibold mb-0" style="color: #4b5563;">
-                                <i class="fas fa-check-circle me-2" style="color: #10b981;"></i>Decisions
+                                <i class="fas fa-check-circle me-2" style="color: #E30613;"></i>Decisions
                             </h6>
                         </div>
 
@@ -198,11 +198,11 @@
                             @csrf
                             <div class="input-group shadow-sm">
                                 <span class="input-group-text border-0" style="background: white;">
-                                    <i class="fas fa-plus" style="color: #10b981;"></i>
+                                    <i class="fas fa-plus" style="color: #E30613;"></i>
                                 </span>
                                 <input type="text" name="decision_text" placeholder="Add decision..." required 
                                     class="form-control border-0" style="background: white; padding: 12px 16px;">
-                                <button type="submit" class="btn" style="background: #10b981; color: white; padding: 12px 20px;">
+                                <button type="submit" class="btn" style="background: #E30613; color: white; padding: 12px 20px;">
                                     <i class="fas fa-check"></i>
                                 </button>
                             </div>
@@ -211,12 +211,12 @@
                         <!-- List Decisions -->
                         @forelse ($meeting->minuteDecisions as $decision)
                             <div class="decision-item d-flex align-items-center gap-3 p-3 mb-2 rounded" 
-                                 style="background: white; border-left: 3px solid #10b981; transition: all 0.2s;"
-                                 onmouseover="this.style.boxShadow='0 2px 8px rgba(16, 185, 129, 0.15)'"
+                                 style="background: white; border-left: 3px solid #E30613; transition: all 0.2s;"
+                                 onmouseover="this.style.boxShadow='0 2px 8px rgba(227, 6, 19, 0.15)'"
                                  onmouseout="this.style.boxShadow='none'">
                                 <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
                                      style="width: 28px; height: 28px; background: rgba(16, 185, 129, 0.1);">
-                                    <i class="fas fa-check" style="color: #10b981; font-size: 12px;"></i>
+                                    <i class="fas fa-check" style="color: #E30613; font-size: 12px;"></i>
                                 </div>
                                 <span class="flex-grow-1" style="color: #2d3748; line-height: 1.6;">{{ $decision->decision_text }}</span>
                                 <form action="{{ route('decisions.destroy', $decision->id) }}" method="POST">
@@ -314,7 +314,7 @@
                                                     @if($risk->owner || $risk->mitigation)
                                                         <div class="d-flex flex-wrap gap-2 align-items-center">
                                                             @if($risk->owner)
-                                                                <span class="badge rounded-pill" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; font-weight: 500;">
+                                                                <span class="badge rounded-pill" style="background: rgba(227, 6, 19, 0.1); color: #E30613; font-weight: 500;">
                                                                     <i class="fas fa-user me-1" style="font-size: 10px;"></i>{{ $risk->owner }}
                                                                 </span>
                                                             @endif
@@ -344,19 +344,19 @@
                     <div class="notulen-section mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-semibold mb-0" style="color: #4b5563;">
-                                <i class="fas fa-paperclip me-2" style="color: #6366f1;"></i>Attachments
+                                <i class="fas fa-paperclip me-2" style="color: #E30613;"></i>Attachments
                                 @if($meeting->attachments->count() > 0)
-                                    <span class="badge rounded-pill ms-2" style="background: rgba(99, 102, 241, 0.1); color: #6366f1; font-size: 0.75rem;">
+                                    <span class="badge rounded-pill ms-2" style="background: rgba(227, 6, 19, 0.1); color: #E30613; font-size: 0.75rem;">
                                         {{ $meeting->attachments->count() }}
                                     </span>
                                 @endif
                             </h6>
                             <div class="text-end">
                                 <button type="button" class="btn btn-sm rounded-pill" 
-                                    style="background: rgba(99, 102, 241, 0.1); color: #6366f1; border: none; font-weight: 600; padding: 6px 16px;"
+                                    style="background: rgba(227, 6, 19, 0.1); color: #E30613; border: none; font-weight: 600; padding: 6px 16px;"
                                     onclick="document.getElementById('fileInput').click()"
-                                    onmouseover="this.style.background='rgba(99, 102, 241, 0.2)'"
-                                    onmouseout="this.style.background='rgba(99, 102, 241, 0.1)'">
+                                    onmouseover="this.style.background='rgba(227, 6, 19, 0.2)'"
+                                    onmouseout="this.style.background='rgba(227, 6, 19, 0.1)'">
                                     <i class="fas fa-upload me-1"></i>Upload
                                 </button>
                                 <small class="d-block text-muted mt-1" style="font-size: 0.75rem;">Max: 10MB per file</small>
@@ -376,8 +376,8 @@
                             <div class="attachments-list">
                                 @foreach ($meeting->attachments as $attachment)
                                     <div class="attachment-item d-flex align-items-center gap-3 p-3 mb-2 rounded" 
-                                        style="background: white; border-left: 3px solid #6366f1; transition: all 0.2s;"
-                                        onmouseover="this.style.boxShadow='0 2px 8px rgba(99, 102, 241, 0.15)'"
+                                        style="background: white; border-left: 3px solid #E30613; transition: all 0.2s;"
+                                        onmouseover="this.style.boxShadow='0 2px 8px rgba(227, 6, 19, 0.15)'"
                                         onmouseout="this.style.boxShadow='none'">
                                         
                                         <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" 
@@ -399,9 +399,9 @@
                                         <div class="d-flex gap-2 flex-shrink-0">
                                             <a href="{{ route('meetings.attachments.download', $attachment) }}" 
                                             class="btn btn-sm rounded-circle" 
-                                            style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: none; width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
-                                            onmouseover="this.style.background='rgba(16, 185, 129, 0.2)'"
-                                            onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'"
+                                            style="background: rgba(227, 6, 19, 0.1); color: #E30613; border: none; width: 32px; height: 32px; padding: 0; display: flex; align-items: center; justify-content: center;"
+                                            onmouseover="this.style.background='rgba(227, 6, 19, 0.2)'"
+                                            onmouseout="this.style.background='rgba(227, 6, 19, 0.1)'"
                                             title="Download">
                                                 <i class="fas fa-download" style="font-size: 12px;"></i>
                                             </a>
@@ -434,9 +434,9 @@
                     <div class="notulen-section mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <h6 class="fw-semibold mb-0" style="color: #4b5563;">
-                                <i class="fas fa-comments me-2" style="color: #8b5cf6;"></i>Comments
+                                <i class="fas fa-comments me-2" style="color: #E30613;"></i>Comments
                             </h6>
-                            <span class="badge rounded-pill" style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-size: 0.85rem; padding: 6px 12px;">
+                            <span class="badge rounded-pill" style="background: rgba(227, 6, 19, 0.1); color: #E30613; font-size: 0.85rem; padding: 6px 12px;">
                                 {{ $meeting->comments->count() }} {{ Str::plural('comment', $meeting->comments->count()) }}
                             </span>
                         </div>
@@ -456,7 +456,7 @@
                                             style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
                                     @else
                                         <div class="rounded-circle d-flex align-items-center justify-content-center" 
-                                            style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                            style="width: 40px; height: 40px; background: rgba(227, 6, 19, 0.1); color: #E30613; font-weight: 600;">
                                             {{ strtoupper(substr(Auth::user()->name, 0, 1)) }}
                                         </div>
                                     @endif
@@ -492,7 +492,7 @@
                                             <small class="text-muted ms-2">(Max: 5MB)</small>
                                         </div>
                                         <button type="submit" class="btn btn-sm" 
-                                            style="background: #8b5cf6; color: white; padding: 6px 20px; border-radius: 20px; font-weight: 600;">
+                                            style="background: #E30613; color: white; padding: 6px 20px; border-radius: 20px; font-weight: 600;">
                                             <i class="fas fa-paper-plane me-1"></i>Post Comment
                                         </button>
                                     </div>
@@ -503,8 +503,8 @@
                         <!-- Comments List -->
                         @forelse ($meeting->comments as $comment)
                             <div class="comment-item d-flex gap-3 p-3 mb-3 rounded" 
-                                style="background: white; border-left: 3px solid #8b5cf6; transition: all 0.2s;"
-                                onmouseover="this.style.boxShadow='0 2px 8px rgba(139, 92, 246, 0.15)'"
+                                style="background: white; border-left: 3px solid #E30613; transition: all 0.2s;"
+                                onmouseover="this.style.boxShadow='0 2px 8px rgba(227, 6, 19, 0.15)'"
                                 onmouseout="this.style.boxShadow='none'">
                                 
                                 <!-- User Avatar -->
@@ -518,7 +518,7 @@
                                             style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #e2e8f0;">
                                     @else
                                         <div class="rounded-circle d-flex align-items-center justify-content-center" 
-                                            style="width: 40px; height: 40px; background: rgba(139, 92, 246, 0.1); color: #8b5cf6; font-weight: 600;">
+                                            style="width: 40px; height: 40px; background: rgba(227, 6, 19, 0.1); color: #E30613; font-weight: 600;">
                                             {{ strtoupper(substr($comment->user->name, 0, 1)) }}
                                         </div>
                                     @endif
@@ -614,16 +614,16 @@
                             <input type="hidden" name="location" value="{{ $meeting->location }}">
                             <input type="hidden" name="organizer_id" value="{{ $meeting->organizer_id }}">
                             <button type="submit" class="btn w-100" 
-                                style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; border: 2px solid rgba(139, 92, 246, 0.2); font-weight: 600;"
-                                onmouseover="this.style.background='rgba(139, 92, 246, 0.15)'"
-                                onmouseout="this.style.background='rgba(139, 92, 246, 0.1)'">
+                                style="background: rgba(227, 6, 19, 0.1); color: #E30613; border: 2px solid rgba(227, 6, 19, 0.2); font-weight: 600;"
+                                onmouseover="this.style.background='rgba(227, 6, 19, 0.15)'"
+                                onmouseout="this.style.background='rgba(227, 6, 19, 0.1)'">
                                 <i class="fas fa-save me-2"></i>Save Draft
                             </button>
                         </form>
                         
                         <button type="button" class="btn flex-fill" 
                             onclick="submitForReview()"
-                            style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; border: 2px solid rgba(59, 130, 246, 0.2); font-weight: 600;"
+                            style="background: rgba(227, 6, 19, 0.1); color: #E30613; border: 2px solid rgba(59, 130, 246, 0.2); font-weight: 600;"
                             onmouseover="this.style.background='rgba(59, 130, 246, 0.15)'"
                             onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">
                             <i class="fas fa-paper-plane me-2"></i>Submit for Review
@@ -640,9 +640,9 @@
                             <input type="hidden" name="organizer_id" value="{{ $meeting->organizer_id }}">
                             <button type="submit" class="btn w-100" 
                                 onclick="return confirm('Mark this meeting as approved and done?')"
-                                style="background: rgba(16, 185, 129, 0.1); color: #10b981; border: 2px solid rgba(16, 185, 129, 0.2); font-weight: 600;"
-                                onmouseover="this.style.background='rgba(16, 185, 129, 0.15)'"
-                                onmouseout="this.style.background='rgba(16, 185, 129, 0.1)'">
+                                style="background: rgba(227, 6, 19, 0.1); color: #E30613; border: 2px solid rgba(227, 6, 19, 0.2); font-weight: 600;"
+                                onmouseover="this.style.background='rgba(227, 6, 19, 0.15)'"
+                                onmouseout="this.style.background='rgba(227, 6, 19, 0.1)'">
                                 <i class="fas fa-check-double me-2"></i>Approve
                             </button>
                         </form>
@@ -775,6 +775,136 @@
 </form>
 
 <style>
+
+/* Telkom Infra Color Scheme */
+:root {
+    --telkom-red: #E30613;
+    --telkom-red-dark: #C00510;
+    --telkom-red-light: #FFE8EA;
+}
+
+/* Primary Colors */
+.telkom-text {
+    color: var(--telkom-red);
+}
+
+.telkom-btn {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn:hover {
+    background: var(--telkom-red-dark) !important;
+    border-color: var(--telkom-red-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(227, 6, 19, 0.3);
+}
+
+.telkom-btn-outline {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn-outline:hover {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+}
+
+.telkom-back-btn {
+    transition: all 0.3s ease;
+}
+
+.telkom-back-btn:hover {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+}
+
+/* Badges */
+.telkom-badge-active {
+    background: var(--telkom-red);
+    color: white;
+}
+
+.telkom-badge-progress {
+    background: var(--telkom-red);
+    font-size: 0.9em;
+    padding: 0.5rem 0.75rem;
+}
+
+/* Stats Cards */
+.telkom-stat-card {
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+}
+
+.telkom-stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(227, 6, 19, 0.15) !important;
+    border-color: var(--telkom-red-light);
+}
+
+.telkom-icon-circle {
+    width: 60px;
+    height: 60px;
+    background: var(--telkom-red-light);
+}
+
+/* Progress Bar */
+.telkom-progress {
+    background: linear-gradient(90deg, var(--telkom-red) 0%, #ff4757 100%);
+    transition: width 0.6s ease;
+}
+
+/* Avatar */
+.telkom-avatar {
+    border: 2px solid var(--telkom-red-light);
+}
+
+.telkom-avatar-initial {
+    background: var(--telkom-red);
+}
+
+/* Meeting Icon */
+.telkom-meeting-icon {
+    background: var(--telkom-red-light);
+}
+
+/* Hover Effects */
+.hover-task-item {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    border: none !important;
+}
+
+.hover-task-item:hover {
+    background-color: var(--telkom-red-light);
+    transform: translateX(5px);
+}
+
+.hover-task-item:hover h6 {
+    color: var(--telkom-red) !important;
+}
+
+.hover-card {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    padding: 8px;
+    margin: -8px;
+}
+
+.hover-card:hover {
+    background-color: var(--telkom-red-light);
+    transform: translateX(5px);
+}
+
+a.text-decoration-none:hover .hover-card h6 {
+    color: var(--telkom-red) !important;
+}
+
 /* Delete Modal */
 .delete-modal {
     position: fixed;

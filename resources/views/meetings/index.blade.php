@@ -6,7 +6,7 @@
             <h2 class="text-dark fw-bold mb-1">Meetings & Notulen</h2>
             <p class="text-muted mb-0">Manage and track your meetings</p>
         </div>
-        <a href="{{ route('meetings.create') }}" class="btn btn-primary" style="background:#6f42c1; border-color:#6f42c1;">
+        <a href="{{ route('meetings.create') }}" class="btn btn-primary telkom-btn">
             <i class="fas fa-plus me-2"></i>New Meeting
         </a>
     </div>
@@ -20,11 +20,11 @@
     @endif
 
     <!-- Filter: Project Dropdown & Status Tabs -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
         <!-- Project Filter -->
         <form method="GET" class="d-flex align-items-center gap-2">
-            <label class="text-muted mb-0">Project:</label>
-            <select name="project_id" onchange="this.form.submit()" class="form-select" style="width: auto;">
+            <label class="text-muted mb-0 fw-semibold">Project:</label>
+            <select name="project_id" onchange="this.form.submit()" class="form-select telkom-select" style="width: auto;">
                 <option value="">All Projects</option>
                 @foreach($projects as $project)
                     <option value="{{ $project->id }}" {{ request('project_id') == $project->id ? 'selected' : '' }}>
@@ -68,13 +68,13 @@
         <div class="row">
             @foreach($meetings as $meeting)
                 <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100 border-0 shadow-sm meeting-card" style="transition: all 0.3s ease;">
+                    <div class="card h-100 border-0 shadow-sm meeting-card">
                         <div class="card-body p-4">
                             <!-- Meeting Header -->
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <div class="flex-grow-1">
-                                    <h5 class="card-title text-dark fw-bold mb-1">{{ $meeting->title }}</h5>
-                                    <p class="text-muted small mb-2">
+                                    <h5 class="card-title text-dark fw-bold mb-2" style="font-size: 1.15rem;">{{ $meeting->title }}</h5>
+                                    <p class="text-muted mb-2" style="font-size: 0.9rem;">
                                         <i class="fas fa-project-diagram me-1"></i>
                                         {{ $meeting->project ? $meeting->project->name : 'No project' }}
                                     </p>
@@ -107,53 +107,53 @@
 
                             <!-- Status Badge -->
                             <div class="mb-3">
-                                <span class="badge 
-                                    @if($meeting->status == 'draft') bg-warning
-                                    @elseif($meeting->status == 'done') bg-success
-                                    @elseif($meeting->status == 'cancelled') bg-danger
+                                <span class="badge px-3 py-2" style="font-size: 0.85rem;
+                                    @if($meeting->status == 'draft') background-color: #ffc107;
+                                    @elseif($meeting->status == 'done') background-color: #28a745;
+                                    @elseif($meeting->status == 'cancelled') background-color: #dc3545;
                                     @endif">
                                     {{ ucfirst($meeting->status) }}
                                 </span>
                             </div>
 
                             <!-- Meeting Info -->
-                            <div class="mb-3" style="min-height: 100px;">
-                                <div class="mb-2">
-                                    <i class="fas fa-calendar" style="color: #8b5cf6; width: 20px;"></i>
-                                    <small class="text-muted">{{ $meeting->scheduled_at->format('M d, Y') }}</small>
+                            <div class="mb-3" style="min-height: 110px;">
+                                <div class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-calendar telkom-text me-2" style="width: 20px; font-size: 1rem;"></i>
+                                    <span class="text-muted" style="font-size: 0.9rem;">{{ $meeting->scheduled_at->format('M d, Y') }}</span>
                                 </div>
-                                <div class="mb-2">
-                                    <i class="fas fa-clock" style="color: #8b5cf6; width: 20px;"></i>
-                                    <small class="text-muted">{{ $meeting->scheduled_at->format('H:i') }}</small>
+                                <div class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-clock telkom-text me-2" style="width: 20px; font-size: 1rem;"></i>
+                                    <span class="text-muted" style="font-size: 0.9rem;">{{ $meeting->scheduled_at->format('H:i') }}</span>
                                 </div>
-                                <div class="mb-2">
-                                    <i class="fas fa-map-marker-alt" style="color: #8b5cf6; width: 20px;"></i>
-                                    <small class="text-muted">{{ $meeting->location ?? 'No location' }}</small>
+                                <div class="mb-2 d-flex align-items-center">
+                                    <i class="fas fa-map-marker-alt telkom-text me-2" style="width: 20px; font-size: 1rem;"></i>
+                                    <span class="text-muted" style="font-size: 0.9rem;">{{ $meeting->location ?? 'No location' }}</span>
                                 </div>
-                                <div>
-                                    <i class="fas fa-user-tie" style="color: #8b5cf6; width: 20px;"></i>
-                                    <small class="text-muted">{{ $meeting->organizer->name }}</small>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-user-tie telkom-text me-2" style="width: 20px; font-size: 1rem;"></i>
+                                    <span class="text-muted" style="font-size: 0.9rem;">{{ $meeting->organizer->name }}</span>
                                 </div>
                             </div>
 
                             <!-- Meeting Stats -->
                             <div class="row g-2 mb-3">
                                 <div class="col-4">
-                                    <div class="bg-light p-2 rounded text-center">
-                                        <div class="fw-bold" style="color: #8b5cf6;">{{ $meeting->agendas_count ?? 0 }}</div>
-                                        <small class="text-muted">Agenda</small>
+                                    <div class="telkom-stat-box">
+                                        <div class="fw-bold telkom-text" style="font-size: 1.25rem;">{{ $meeting->agendas_count ?? 0 }}</div>
+                                        <small class="text-muted" style="font-size: 0.8rem;">Agenda</small>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="bg-light p-2 rounded text-center">
-                                        <div class="fw-bold" style="color: #3b82f6;">{{ $meeting->minute_decisions_count ?? 0 }}</div>
-                                        <small class="text-muted">Decisions</small>
+                                    <div class="telkom-stat-box">
+                                        <div class="fw-bold telkom-text" style="font-size: 1.25rem;">{{ $meeting->minute_decisions_count ?? 0 }}</div>
+                                        <small class="text-muted" style="font-size: 0.8rem;">Decisions</small>
                                     </div>
                                 </div>
                                 <div class="col-4">
-                                    <div class="bg-light p-2 rounded text-center">
-                                        <div class="fw-bold" style="color: #f59e0b;">{{ $meeting->risks_count ?? 0 }}</div>
-                                        <small class="text-muted">Risks</small>
+                                    <div class="telkom-stat-box">
+                                        <div class="fw-bold text-warning" style="font-size: 1.25rem;">{{ $meeting->risks_count ?? 0 }}</div>
+                                        <small class="text-muted" style="font-size: 0.8rem;">Risks</small>
                                     </div>
                                 </div>
                             </div>
@@ -161,7 +161,7 @@
                         
                         <!-- Card Footer -->
                         <div class="card-footer bg-transparent border-0 pt-0">
-                            <a href="{{ route('meetings.show', $meeting) }}" class="btn btn-outline-primary btn-sm w-100">
+                            <a href="{{ route('meetings.show', $meeting) }}" class="btn telkom-btn-outline btn-sm w-100" style="font-size: 0.9rem; padding: 0.5rem;">
                                 <i class="fas fa-arrow-right me-2"></i>View Details
                             </a>
                         </div>
@@ -181,14 +181,14 @@
                 <i class="fas fa-calendar-times text-muted" style="font-size: 4rem;"></i>
             </div>
             <h4 class="text-muted mb-3">No Meetings Found</h4>
-            <p class="text-muted mb-4">
+            <p class="text-muted mb-4" style="font-size: 1rem;">
                 @if(request('status'))
                     No meetings with status "{{ request('status') }}" found.
                 @else
                     You haven't created any meetings yet. Start by creating your first meeting!
                 @endif
             </p>
-            <a href="{{ route('meetings.create') }}" class="btn btn-primary" style="background: #8b5cf6; border-color:#8b5cf6;">
+            <a href="{{ route('meetings.create') }}" class="btn btn-primary telkom-btn">
                 <i class="fas fa-plus me-2"></i>Create Your First Meeting
             </a>
         </div>
@@ -222,13 +222,79 @@
 </form>
 
 <style>
+/* Telkom Infra Color Scheme */
+:root {
+    --telkom-red: #E30613;
+    --telkom-red-dark: #C00510;
+    --telkom-red-light: #FFE8EA;
+}
+
+/* Primary Colors */
+.telkom-text {
+    color: var(--telkom-red);
+}
+
+.telkom-btn {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    padding: 0.6rem 1.2rem;
+}
+
+.telkom-btn:hover {
+    background: var(--telkom-red-dark) !important;
+    border-color: var(--telkom-red-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(227, 6, 19, 0.3);
+}
+
+.telkom-btn-outline {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn-outline:hover {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+/* Select Dropdown */
+.telkom-select {
+    border-color: #dee2e6;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.telkom-select:focus {
+    border-color: var(--telkom-red);
+    box-shadow: 0 0 0 0.2rem rgba(227, 6, 19, 0.15);
+}
+
+/* Stats Box */
+.telkom-stat-box {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe8ea 100%);
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--telkom-red-light);
+}
+
+/* Meeting Card */
 .meeting-card {
     transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
 }
 
 .meeting-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.15) !important;
+    box-shadow: 0 10px 25px rgba(227, 6, 19, 0.15) !important;
+    border-color: var(--telkom-red-light);
 }
 
 /* Tab Styling */
@@ -238,16 +304,18 @@
     border: none !important;
     border-radius: 0 !important;
     margin-right: 20px;
-    padding-bottom: 8px;
+    padding-bottom: 10px;
     position: relative;
     transition: color 0.3s ease;
     text-decoration: none !important;
     outline: none !important;
     box-shadow: none !important;
+    font-size: 0.95rem;
+    font-weight: 500;
 }
 
 .nav-pills .nav-link:hover {
-    color: #8b5cf6;
+    color: var(--telkom-red);
     text-decoration: none !important;
 }
 
@@ -257,7 +325,7 @@
 }
 
 .nav-pills .nav-link.active {
-    color: #8b5cf6 !important;
+    color: var(--telkom-red) !important;
     background: transparent !important;
 }
 
@@ -268,7 +336,7 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #8b5cf6;
+    background-color: var(--telkom-red);
     border-radius: 3px;
 }
 
@@ -312,22 +380,22 @@
 }
 
 .delete-modal-header {
-    background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+    background: linear-gradient(135deg, var(--telkom-red-light) 0%, #ffd1d4 100%);
     padding: 32px;
     text-align: center;
-    border-bottom: 1px solid #fecaca;
+    border-bottom: 1px solid #ffb3b8;
 }
 
 .delete-icon {
     width: 64px;
     height: 64px;
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: linear-gradient(135deg, var(--telkom-red) 0%, var(--telkom-red-dark) 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 16px;
-    box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
+    box-shadow: 0 8px 24px rgba(227, 6, 19, 0.4);
 }
 
 .delete-modal-title {
@@ -341,6 +409,7 @@
     color: #6b7280;
     line-height: 1.5;
     margin: 0;
+    font-size: 1rem;
 }
 
 .delete-modal-body {
@@ -359,6 +428,7 @@
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    font-size: 0.95rem;
 }
 
 .btn-delete-cancel:hover {
@@ -367,7 +437,7 @@
 }
 
 .btn-delete-confirm {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    background: linear-gradient(135deg, var(--telkom-red) 0%, var(--telkom-red-dark) 100%);
     color: white;
     padding: 12px 24px;
     border: none;
@@ -375,11 +445,12 @@
     cursor: pointer;
     font-weight: 600;
     transition: all 0.3s ease;
+    font-size: 0.95rem;
 }
 
 .btn-delete-confirm:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
+    box-shadow: 0 8px 25px rgba(227, 6, 19, 0.4);
 }
 </style>
 

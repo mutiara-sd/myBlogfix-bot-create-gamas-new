@@ -1,5 +1,80 @@
 <x-layout>
   <x-slot:title>{{ $title }}</x-slot:title>
+  
+  <style>
+    :root {
+      --telkom-red: #E30613;
+      --telkom-red-dark: #C8161D;
+      --telkom-red-light: #ffebee;
+    }
+
+    .form-control:focus {
+      border-color: var(--telkom-red);
+      box-shadow: 0 0 0 3px rgba(227, 6, 19, 0.1);
+      outline: none;
+    }
+
+    .btn-telkom {
+      background: var(--telkom-red);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 20px;
+    }
+
+    .btn-telkom:hover {
+      background: var(--telkom-red-dark);
+      transform: translateY(-1px);
+      transition: all 0.2s ease;
+      color: white;
+    }
+
+    .btn-secondary-telkom {
+      background: #e2e8f0;
+      color: #4a5568;
+      border: none;
+      border-radius: 6px;
+      padding: 8px 20px;
+    }
+
+    .btn-secondary-telkom:hover {
+      background: #cbd5e0;
+      transform: translateY(-1px);
+      transition: all 0.2s ease;
+    }
+
+    .btn-change-photo {
+      background: var(--telkom-red);
+      color: white;
+      border-radius: 6px;
+      padding: 6px 16px;
+    }
+
+    .btn-change-photo:hover {
+      background: var(--telkom-red-dark);
+      color: white;
+    }
+
+    .badge {
+      font-size: 0.75rem;
+      padding: 4px 8px;
+      font-weight: 600;
+    }
+
+    .alert {
+      font-size: 0.9rem;
+    }
+
+    .alert ol {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .section-icon {
+      color: var(--telkom-red);
+    }
+  </style>
+
   <div class="main-content">
     <div class="page-content" style="padding-top: 1rem;">
       <div class="container-fluid">
@@ -43,11 +118,10 @@
                         : asset('storage/' . auth()->user()->profile_picture) }}"
                     alt="Profile Picture" 
                     class="rounded-circle mb-3" 
-                    style="width: 100px; height: 100px; object-fit: cover; border: 3px solid #e2e8f0;">
+                    style="width: 100px; height: 100px; object-fit: cover; border: 3px solid var(--telkom-red-light);">
                   <div>
                     <input type="file" name="profile_picture" id="upload_profile" accept="image/*" hidden>
-                    <button type="button" id="change_profile_picture" class="btn btn-sm" 
-                      style="background: #4a5568; color: white; border-radius: 6px; padding: 6px 16px;">
+                    <button type="button" id="change_profile_picture" class="btn btn-sm btn-change-photo">
                       Change Photo
                     </button>
                   </div>
@@ -86,7 +160,7 @@
               <!-- Contact Information Section -->
               <div class="border-top pt-4 mt-4">
                 <h3 class="mb-3" style="color: #2d3748; font-size: 1.25rem;">
-                  <i class="fas fa-bell me-2 text-primary"></i>Notification Settings
+                  <i class="fas fa-bell me-2 section-icon"></i>Notification Settings
                 </h3>
                 <p class="text-muted small mb-4">Configure how you want to receive reminders and notifications</p>
 
@@ -205,12 +279,10 @@
               
               <!-- Action Buttons -->
               <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
-                <a href="{{ route('dashboard') }}" class="btn" 
-                  style="background: #e2e8f0; color: #4a5568; border: none; border-radius: 6px; padding: 8px 20px;">
+                <a href="{{ route('dashboard') }}" class="btn btn-secondary-telkom">
                   Cancel
                 </a>
-                <button type="submit" class="btn" 
-                  style="background: #4a5568; color: white; border: none; border-radius: 6px; padding: 8px 20px;">
+                <button type="submit" class="btn btn-telkom">
                   <i class="fas fa-save me-2"></i>Save Changes
                 </button>
               </div>
@@ -220,35 +292,6 @@
       </div>
     </div>
   </div>
-
-  <style>
-    .form-control:focus {
-      border-color: #4a5568;
-      box-shadow: 0 0 0 3px rgba(74, 85, 104, 0.1);
-      outline: none;
-    }
-
-    .btn:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-      transition: all 0.2s ease;
-    }
-
-    .badge {
-      font-size: 0.75rem;
-      padding: 4px 8px;
-      font-weight: 600;
-    }
-
-    .alert {
-      font-size: 0.9rem;
-    }
-
-    .alert ol {
-      font-size: 0.85rem;
-      line-height: 1.6;
-    }
-  </style>
 
   <script>
     document.addEventListener("DOMContentLoaded", function() {

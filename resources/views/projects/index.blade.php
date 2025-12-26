@@ -6,7 +6,7 @@
             <h2 class="text-dark fw-bold mb-1">Projects</h2>
             <p class="text-muted mb-0">Manage and track your projects</p>
         </div>
-        <a href="{{ route('projects.create') }}" class="btn btn-primary" style="background:#6f42c1; border-color:#6f42c1;">
+        <a href="{{ route('projects.create') }}" class="btn btn-primary telkom-btn">
             <i class="fas fa-plus me-2"></i>New Project
         </a>
     </div>
@@ -49,7 +49,7 @@
         <div class="row">
             @foreach($projects as $project)
                 <div class="col-lg-4 col-md-6 mb-4">
-                    <div class="card h-100 border-0 shadow-sm project-card" style="transition: all 0.3s ease;">
+                    <div class="card h-100 border-0 shadow-sm project-card">
                         <div class="card-body p-4">
                             <!-- Project Header -->
                             <div class="d-flex justify-content-between align-items-start mb-3">
@@ -102,14 +102,14 @@
                             <!-- Project Stats -->
                             <div class="row g-2 mb-3">
                                 <div class="col-6">
-                                    <div class="bg-light p-2 rounded text-center">
-                                        <div class="fw-bold text-primary">{{ $project->tasks_count ?? 0 }}</div>
+                                    <div class="telkom-stat-box">
+                                        <div class="fw-bold telkom-text">{{ $project->tasks_count ?? 0 }}</div>
                                         <small class="text-muted">Tasks</small>
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    <div class="bg-light p-2 rounded text-center">
-                                        <div class="fw-bold" style="color: #6f42c1;">0%</div>
+                                    <div class="telkom-stat-box">
+                                        <div class="fw-bold telkom-text">0%</div>
                                         <small class="text-muted">Complete</small>
                                     </div>
                                 </div>
@@ -117,14 +117,14 @@
 
                             <!-- Progress Bar -->
                             <div class="progress mb-3" style="height: 6px;">
-                                <div class="progress-bar" style="background: linear-gradient(45deg, #6f42c1, #9b59b6); width: 0%"></div>
+                                <div class="progress-bar telkom-progress" style="width: 0%"></div>
                             </div>
 
                             <!-- Project Footer -->
                             <div class="d-flex justify-content-between align-items-center">
                                 <div>
                                     @if($project->status === 'active')
-                                        <span class="badge bg-success">Active</span>
+                                        <span class="badge telkom-badge-active">Active</span>
                                     @else
                                         <span class="badge bg-secondary">Archived</span>
                                     @endif
@@ -141,7 +141,7 @@
                         
                         <!-- Card Footer with Action -->
                         <div class="card-footer bg-transparent border-0 pt-0">
-                            <a href="{{ route('projects.show', $project) }}" class="btn btn-outline-primary btn-sm w-100">
+                            <a href="{{ route('projects.show', $project) }}" class="btn btn-outline-danger telkom-btn-outline w-100">
                                 <i class="fas fa-arrow-right me-2"></i>View Project
                             </a>
                         </div>
@@ -170,7 +170,7 @@
                     You haven't created any projects yet. Start by creating your first project!
                 @endif
             </p>
-            <a href="{{ route('projects.create') }}" class="btn btn-primary" style="background: #6f42c1; border-color:#6f42c1;">
+            <a href="{{ route('projects.create') }}" class="btn btn-primary telkom-btn">
                 <i class="fas fa-plus me-2"></i>Create Your First Project
             </a>
         </div>
@@ -204,16 +204,80 @@
 </form>
 
 <style>
+/* Telkom Infra Color Scheme */
+:root {
+    --telkom-red: #E30613;
+    --telkom-red-dark: #C00510;
+    --telkom-red-light: #FFE8EA;
+}
+
+/* Primary Button - Telkom Red */
+.telkom-btn {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn:hover {
+    background: var(--telkom-red-dark) !important;
+    border-color: var(--telkom-red-dark) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(227, 6, 19, 0.3);
+}
+
+/* Outline Button - Telkom Red */
+.telkom-btn-outline {
+    color: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    transition: all 0.3s ease;
+}
+
+.telkom-btn-outline:hover {
+    background: var(--telkom-red) !important;
+    border-color: var(--telkom-red) !important;
+    color: white !important;
+    transform: translateY(-2px);
+}
+
+/* Project Card Hover Effect */
 .project-card {
     transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
 }
 
 .project-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(111, 66, 193, 0.1) !important;
+    box-shadow: 0 10px 25px rgba(227, 6, 19, 0.15) !important;
+    border-color: var(--telkom-red-light);
 }
 
-/* Fix untuk tab - hilangkan border & outline */
+/* Telkom Stats Box */
+.telkom-stat-box {
+    background: linear-gradient(135deg, #fff5f5 0%, #ffe8ea 100%);
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid var(--telkom-red-light);
+}
+
+.telkom-text {
+    color: var(--telkom-red);
+}
+
+/* Progress Bar - Telkom Red */
+.telkom-progress {
+    background: linear-gradient(90deg, var(--telkom-red) 0%, #ff4757 100%);
+    transition: width 0.6s ease;
+}
+
+/* Badge - Telkom Red */
+.telkom-badge-active {
+    background: var(--telkom-red);
+    color: white;
+}
+
+/* Navigation Tabs */
 .nav-pills .nav-link {
     color: #6c757d;
     background: transparent !important;
@@ -229,7 +293,7 @@
 }
 
 .nav-pills .nav-link:hover {
-    color: #6f42c1;
+    color: var(--telkom-red);
     text-decoration: none !important;
 }
 
@@ -239,7 +303,7 @@
 }
 
 .nav-pills .nav-link.active {
-    color: #6f42c1 !important;
+    color: var(--telkom-red) !important;
     background: transparent !important;
 }
 
@@ -250,12 +314,8 @@
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #6f42c1;
+    background-color: var(--telkom-red);
     border-radius: 3px;
-}
-
-.progress-bar {
-    transition: width 0.6s ease;
 }
 
 .card-title {
@@ -271,114 +331,113 @@
 }
 
 /* Delete Confirmation Modal */
-    .delete-modal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(8px);
-        z-index: 20000;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
+.delete-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 20000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
 
-    .delete-modal.active {
-        opacity: 1;
-        visibility: visible;
-    }
+.delete-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
 
-    .delete-modal-content {
-        background: white;
-        border-radius: 20px;
-        box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
-        width: 100%;
-        max-width: 480px;
-        transform: scale(0.8) translateY(30px);
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        overflow: hidden;
-    }
+.delete-modal-content {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 480px;
+    transform: scale(0.8) translateY(30px);
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    overflow: hidden;
+}
 
-    .delete-modal.active .delete-modal-content {
-        transform: scale(1) translateY(0);
-    }
+.delete-modal.active .delete-modal-content {
+    transform: scale(1) translateY(0);
+}
 
-    .delete-modal-header {
-        background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
-        padding: 32px;
-        text-align: center;
-        border-bottom: 1px solid #fecaca;
-    }
+.delete-modal-header {
+    background: linear-gradient(135deg, var(--telkom-red-light) 0%, #ffd1d4 100%);
+    padding: 32px;
+    text-align: center;
+    border-bottom: 1px solid #ffb3b8;
+}
 
-    .delete-icon {
-        width: 64px;
-        height: 64px;
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: 0 auto 16px;
-        box-shadow: 0 8px 24px rgba(239, 68, 68, 0.3);
-    }
+.delete-icon {
+    width: 64px;
+    height: 64px;
+    background: linear-gradient(135deg, var(--telkom-red) 0%, var(--telkom-red-dark) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    box-shadow: 0 8px 24px rgba(227, 6, 19, 0.4);
+}
 
-    .delete-modal-title {
-        font-size: 1.5rem;
-        font-weight: 700;
-        color: #1f2937;
-        margin: 0 0 8px 0;
-    }
+.delete-modal-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 8px 0;
+}
 
-    .delete-modal-text {
-        color: #6b7280;
-        line-height: 1.5;
-        margin: 0;
-    }
+.delete-modal-text {
+    color: #6b7280;
+    line-height: 1.5;
+    margin: 0;
+}
 
-    .delete-modal-body {
-        padding: 24px 32px 32px;
-        display: flex;
-        gap: 12px;
-        justify-content: flex-end;
-    }
+.delete-modal-body {
+    padding: 24px 32px 32px;
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
 
-    .btn-delete-cancel {
-        background: #f3f4f6;
-        color: #374151;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
+.btn-delete-cancel {
+    background: #f3f4f6;
+    color: #374151;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
 
-    .btn-delete-cancel:hover {
-        background: #e5e7eb;
-        transform: translateY(-1px);
-    }
+.btn-delete-cancel:hover {
+    background: #e5e7eb;
+    transform: translateY(-1px);
+}
 
-    .btn-delete-confirm {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
-        padding: 12px 24px;
-        border: none;
-        border-radius: 12px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: all 0.3s ease;
-    }
+.btn-delete-confirm {
+    background: linear-gradient(135deg, var(--telkom-red) 0%, var(--telkom-red-dark) 100%);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
 
-    .btn-delete-confirm:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
-    }
+.btn-delete-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(227, 6, 19, 0.4);
 }
 </style>
 

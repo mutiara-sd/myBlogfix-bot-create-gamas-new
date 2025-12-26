@@ -12,22 +12,28 @@
     <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- CUSTOM STYLE - Perbaiki efek klik & hover sidebar -->
+    <!-- CUSTOM STYLE - Branding Telkom Infrastruktur -->
     <style>
-        /* Warna menu aktif (solid, bukan transparan) */
-        .mm-active > a,
-        #sidebar-menu ul li a.active {
-            background: #e9e9f1 !important;
-            color: #5a6c7d !important;
-            box-shadow: none !important;
+        :root {
+            --telkom-red: #E30613;
+            --telkom-red-dark: #C8161D;
+            --telkom-red-light: #ffebee;
         }
 
-        /* Hover sidebar (tanpa efek transparan ungu) */
+        /* Warna menu aktif dengan merah Telkom */
+        .mm-active > a,
+        #sidebar-menu ul li a.active {
+            background: var(--telkom-red) !important;
+            color: #ffffff !important;
+            box-shadow: 0 2px 8px rgba(227, 6, 19, 0.3) !important;
+        }
+
+        /* Hover sidebar dengan merah Telkom soft */
         #sidebar-menu ul li a:hover,
         #sidebar-menu ul li a:focus,
         #sidebar-menu ul li a:active {
-            background-color: #e9e9f1 !important; /* warna abu lembut solid */
-            color: #5a6c7d !important;
+            background-color: var(--telkom-red-light) !important;
+            color: var(--telkom-red) !important;
             box-shadow: none !important;
             border-radius: 6px !important;
         }
@@ -40,15 +46,22 @@
             box-shadow: none !important;
         }
 
-        /* Aktif submenu */
+        /* Aktif submenu dengan merah Telkom */
         .metismenu li.mm-active > a {
-            background-color: #5a6c7d !important;
+            background-color: var(--telkom-red) !important;
             color: #fff !important;
+        }
+
+        /* Active menu hover */
+        #sidebar-menu ul li a.active:hover,
+        .mm-active > a:hover {
+            background: var(--telkom-red-dark) !important;
+            color: #ffffff !important;
         }
 
         /* Sidebar border & background biar lembut */
         .vertical-menu {
-            background-color: #f8f9fa !important; /* putih keabu */
+            background-color: #f8f9fa !important;
             border-right: 1px solid #dee2e6;
         }
 
@@ -56,6 +69,17 @@
         #sidebar-menu ul li a {
             padding: 10px 20px !important;
             transition: all 0.2s ease-in-out;
+        }
+
+        /* Icon color on hover */
+        #sidebar-menu ul li a:hover i {
+            color: var(--telkom-red) !important;
+        }
+
+        /* Icon color on active */
+        #sidebar-menu ul li a.active i,
+        .mm-active > a i {
+            color: #ffffff !important;
         }
     </style>
 </head>

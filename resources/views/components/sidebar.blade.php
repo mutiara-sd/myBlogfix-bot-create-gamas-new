@@ -37,8 +37,14 @@
     </div>
 </div>
 
-<!-- CSS UNTUK MEMPERCANTIK SIDEBAR -->
+<!-- CSS UNTUK MEMPERCANTIK SIDEBAR DENGAN BRANDING TELKOM -->
 <style>
+:root {
+    --telkom-red: #E30613;
+    --telkom-red-dark: #C8161D;
+    --telkom-red-light: #ffebee;
+}
+
 /* Sidebar Styling */
 .vertical-menu {
     background: #ffffff;
@@ -56,14 +62,14 @@
 }
 
 .vertical-menu .metismenu li a:hover {
-    background: #f8f9fa;
-    color: #007bff;
+    background: var(--telkom-red-light);
+    color: var(--telkom-red);
     transform: translateX(2px);
 }
 
 .vertical-menu .metismenu li a.active,
 .vertical-menu .metismenu li a[aria-expanded="true"] {
-    background: #007bff;
+    background: var(--telkom-red);
     color: #ffffff;
 }
 
@@ -90,12 +96,12 @@
 
 /* Hover effect untuk logout */
 .vertical-menu button:hover {
-    background: #fff5f5 !important;
+    background: var(--telkom-red-light) !important;
 }
 
 .vertical-menu button:hover i,
 .vertical-menu button:hover span {
-    color: #dc3545 !important;
+    color: var(--telkom-red) !important;
 }
 
 /* Collapsed sidebar state */
@@ -118,8 +124,16 @@ body.sidebar-collapsed .vertical-menu .metismenu li a i {
 
 /* Active page highlighting */
 .vertical-menu .metismenu li.mm-active > a {
-    background: #007bff;
+    background: var(--telkom-red);
     color: #ffffff;
+    box-shadow: 0 2px 8px rgba(227, 6, 19, 0.3);
+}
+
+/* Active state hover */
+.vertical-menu .metismenu li.mm-active > a:hover {
+    background: var(--telkom-red-dark);
+    color: #ffffff;
+    transform: translateX(2px);
 }
 
 /* Responsive */
@@ -128,6 +142,4 @@ body.sidebar-collapsed .vertical-menu .metismenu li a i {
         padding: 15px 20px;
     }
 }
-
-
 </style>
