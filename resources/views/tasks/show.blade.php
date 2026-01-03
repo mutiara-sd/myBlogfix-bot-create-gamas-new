@@ -554,7 +554,7 @@
                                 <option value="todo" {{ $task->status == 'todo' ? 'selected' : '' }}>To Do</option>
                                 <option value="in_progress" {{ $task->status == 'in_progress' ? 'selected' : '' }}>In Progress</option>
                                 <option value="review" {{ $task->status == 'review' ? 'selected' : '' }}>Review</option>
-                                <option value="completed" {{ $task->status == 'completed' ? 'selected' : '' }}>Completed</option>
+                                <option value="done" {{ $task->status == 'done' ? 'selected' : '' }}>Done</option>
                                 <option value="blocked" {{ $task->status == 'blocked' ? 'selected' : '' }}>Blocked</option>
                             </select>
                         </div>

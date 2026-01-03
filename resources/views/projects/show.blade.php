@@ -142,73 +142,6 @@
                 </div>
             </div>
 
-            <!-- Progress Overview -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="card-header bg-white py-3">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0">
-                            <i class="fas fa-chart-line me-2 telkom-text"></i>Progress Overview
-                        </h5>
-                        @php
-                            $totalTasks = $project->tasks->count();
-                            $completedTasks = $project->tasks->where('status', 'completed')->count();
-                            $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
-                        @endphp
-                        <span class="badge badge-lg telkom-badge-progress">
-                            {{ $progress }}% Complete
-                        </span>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <!-- Progress Bar -->
-                    <div class="progress mb-3" style="height: 12px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated telkom-progress" 
-                             style="width: {{ $progress }}%">
-                        </div>
-                    </div>
-                    
-                    <!-- Task Status Breakdown -->
-                    <div class="row g-3">
-                        @if($totalTasks > 0)
-                            @php
-                                $inProgress = $project->tasks->where('status', 'in_progress')->count();
-                                $blocked = $project->tasks->where('status', 'blocked')->count();
-                                $todo = $totalTasks - $completedTasks - $inProgress - $blocked;
-                            @endphp
-                            <div class="col-sm-3">
-                                <div class="text-center">
-                                    <div class="text-success fw-bold h5 mb-1">{{ number_format(($completedTasks / $totalTasks) * 100, 1) }}%</div>
-                                    <small class="text-muted">Completed</small>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="text-center">
-                                    <div class="text-warning fw-bold h5 mb-1">{{ number_format(($inProgress / $totalTasks) * 100, 1) }}%</div>
-                                    <small class="text-muted">In Progress</small>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="text-center">
-                                    <div class="text-danger fw-bold h5 mb-1">{{ number_format(($blocked / $totalTasks) * 100, 1) }}%</div>
-                                    <small class="text-muted">Blocked</small>
-                                </div>
-                            </div>
-                            <div class="col-sm-3">
-                                <div class="text-center">
-                                    <div class="text-muted fw-bold h5 mb-1">{{ number_format(($todo / $totalTasks) * 100, 1) }}%</div>
-                                    <small class="text-muted">To Do</small>
-                                </div>
-                            </div>
-                        @else
-                            <div class="col-12 text-center text-muted">
-                                <i class="fas fa-tasks fa-2x mb-3"></i>
-                                <p>No tasks created yet. Start by adding your first task!</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-
             <!-- Recent Tasks -->
             <div class="card border-0 shadow-sm">
                 <div class="card-header bg-white py-3">
@@ -354,12 +287,6 @@
                         <a href="{{ route('tasks.create') }}" class="btn telkom-btn-outline">
                             <i class="fas fa-plus me-2"></i>Add Task
                         </a>
-                        <button class="btn btn-outline-secondary" disabled>
-                            <i class="fas fa-calendar-plus me-2"></i>Schedule Meeting
-                        </button>
-                        <button class="btn btn-outline-secondary" disabled>
-                            <i class="fas fa-share me-2"></i>Share Project
-                        </button>
                     </div>
                 </div>
             </div>

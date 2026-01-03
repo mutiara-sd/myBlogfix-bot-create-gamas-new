@@ -170,7 +170,6 @@
                                     <option value="">All Status</option>
                                     <option value="todo" {{ request('status') == 'todo' ? 'selected' : '' }}>To Do</option>
                                     <option value="doing" {{ request('status') == 'doing' ? 'selected' : '' }}>In Progress</option>
-                                    <option value="review" {{ request('status') == 'review' ? 'selected' : '' }}>In Review</option>
                                     <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
                                     <option value="blocked" {{ request('status') == 'blocked' ? 'selected' : '' }}>Blocked</option>
                                 </select>
@@ -220,21 +219,6 @@
                         <i class="fas fa-exclamation-circle kpi-icon" style="color: var(--telkom-red);"></i>
                     </div>
                     <small class="text-muted kpi-subtitle">Requires immediate attention</small>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-xl-3 col-md-6 mb-3">
-            <div class="card kpi-card warning border-0 shadow-sm">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-3">
-                        <div>
-                            <p class="kpi-label mb-2">In Review</p>
-                            <h2 class="kpi-value text-warning mb-0">{{ $inReviewTasks ?? 0 }}</h2>
-                        </div>
-                        <i class="fas fa-eye kpi-icon text-warning"></i>
-                    </div>
-                    <small class="text-muted kpi-subtitle">Awaiting approval</small>
                 </div>
             </div>
         </div>

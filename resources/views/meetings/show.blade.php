@@ -621,14 +621,6 @@
                             </button>
                         </form>
                         
-                        <button type="button" class="btn flex-fill" 
-                            onclick="submitForReview()"
-                            style="background: rgba(227, 6, 19, 0.1); color: #E30613; border: 2px solid rgba(59, 130, 246, 0.2); font-weight: 600;"
-                            onmouseover="this.style.background='rgba(59, 130, 246, 0.15)'"
-                            onmouseout="this.style.background='rgba(59, 130, 246, 0.1)'">
-                            <i class="fas fa-paper-plane me-2"></i>Submit for Review
-                        </button>
-                        
                         <form action="{{ route('meetings.update', $meeting) }}" method="POST" class="flex-fill">
                             @csrf
                             @method('PUT')
@@ -735,12 +727,6 @@
                         <a href="{{ route('meetings.edit', $meeting) }}" class="btn btn-outline-primary">
                             <i class="fas fa-edit me-2"></i>Edit Meeting
                         </a>
-                        <button class="btn btn-outline-success" disabled>
-                            <i class="fas fa-file-export me-2"></i>Export Minutes
-                        </button>
-                        <button class="btn btn-outline-info" disabled>
-                            <i class="fas fa-share me-2"></i>Share Meeting
-                        </button>
                     </div>
                 </div>
             </div>
